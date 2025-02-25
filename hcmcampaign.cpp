@@ -78,6 +78,7 @@ string Vehicle::str() const
     }
     result << "Vehicle[vehicleType=" << vehicleName << ",quantity=" << quantity 
     << ",weight=" << weight << ",pos=" << pos.str() << "]";
+    return result.str();
 }
 
 ////////////////////////////////////////////////
