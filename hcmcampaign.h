@@ -107,7 +107,7 @@ public:
     virtual string str() const = 0;
 };
 
-class Vehicle : public Unit
+class Vehicle : Unit
 {
 private:
     VehicleType vehicleType;
