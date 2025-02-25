@@ -114,7 +114,7 @@ private:
 public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore();
-    string str();
+    string str() const;
 };
 
 class UnitList

@@ -19,11 +19,20 @@ Unit::~Unit()
 
 }
 
+int Unit::getAttackScore()
+{
+
+}
+
 Position Unit::getCurrentPosition() const
 {
     return pos;
 }
 
+string Unit::str() const
+{
+
+}
 
 // class Vehicle
 Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType) : Unit(quantity,weight,pos)
@@ -36,7 +45,7 @@ int Vehicle::getAttackScore()
     return vehicleType * 304 + quantity * weight;
 }
 
-string Vehicle::str()
+string Vehicle::str() const
 {
     stringstream result;
     string vehicleName;
