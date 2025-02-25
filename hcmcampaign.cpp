@@ -76,8 +76,8 @@ string Vehicle::str() const
     default:
         break;
     }
-    result << "Vehicle[vehicleType=" << vehicleName << ",quantity=" << quantity 
-    << ",weight=" << weight << ",pos=" << pos.str() << "]";
+    result << "Vehicle[vehicleType=" << vehicleName << ";quantity=" << quantity 
+    << ";weight=" << weight << ";pos=" << pos.str() << "]";
     return result.str();
 }
 
