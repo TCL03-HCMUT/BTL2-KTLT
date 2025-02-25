@@ -112,7 +112,7 @@ class Vehicle : Unit
 private:
     VehicleType vehicleType;
 public:
-    Vehicle (int quantity, int weight, const Position pos, VehicleType vehicleType);
+    Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore();
     string str();
 };
