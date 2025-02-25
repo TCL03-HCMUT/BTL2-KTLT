@@ -4,6 +4,23 @@
 /// STUDENT'S ANSWER BEGINS HERE
 ////////////////////////////////////////////////////////////////////////
 
+// abstract class Unit
+Unit::Unit(int quantity, int weight, Position pos)
+{
+    this->quantity = quantity;
+    this->weight = weight;
+    this->pos = pos;
+}
+
+Unit::~Unit()
+{
+
+}
+
+Position Unit::getCurrentPosition() const
+{
+    return pos;
+}
 
 
 ////////////////////////////////////////////////
