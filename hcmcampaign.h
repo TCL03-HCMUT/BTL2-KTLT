@@ -107,6 +107,16 @@ public:
     virtual string str() const = 0;
 };
 
+class Vehicle : Unit
+{
+private:
+    VehicleType vehicleType;
+public:
+    Vehicle (int quantity, int weight, const Position pos, VehicleType vehicleType);
+    int getAttackScore();
+    string str();
+};
+
 class UnitList
 {
 private:
