@@ -117,6 +117,19 @@ public:
     string str() const;
 };
 
+class Infantry : public Unit
+{
+private:
+    InfantryType infantryType;
+protected:
+    bool isCommando();
+    int getScore();
+public:
+    Infantry (int quantity, int weight, const Position pos, InfantryType infantryType);
+    int getAttackScore();
+    string str() const;
+};
+
 class UnitList
 {
 private:
