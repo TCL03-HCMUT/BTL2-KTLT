@@ -113,21 +113,20 @@ private:
     VehicleType vehicleType;
 public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
-    int getAttackScore();
-    string str() const;
+    int getAttackScore() override;
+    string str() const override;
 };
 
 class Infantry : public Unit
 {
 private:
     InfantryType infantryType;
-protected:
     bool isCommando();
     int getScore();
 public:
     Infantry (int quantity, int weight, const Position pos, InfantryType infantryType);
-    int getAttackScore();
-    string str() const;
+    int getAttackScore() override;
+    string str() const override;
 };
 
 class UnitList

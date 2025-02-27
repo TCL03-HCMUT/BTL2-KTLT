@@ -147,7 +147,16 @@ int Infantry::getAttackScore()
         quantity = ceil(quantity_tmp);
         score = getScore();
     }
+    return score;
 }
+
+string Infantry::str() const
+{
+
+}
+
+
+
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
