@@ -48,35 +48,7 @@ int Vehicle::getAttackScore()
 string Vehicle::str() const
 {
     stringstream result;
-    string vehicleName;
-    switch (vehicleType)
-    {
-    case 0:
-        vehicleName = "TRUCK";
-        break;
-    case 1:
-        vehicleName = "MORTAR";
-        break;
-    case 2:
-        vehicleName = "ANTIAIRCRAFT";
-        break;
-    case 3:
-        vehicleName = "ARMOREDCAR";
-        break;
-    case 4:
-        vehicleName = "APC";
-        break;
-    case 5:
-        vehicleName = "ARTILLERY";
-        break;
-    case 6:
-        vehicleName = "TANK";
-        break;
-    
-    default:
-        break;
-    }
-    result << "Vehicle[vehicleType=" << vehicleName << ";quantity=" << quantity 
+    result << "Vehicle[vehicleType=" << vehicleType << ";quantity=" << quantity 
     << ";weight=" << weight << ";pos=" << pos.str() << "]";
     return result.str();
 }
@@ -151,6 +123,26 @@ int Infantry::getAttackScore()
 }
 
 string Infantry::str() const
+{
+    stringstream result;
+    result << "Infantry[infantryType=" << infantryType << ",quantity=" << quantity 
+    << ",weight=" << weight << ",pos=" << pos.str() << "]";
+    return result.str();
+}
+
+
+// class Army
+Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
+{
+    // TODO: implement the constructor
+}
+
+void Army::fight(Army *enemy, bool defense = false)
+{
+
+}
+
+string Army::str() const
 {
 
 }
