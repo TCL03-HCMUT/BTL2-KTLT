@@ -132,13 +132,13 @@ string Infantry::str() const
 
 
 // class Army
-Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
+Army::Army(const Unit **unitArray, int size, string name, BattleField *battleField)
 {
     this->name = name;
     this->battleField = battleField;
     for (int i = 0; i < size; i++)
     {
-        unitList->insert(unitArray[i]);
+        unitList->insert(const_cast<Unit*>(unitArray[i]));
     }
 }
 
@@ -153,7 +153,22 @@ string Army::str() const
 }
 
 
+// class LiberationArmy
+LiberationArmy::LiberationArmy(const Unit **unitArray, int size, string name, BattleField *battleField) : Army(unitArray, size, name, battleField)
+{
+    
+}
 
+void LiberationArmy::fight(Army *enemy, bool defense = false)
+{
+    //TODO: implement this method
+}
+
+string LiberationArmy::str() const
+{
+    stringstream result;
+    // result << "LiberationArmy[name=" << name << ",LF=" << LF << "EXP"
+}
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
