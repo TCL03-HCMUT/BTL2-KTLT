@@ -35,7 +35,8 @@ string Unit::str() const
 }
 
 // class Vehicle
-Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType) : Unit(quantity,weight,pos)
+Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType) 
+: Unit(quantity,weight,pos)
 {
     this->vehicleType = vehicleType;
 }
@@ -56,7 +57,8 @@ string Vehicle::str() const
 
 
 // class Infantry
-Infantry::Infantry(int quantity, int weight, const Position pos, InfantryType infantryType) : Unit(quantity,weight,pos)
+Infantry::Infantry(int quantity, int weight, const Position pos, InfantryType infantryType) 
+: Unit(quantity,weight,pos)
 {
     this->infantryType = infantryType;
 }
@@ -106,7 +108,7 @@ int personalNumber(int num, int year)
 int Infantry::getAttackScore()
 {
     int score = getScore();
-    int personalNum = personalNumber(score,1975);
+    int personalNum = personalNumber(score, 1975);
     if (personalNum > 7)
     {
         double quantity_tmp = quantity * 1.2;
@@ -154,7 +156,8 @@ string Army::str() const
 
 
 // class LiberationArmy
-LiberationArmy::LiberationArmy(const Unit **unitArray, int size, string name, BattleField *battleField) : Army(unitArray, size, name, battleField)
+LiberationArmy::LiberationArmy(const Unit **unitArray, int size, string name, BattleField *battleField) 
+: Army(unitArray, size, name, battleField)
 {
     
 }
