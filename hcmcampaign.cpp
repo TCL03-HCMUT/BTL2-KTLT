@@ -134,7 +134,12 @@ string Infantry::str() const
 // class Army
 Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
 {
-    // TODO: implement the constructor
+    this->name = name;
+    this->battleField = battleField;
+    for (int i = 0; i < size; i++)
+    {
+        unitList->insert(unitArray[i]);
+    }
 }
 
 void Army::fight(Army *enemy, bool defense = false)
