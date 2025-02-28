@@ -169,6 +169,51 @@ string LiberationArmy::str() const
     stringstream result;
     // result << "LiberationArmy[name=" << name << ",LF=" << LF << "EXP"
 }
+
+
+// class Position
+Position::Position(int r = 0, int c = 0)
+{
+    this->r = r;
+    this->c = c;
+}
+
+Position::Position(const string &str_pos)
+{
+    string pos_cpy = str_pos;
+    pos_cpy.erase(pos_cpy.begin());
+    pos_cpy.erase(pos_cpy.end());
+    pos_cpy.replace(pos_cpy.find(','), 1, ",", 1);
+    stringstream nums(pos_cpy);
+    nums >> this->r >> this->c;
+}
+
+int Position::getRow() const
+{
+    return r;
+}
+
+int Position::getCol() const
+{
+    return c;
+}
+
+void Position::setRow(int r)
+{
+    this->r = r;
+}
+
+void Position::setCol(int c)
+{
+    this->c = c;
+}
+
+string Position::str() const
+{
+    stringstream result;
+    result << "(" << r << "," << c << ")";
+    return result.str();
+}
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
