@@ -123,6 +123,7 @@ public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore() override;
     string str() const override;
+    string instance();
 };
 
 class Infantry : public Unit
@@ -135,6 +136,7 @@ public:
     Infantry (int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
+    string instance();
 };
 
 class UnitList

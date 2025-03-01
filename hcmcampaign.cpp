@@ -79,6 +79,10 @@ string Vehicle::str() const
     return result.str();
 }
 
+string Vehicle::instance()
+{
+    return "Vehicle";
+}
 
 
 // class Infantry
@@ -177,6 +181,11 @@ string Infantry::str() const
     result << "Infantry[infantryType=" << infantryType << ",quantity=" << quantity 
     << ",weight=" << weight << ",pos=" << pos.str() << "]";
     return result.str();
+}
+
+string Infantry::instance()
+{
+    return "Infantry";
 }
 
 
