@@ -49,7 +49,32 @@ int Vehicle::getAttackScore()
 string Vehicle::str() const
 {
     stringstream result;
-    result << "Vehicle[vehicleType=" << vehicleType << ";quantity=" << quantity 
+    string vehicleName;
+    switch (vehicleType)
+    {
+    case TRUCK:
+        vehicleName = "TRUCK";
+        break;
+    case MORTAR:
+        vehicleName = "MORTAR";
+        break;
+    case ANTIAIRCRAFT:
+        vehicleName = "ANTIAIRCRAFT";
+        break;
+    case ARMOREDCAR:
+        vehicleName = "ARMOREDCAR";
+        break;
+    case APC:
+        vehicleName = "APC";
+        break;
+    case ARTILLERY:
+        vehicleName = "ARTILLERY";
+        break;
+    case TANK:
+        vehicleName = "TANK";
+        break;
+    }
+    result << "Vehicle[vehicleType=" << vehicleName << ";quantity=" << quantity 
     << ";weight=" << weight << ";pos=" << pos.str() << "]";
     return result.str();
 }
@@ -127,6 +152,28 @@ int Infantry::getAttackScore()
 string Infantry::str() const
 {
     stringstream result;
+    string infantryName;
+    switch(infantryType)
+    {
+        case SNIPER:
+            infantryName = "SNIPER";
+            break;
+        case ANTIAIRCRAFTSQUAD:
+            infantryName = "ANTIAIRCRAFTSQUAD";
+            break;
+        case MORTARSQUAD:
+            infantryName = "MORTARSQUAD";
+            break;
+        case ENGINEER:
+            infantryName = "ENGINEER";
+            break;
+        case SPECIALFORCES:
+            infantryName = "SPECIALFORCES";
+            break;
+        case REGULARINFANTRY:
+            infantryName = "REGULARINFANTRY";
+            break;
+    }
     result << "Infantry[infantryType=" << infantryType << ",quantity=" << quantity 
     << ",weight=" << weight << ",pos=" << pos.str() << "]";
     return result.str();
@@ -170,6 +217,7 @@ void LiberationArmy::fight(Army *enemy, bool defense = false)
 string LiberationArmy::str() const
 {
     stringstream result;
+    // TODO: deal with the stringstream
     // result << "LiberationArmy[name=" << name << ",LF=" << LF << "EXP"
 }
 
