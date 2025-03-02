@@ -73,7 +73,7 @@ protected:
     BattleField *battleField;
 
 public:
-    Army(const Unit **unitArray, int size, string name, BattleField *battleField);
+    Army(Unit **unitArray, int size, string name, BattleField *battleField);
     virtual void fight(Army *enemy, bool defense = false) = 0;
     virtual string str() const = 0;
 };
@@ -81,7 +81,7 @@ public:
 class LiberationArmy : public Army
 {
 public:
-    LiberationArmy(const Unit **unitArray , int size , string name ,BattleField *battleField);
+    LiberationArmy(Unit **unitArray , int size , string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
 };

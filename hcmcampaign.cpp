@@ -190,13 +190,13 @@ string Infantry::instance()
 
 
 // class Army
-Army::Army(const Unit **unitArray, int size, string name, BattleField *battleField)
+Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
 {
     this->name = name;
     this->battleField = battleField;
     for (int i = 0; i < size; i++)
     {
-        unitList->insert(const_cast<Unit*>(unitArray[i]));
+        unitList->insert(unitArray[i]);
     }
 }
 
@@ -212,7 +212,7 @@ string Army::str() const
 
 
 // class LiberationArmy
-LiberationArmy::LiberationArmy(const Unit **unitArray, int size, string name, BattleField *battleField) 
+LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField) 
 : Army(unitArray, size, name, battleField)
 {
     
