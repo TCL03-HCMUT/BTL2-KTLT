@@ -171,6 +171,7 @@ public:
                 vector<Position *> arrayRiver, vector<Position *> arrayFortification,
                 vector<Position *> arrayUrban, vector<Position *> arraySpecialZone);
     ~BattleField();
+    string str();
 };
 
 class HCMCampaign

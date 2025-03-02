@@ -76,7 +76,7 @@ string Vehicle::str() const
         break;
     }
     result << "Vehicle[vehicleType=" << vehicleName << ";quantity=" << quantity 
-    << ";weight=" << weight << ";pos=" << pos.str() << "]";
+        << ";weight=" << weight << ";pos=" << pos.str() << "]";
     return result.str();
 }
 
@@ -180,7 +180,7 @@ string Infantry::str() const
             break;
     }
     result << "Infantry[infantryType=" << infantryType << ",quantity=" << quantity 
-    << ",weight=" << weight << ",pos=" << pos.str() << "]";
+        << ",weight=" << weight << ",pos=" << pos.str() << "]";
     return result.str();
 }
 
@@ -228,7 +228,9 @@ string LiberationArmy::str() const
 {
     stringstream result;
     // TODO: deal with the stringstream
-    // result << "LiberationArmy[name=" << name << ",LF=" << LF << "EXP"
+    result << "LiberationArmy[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
+        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str();
+    return result.str();
 }
 
 
