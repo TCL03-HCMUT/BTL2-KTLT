@@ -227,7 +227,6 @@ void LiberationArmy::fight(Army *enemy, bool defense = false)
 string LiberationArmy::str() const
 {
     stringstream result;
-    // TODO: deal with the stringstream
     result << "LiberationArmy[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
         << ",unitList=" << unitList->str() << ",battleField=" << battleField->str();
     return result.str();
