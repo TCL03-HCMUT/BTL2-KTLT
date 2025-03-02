@@ -43,7 +43,8 @@ Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType
 
 int Vehicle::getAttackScore()
 {
-    return vehicleType * 304 + quantity * weight;
+    double score = (vehicleType * 304 + quantity * weight) / 30.0;
+    return ceil(score);
 }
 
 string Vehicle::str() const
