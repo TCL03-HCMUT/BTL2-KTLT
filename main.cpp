@@ -38,20 +38,19 @@ void g_satc_02() {
     unitArrayOfAr[1] = &truckOfAr;
     unitArrayOfAr[2] = &sniperOfAr;
 
-    LiberationArmy* liberationArmy = new LiberationArmy(unitArrayOfLiber, 2, "LiberationArmy", 0);
-    liberationArmy->str();
-
-    ARVN* arvn = new ARVN(unitArrayOfAr, 2, "ARVN", 0);
-    arvn->str();
+    LiberationArmy* liberationArmy = new LiberationArmy(unitArrayOfLiber, 3, "LiberationArmy", 0);
+    cout << liberationArmy->str() << endl;
+    ARVN* arvn = new ARVN(unitArrayOfAr, 3, "ARVN", 0);
+    cout << arvn->str() << endl;
 
     Army* enemyLiber = arvn;
-    liberationArmy->fight(&enemyLiber, false);
+    liberationArmy->fight(enemyLiber, false);
     Army* enemyAr = liberationArmy;
-    arvn->fight(&enemyAr, false);
+    arvn->fight(enemyAr, false);
 
     cout << "* After the fight" << endl;
-    liberationArmy->str();
-    arvn->str();
+    cout << liberationArmy->str() << endl;
+    cout << arvn->str() << endl;
 
     delete liberationArmy;
     delete arvn;
@@ -60,7 +59,7 @@ void g_satc_02() {
 }
 
 int main(int argc, const char * argv[]) {
-    // g_satc_01();
-    // g_satc_02();
+    g_satc_01();
+    g_satc_02();
     return 0;
 }
