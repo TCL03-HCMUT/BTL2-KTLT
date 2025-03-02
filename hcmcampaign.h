@@ -132,6 +132,8 @@ private:
     InfantryType infantryType;
     bool isCommando();
     int getScore();
+    int sumDigits(int n);
+    int personalNumber(int num, int year);
 public:
     Infantry (int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;

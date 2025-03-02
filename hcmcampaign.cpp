@@ -114,7 +114,7 @@ int Infantry::getScore()
     return score;
 }
 
-int sumDigits(int n)
+int Infantry::sumDigits(int n)
 {
     int s = 0;
     while (n != 0)
@@ -125,7 +125,7 @@ int sumDigits(int n)
     return s;
 }
 
-int personalNumber(int num, int year)
+int Infantry::personalNumber(int num, int year)
 {
     int result = sumDigits(num) + sumDigits(year);
     while (result > 9)
