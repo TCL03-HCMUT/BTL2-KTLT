@@ -246,7 +246,7 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     }
     this->LF = clampLF(LF);
     this->EXP = clampEXP(EXP);
-    int S = LF + EXP;
+    int S = this->LF + this->EXP;
     bool specialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
     int capacity = specialSize ? 12 : 8;
     *(this->unitList) = UnitList(capacity);
