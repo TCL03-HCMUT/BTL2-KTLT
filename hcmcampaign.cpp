@@ -4,6 +4,28 @@
 /// STUDENT'S ANSWER BEGINS HERE
 ////////////////////////////////////////////////////////////////////////
 
+
+int Utility::sumDigits(int n)
+{
+    int s = 0;
+    while (n != 0)
+    {
+        s += n % 10;
+        n /= 10;
+    }
+    return s;
+}
+
+int Utility::personalNumber(int num, int year)
+{
+    int result = sumDigits(num) + sumDigits(year);
+    while (result > 9)
+    {
+        result = sumDigits(result);
+    }
+    return result;
+}
+
 Utility util;
 
 // abstract class Unit
@@ -114,26 +136,6 @@ int Infantry::getScore()
     return score;
 }
 
-int Utility::sumDigits(int n)
-{
-    int s = 0;
-    while (n != 0)
-    {
-        s += n % 10;
-        n /= 10;
-    }
-    return s;
-}
-
-int Utility::personalNumber(int num, int year)
-{
-    int result = util.sumDigits(num) + util.sumDigits(year);
-    while (result > 9)
-    {
-        result = util.sumDigits(result);
-    }
-    return result;
-}
 
 int Infantry::getAttackScore()
 {

@@ -71,6 +71,7 @@ class Utility
 public:
     int sumDigits(int n);
     int personalNumber(int num, int year);
+    bool isSpecialNumber(int num, int k);
 };
 
 class Army
