@@ -342,7 +342,18 @@ UnitList::UnitList(int capacity)
     listEnd = NULL;
 }
 
+void UnitList::insertAtHead(Unit *unit)
+{
+    if (this->listHead == NULL)
+    {
+        this->listHead = new Node(unit);
+        return;
+    }
 
+    Node *newNode = new Node(unit);
+    newNode->next = this->listHead;
+    this->listHead = newNode;
+}
 
 bool UnitList::insert(Unit *unit)
 {
