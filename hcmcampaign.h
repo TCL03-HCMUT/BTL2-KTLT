@@ -141,18 +141,24 @@ public:
     string instance();
 };
 
+struct Node
+{
+    Unit *data;
+    Node *next;
+};
+
 class UnitList
 {
 private:
     int capacity;
-    // TODO
+    // TODO:
 public:
     UnitList(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
     string str() const;
-    // TODO
+    // TODO:
 };
 
 class TerrainElement
