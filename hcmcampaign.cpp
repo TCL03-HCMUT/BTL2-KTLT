@@ -237,22 +237,22 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     {
         if (unitArray[i]->instance() == "Vehicle")
         {
-            LF += unitArray[i]->getAttackScore();
+            this->LF += unitArray[i]->getAttackScore();
         }
         else if (unitArray[i]->instance() == "Infantry")
         {
-            EXP += unitArray[i]->getAttackScore();
+            this->EXP += unitArray[i]->getAttackScore();
         }
     }
-    LF = clampLF(LF);
-    EXP = clampEXP(EXP);
+    this->LF = clampLF(LF);
+    this->EXP = clampEXP(EXP);
     int S = LF + EXP;
     bool specialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
     int capacity = specialSize ? 12 : 8;
-    *unitList = UnitList(capacity);
+    *(this->unitList) = UnitList(capacity);
     for (int i = 0; i < size; i++)
     {
-        unitList->insert(unitArray[i]);
+        (this->unitList)->insert(unitArray[i]);
     }
 }
 
