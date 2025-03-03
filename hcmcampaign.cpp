@@ -5,15 +5,15 @@
 ////////////////////////////////////////////////////////////////////////
 
 
-int Utility::sumDigits(int n)
+int Utility::sumDigits(int num)
 {
-    int s = 0;
-    while (n != 0)
+    int sumDigit = 0;
+    while (num != 0)
     {
-        s += n % 10;
-        n /= 10;
+        sumDigit += num % 10;
+        num /= 10;
     }
-    return s;
+    return sumDigit;
 }
 
 int Utility::personalNumber(int num, int year)
@@ -24,6 +24,26 @@ int Utility::personalNumber(int num, int year)
         result = sumDigits(result);
     }
     return result;
+}
+
+bool Utility::isSpecialNumber(int num, int base)
+{
+    // Edge case: 0 and negative numbers cannot be expressed as a sum of powers
+    if (num < 0)
+        return false;
+
+    int remainder;
+    while (num > 0)
+    {
+        remainder = num % base;
+
+        // If any digit is greater than 1, it's not a special number
+        if (remainder > 1)
+            return false;
+        
+        num /= base;
+    }
+    return true;
 }
 
 Utility util;
