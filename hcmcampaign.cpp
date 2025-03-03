@@ -4,7 +4,7 @@
 /// STUDENT'S ANSWER BEGINS HERE
 ////////////////////////////////////////////////////////////////////////
 
-
+Utility util;
 
 // abstract class Unit
 Unit::Unit(int quantity, int weight, Position pos)
@@ -114,7 +114,7 @@ int Infantry::getScore()
     return score;
 }
 
-int Infantry::sumDigits(int n)
+int Utility::sumDigits(int n)
 {
     int s = 0;
     while (n != 0)
@@ -125,12 +125,12 @@ int Infantry::sumDigits(int n)
     return s;
 }
 
-int Infantry::personalNumber(int num, int year)
+int Utility::personalNumber(int num, int year)
 {
-    int result = sumDigits(num) + sumDigits(year);
+    int result = util.sumDigits(num) + util.sumDigits(year);
     while (result > 9)
     {
-        result = sumDigits(result);
+        result = util.sumDigits(result);
     }
     return result;
 }
@@ -138,7 +138,7 @@ int Infantry::personalNumber(int num, int year)
 int Infantry::getAttackScore()
 {
     int score = getScore();
-    int personalNum = personalNumber(score, 1975);
+    int personalNum = util.personalNumber(score, 1975);
     if (personalNum > 7)
     {
         double quantity_tmp = quantity * 1.2;
@@ -275,6 +275,16 @@ string Position::str() const
     stringstream result;
     result << "(" << r << "," << c << ")";
     return result.str();
+}
+
+
+//class UnitList
+UnitList::UnitList(int capacity)
+{
+    this->capacity = capacity;
+    currentSize = 0;
+    listHead = NULL;
+    listEnd = NULL;
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER

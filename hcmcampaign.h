@@ -44,6 +44,8 @@ class BattleField;
 class HCMCampaign;
 class Configuration;
 
+class Utility;
+
 enum VehicleType
 {
     TRUCK,
@@ -62,6 +64,13 @@ enum InfantryType
     ENGINEER,
     SPECIALFORCES,
     REGULARINFANTRY
+};
+
+class Utility
+{
+public:
+    int sumDigits(int n);
+    int personalNumber(int num, int year);
 };
 
 class Army
@@ -132,8 +141,6 @@ private:
     InfantryType infantryType;
     bool isCommando();
     int getScore();
-    int sumDigits(int n);
-    int personalNumber(int num, int year);
 public:
     Infantry (int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
@@ -151,7 +158,9 @@ class UnitList
 {
 private:
     int capacity;
-    // TODO:
+    int currentSize;
+    Node *listHead;
+    Node *listEnd;
 public:
     UnitList(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
