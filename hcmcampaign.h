@@ -151,10 +151,15 @@ public:
     string instance();
 };
 
-struct Node
+class Node
 {
-    Unit *data;
+public:
+    Unit *unit;
     Node *next;
+    // default constructor
+    Node();
+    // parametrized constructor
+    Node(Unit *unit);
 };
 
 class UnitList
@@ -164,6 +169,8 @@ private:
     int currentSize;
     Node *listHead;
     Node *listEnd;
+    void insertAtHead(Unit *unit);
+    void insertAtEnd(Unit *unit);
 public:
     UnitList(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully

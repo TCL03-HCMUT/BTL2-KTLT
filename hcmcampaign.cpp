@@ -78,7 +78,7 @@ string Unit::str() const
 
 string Unit::instance()
 {
-
+    return "Unit";
 }
 
 // class Vehicle
@@ -340,6 +340,27 @@ UnitList::UnitList(int capacity)
     currentSize = 0;
     listHead = NULL;
     listEnd = NULL;
+}
+
+
+
+bool UnitList::insert(Unit *unit)
+{
+    if (currentSize >= capacity)
+    {
+        return false;
+    }
+
+    if (unit->instance() == "Vehicle")
+    {
+        insertAtEnd(unit);
+    }
+    else if (unit->instance() == "Infantry")
+    {
+        insertAtHead(unit);
+    }
+    return true;
+    
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
