@@ -81,7 +81,8 @@ protected:
     string name;
     UnitList *unitList;
     BattleField *battleField;
-
+    int clampLF(int LF);
+    int clampEXP(int EXP);
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
     virtual void fight(Army *enemy, bool defense = false) = 0;
@@ -91,7 +92,7 @@ public:
 class LiberationArmy : public Army
 {
 public:
-    LiberationArmy(Unit **unitArray , int size , string name ,BattleField *battleField);
+    LiberationArmy(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
 };
@@ -123,6 +124,7 @@ public:
     virtual int getAttackScore() = 0;
     Position getCurrentPosition() const;
     virtual string str() const = 0;
+    virtual string instance();
 };
 
 class Vehicle : public Unit

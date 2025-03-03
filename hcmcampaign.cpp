@@ -76,6 +76,11 @@ string Unit::str() const
 
 }
 
+string Unit::instance()
+{
+
+}
+
 // class Vehicle
 Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType) 
 : Unit(quantity,weight,pos)
@@ -213,6 +218,17 @@ string Infantry::instance()
 
 
 // class Army
+int Army::clampLF(int LF)
+{
+    return LF < 0 ? 0 : (LF > 1000 ? 1000 : LF);
+}
+
+int Army::clampEXP(int EXP)
+{
+    return LF < 0 ? 0 : (LF > 500 ? 500 : LF);    
+}
+
+
 Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
 {
     this->name = name;
