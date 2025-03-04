@@ -81,7 +81,15 @@ string Unit::instance()
     return "Unit";
 }
 
+VehicleType Unit::getVehicleType()
+{
 
+}
+
+InfantryType Unit::getInfantryType()
+{
+
+}
 
 // class Vehicle
 Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType) 
@@ -389,7 +397,38 @@ bool UnitList::insert(Unit *unit)
         insertAtHead(unit);
     }
     return true;
-    
+}
+
+bool UnitList::isContain(VehicleType vehicleType)
+{
+    Node *tmp = listHead;
+    while (tmp != NULL)
+    {
+        if (tmp->unit->instance() == "Vehicle")
+        {
+            if (tmp->unit->getVehicleType() == vehicleType)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool UnitList::isContain(InfantryType infantryType)
+{
+    Node *tmp = listHead;
+    while (tmp != NULL)
+    {
+        if (tmp->unit->instance() == "Infantry")
+        {
+            if (tmp->unit->getInfantryType() == infantryType)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER

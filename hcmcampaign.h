@@ -125,6 +125,8 @@ public:
     Position getCurrentPosition() const;
     virtual string str() const = 0;
     virtual string instance();
+    virtual VehicleType getVehicleType();
+    virtual InfantryType getInfantryType();
 };
 
 class Vehicle : public Unit
