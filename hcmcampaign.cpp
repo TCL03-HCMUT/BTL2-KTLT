@@ -81,10 +81,7 @@ string Unit::instance()
     return "Unit";
 }
 
-string Unit::getName()
-{
 
-}
 
 // class Vehicle
 Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType) 
@@ -136,9 +133,9 @@ string Vehicle::instance()
     return "Vehicle";
 }
 
-string Vehicle::getName()
+VehicleType Vehicle::getVehicleType()
 {
-    return vehicleName;
+    return vehicleType;
 }
 
 // class Infantry
@@ -223,9 +220,9 @@ string Infantry::instance()
     return "Infantry";
 }
 
-string Infantry::getName()
+InfantryType Infantry::getInfantryType()
 {
-    return infantryName;
+    return infantryType;
 }
 
 // class Army

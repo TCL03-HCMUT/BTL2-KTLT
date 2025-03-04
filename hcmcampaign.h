@@ -125,7 +125,6 @@ public:
     Position getCurrentPosition() const;
     virtual string str() const = 0;
     virtual string instance();
-    virtual string getName();
 };
 
 class Vehicle : public Unit
@@ -138,7 +137,7 @@ public:
     int getAttackScore() override;
     string str() const override;
     string instance();
-    string getName();
+    VehicleType getVehicleType();
 };
 
 class Infantry : public Unit
@@ -153,7 +152,7 @@ public:
     int getAttackScore() override;
     string str() const override;
     string instance();
-    string getName();
+    InfantryType getInfantryType();
 };
 
 class Node
