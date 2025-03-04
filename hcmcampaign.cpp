@@ -81,23 +81,16 @@ string Unit::instance()
     return "Unit";
 }
 
+string Unit::getName()
+{
+
+}
+
 // class Vehicle
 Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType) 
 : Unit(quantity,weight,pos)
 {
     this->vehicleType = vehicleType;
-}
-
-int Vehicle::getAttackScore()
-{
-    double score = (vehicleType * 304 + quantity * weight) / 30.0;
-    return ceil(score);
-}
-
-string Vehicle::str() const
-{
-    stringstream result;
-    string vehicleName;
     switch (vehicleType)
     {
     case TRUCK:
@@ -122,6 +115,17 @@ string Vehicle::str() const
         vehicleName = "TANK";
         break;
     }
+}
+
+int Vehicle::getAttackScore()
+{
+    double score = (vehicleType * 304 + quantity * weight) / 30.0;
+    return ceil(score);
+}
+
+string Vehicle::str() const
+{
+    stringstream result;
     result << "Vehicle[vehicleType=" << vehicleName << ";quantity=" << quantity 
         << ";weight=" << weight << ";pos=" << pos.str() << "]";
     return result.str();
@@ -132,12 +136,37 @@ string Vehicle::instance()
     return "Vehicle";
 }
 
+string Vehicle::getName()
+{
+    return vehicleName;
+}
 
 // class Infantry
 Infantry::Infantry(int quantity, int weight, const Position pos, InfantryType infantryType) 
 : Unit(quantity,weight,pos)
 {
     this->infantryType = infantryType;
+    switch(infantryType)
+    {
+        case SNIPER:
+            infantryName = "SNIPER";
+            break;
+        case ANTIAIRCRAFTSQUAD:
+            infantryName = "ANTIAIRCRAFTSQUAD";
+            break;
+        case MORTARSQUAD:
+            infantryName = "MORTARSQUAD";
+            break;
+        case ENGINEER:
+            infantryName = "ENGINEER";
+            break;
+        case SPECIALFORCES:
+            infantryName = "SPECIALFORCES";
+            break;
+        case REGULARINFANTRY:
+            infantryName = "REGULARINFANTRY";
+            break;
+    }
 }
 
 bool isSquare(int a)
@@ -183,30 +212,8 @@ int Infantry::getAttackScore()
 
 string Infantry::str() const
 {
-    stringstream result;
-    string infantryName;
-    switch(infantryType)
-    {
-        case SNIPER:
-            infantryName = "SNIPER";
-            break;
-        case ANTIAIRCRAFTSQUAD:
-            infantryName = "ANTIAIRCRAFTSQUAD";
-            break;
-        case MORTARSQUAD:
-            infantryName = "MORTARSQUAD";
-            break;
-        case ENGINEER:
-            infantryName = "ENGINEER";
-            break;
-        case SPECIALFORCES:
-            infantryName = "SPECIALFORCES";
-            break;
-        case REGULARINFANTRY:
-            infantryName = "REGULARINFANTRY";
-            break;
-    }
-    result << "Infantry[infantryType=" << infantryType << ",quantity=" << quantity 
+    stringstream result;  
+    result << "Infantry[infantryType=" << infantryName << ",quantity=" << quantity 
         << ",weight=" << weight << ",pos=" << pos.str() << "]";
     return result.str();
 }
@@ -216,6 +223,10 @@ string Infantry::instance()
     return "Infantry";
 }
 
+string Infantry::getName()
+{
+    return infantryName;
+}
 
 // class Army
 int Army::clampLF(int LF)
@@ -344,15 +355,18 @@ UnitList::UnitList(int capacity)
 
 void UnitList::insertAtHead(Unit *unit)
 {
-    if (this->listHead == NULL)
-    {
-        this->listHead = new Node(unit);
-        return;
-    }
-
     Node *newNode = new Node(unit);
-    newNode->next = this->listHead;
-    this->listHead = newNode;
+    newNode->next = listHead;
+    listHead = newNode;
+}
+
+void UnitList::insertAtEnd(Unit *unit)
+{
+    Node *newNode = new Node(unit);
+    newNode->next = NULL;
+    listEnd->next = newNode;
+    listEnd = listEnd->next;
+    
 }
 
 bool UnitList::insert(Unit *unit)
@@ -360,6 +374,13 @@ bool UnitList::insert(Unit *unit)
     if (currentSize >= capacity)
     {
         return false;
+    }
+
+    if (listHead == NULL)
+    {
+        listHead = new Node(unit);
+        listEnd = listHead;
+        return true;
     }
 
     if (unit->instance() == "Vehicle")

@@ -125,17 +125,20 @@ public:
     Position getCurrentPosition() const;
     virtual string str() const = 0;
     virtual string instance();
+    virtual string getName();
 };
 
 class Vehicle : public Unit
 {
 private:
     VehicleType vehicleType;
+    string vehicleName;
 public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore() override;
     string str() const override;
     string instance();
+    string getName();
 };
 
 class Infantry : public Unit
@@ -144,11 +147,13 @@ private:
     InfantryType infantryType;
     bool isCommando();
     int getScore();
+    string infantryName;
 public:
     Infantry (int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
     string instance();
+    string getName();
 };
 
 class Node
