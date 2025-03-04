@@ -175,6 +175,8 @@ private:
     int currentSize;
     Node *listHead;
     Node *listEnd;
+    int vehicleCount;
+    int infantryCount;
     void insertAtHead(Unit *unit);
     void insertAtEnd(Unit *unit);
 public:

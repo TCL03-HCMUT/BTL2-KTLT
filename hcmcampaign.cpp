@@ -356,10 +356,18 @@ UnitList::UnitList(int capacity)
     currentSize = 0;
     listHead = NULL;
     listEnd = NULL;
+    vehicleCount = 0;
+    infantryCount = 0;
 }
 
 void UnitList::insertAtHead(Unit *unit)
 {
+    if (listHead == NULL)
+    {
+        listHead = new Node(unit);
+        listEnd = listHead;
+        return;
+    }
     Node *newNode = new Node(unit);
     newNode->next = listHead;
     listHead = newNode;
@@ -367,6 +375,12 @@ void UnitList::insertAtHead(Unit *unit)
 
 void UnitList::insertAtEnd(Unit *unit)
 {
+    if (listHead == NULL)
+    {
+        listHead = new Node(unit);
+        listEnd = listHead;
+        return;
+    }
     Node *newNode = new Node(unit);
     newNode->next = NULL;
     listEnd->next = newNode;
@@ -381,20 +395,15 @@ bool UnitList::insert(Unit *unit)
         return false;
     }
 
-    if (listHead == NULL)
-    {
-        listHead = new Node(unit);
-        listEnd = listHead;
-        return true;
-    }
-
     if (unit->instance() == "Vehicle")
     {
         insertAtEnd(unit);
+        vehicleCount++;
     }
     else if (unit->instance() == "Infantry")
     {
         insertAtHead(unit);
+        infantryCount++;
     }
     return true;
 }
