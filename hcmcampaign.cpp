@@ -348,7 +348,16 @@ string Position::str() const
     return result.str();
 }
 
+Node::Node()
+{
+    next = NULL;
+}
 
+Node::Node(Unit *unit)
+{
+    this->unit = unit;
+    this->next = NULL;
+}
 //class UnitList
 UnitList::UnitList(int capacity)
 {
