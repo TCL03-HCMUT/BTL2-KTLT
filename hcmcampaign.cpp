@@ -304,6 +304,25 @@ string LiberationArmy::str() const
     return result.str();
 }
 
+// class ARVN
+ARVN::ARVN(Unit **unitArray, int size, string name, BattleField *battleField)
+: Army(unitArray, size, name, battleField)
+{
+
+}
+
+void ARVN::fight(Army *enemy, bool defense = false)
+{
+    //TODO: implement this method
+}
+
+string ARVN::str() const
+{
+    stringstream result;
+    result << "LiberationArmy[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
+        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str();
+    return result.str();
+}
 
 // class Position
 Position::Position(int r = 0, int c = 0)

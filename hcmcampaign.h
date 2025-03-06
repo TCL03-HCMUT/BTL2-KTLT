@@ -97,6 +97,14 @@ public:
     string str() const override;
 };
 
+class ARVN : public Army
+{
+public:
+    ARVN(Unit **unitArray, int size, string name ,BattleField *battleField);
+    void fight(Army *enemy, bool defense = false) override;
+    string str() const override;
+};
+
 class Position
 {
 private:
