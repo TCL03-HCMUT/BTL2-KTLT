@@ -46,7 +46,6 @@ bool Utility::isSpecialNumber(int num, int base)
     return true;
 }
 
-Utility util;
 
 // abstract class Unit
 Unit::Unit(int quantity, int weight, Position pos)
@@ -198,6 +197,7 @@ int Infantry::getScore()
 
 int Infantry::getAttackScore()
 {
+    Utility util;
     int score = getScore();
     int personalNum = util.personalNumber(score, 1975);
     if (personalNum > 7)
@@ -247,6 +247,7 @@ int Army::clampEXP(int EXP)
 
 Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
 {
+    Utility util;
     this->name = name;
     this->battleField = battleField;
     for (int i = 0; i < size; i++)
@@ -350,6 +351,7 @@ string Position::str() const
 
 Node::Node()
 {
+    unit = NULL;
     next = NULL;
 }
 
@@ -362,11 +364,11 @@ Node::Node(Unit *unit)
 UnitList::UnitList(int capacity)
 {
     this->capacity = capacity;
-    currentSize = 0;
-    listHead = NULL;
-    listEnd = NULL;
-    vehicleCount = 0;
-    infantryCount = 0;
+    this->currentSize = 0;
+    this->listHead = NULL;
+    this->listEnd = NULL;
+    this->vehicleCount = 0;
+    this->infantryCount = 0;
 }
 
 void UnitList::insertAtHead(Unit *unit)
@@ -391,7 +393,6 @@ void UnitList::insertAtEnd(Unit *unit)
         return;
     }
     Node *newNode = new Node(unit);
-    newNode->next = NULL;
     listEnd->next = newNode;
     listEnd = listEnd->next;
     
@@ -429,6 +430,7 @@ bool UnitList::isContain(VehicleType vehicleType)
                 return true;
             }
         }
+        tmp = tmp->next;
     }
     return false;
 }
@@ -445,8 +447,14 @@ bool UnitList::isContain(InfantryType infantryType)
                 return true;
             }
         }
+        tmp = tmp->next;
     }
     return false;
+}
+
+string UnitList::str() const
+{
+
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
