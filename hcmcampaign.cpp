@@ -264,8 +264,8 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     this->LF = clampLF(LF);
     this->EXP = clampEXP(EXP);
     int S = this->LF + this->EXP;
-    bool specialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
-    int capacity = specialSize ? 12 : 8;
+    bool isSpecialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
+    int capacity = isSpecialSize ? 12 : 8;
     *(this->unitList) = UnitList(capacity);
     for (int i = 0; i < size; i++)
     {
@@ -454,7 +454,20 @@ bool UnitList::isContain(InfantryType infantryType)
 
 string UnitList::str() const
 {
-
+    stringstream result;
+    result << "UnitList[" << "countvehicle=" << vehicleCount << ";count_infantry=" << infantryCount << ";";
+    Node *tmp = listHead;
+    while (tmp != NULL)
+    {
+        result << tmp->unit->str();
+        if (tmp->next != NULL)
+        {
+            result << ",";
+        }
+        tmp = tmp->next;
+    }
+    result << "]";
+    return result.str();
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
