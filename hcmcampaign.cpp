@@ -244,25 +244,33 @@ int Army::clampEXP(int EXP)
     return LF < 0 ? 0 : (LF > 500 ? 500 : LF);    
 }
 
+void Army::updateParameters()
+{
+    int LF_tmp = 0, EXP_tmp = 0;
+    Node* tmp = unitList->getHead();
+    while (tmp != NULL)
+    {
+        if (tmp->unit->instance() == "Vehicle")
+        {
+            LF_tmp += tmp->unit->getAttackScore();
+        }
+        else if (tmp->unit->instance() == "Infantry")
+        {
+            EXP_tmp += tmp->unit->getAttackScore();
+        }
+        tmp = tmp->next;
+    }
+    LF_tmp = clampLF(LF_tmp);
+    EXP_tmp = clampEXP(EXP_tmp);
+    this->LF = LF_tmp;
+    this->EXP = EXP_tmp;
+}
 
 Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
 {
     Utility util;
     this->name = name;
     this->battleField = battleField;
-    for (int i = 0; i < size; i++)
-    {
-        if (unitArray[i]->instance() == "Vehicle")
-        {
-            this->LF += unitArray[i]->getAttackScore();
-        }
-        else if (unitArray[i]->instance() == "Infantry")
-        {
-            this->EXP += unitArray[i]->getAttackScore();
-        }
-    }
-    this->LF = clampLF(LF);
-    this->EXP = clampEXP(EXP);
     int S = this->LF + this->EXP;
     bool isSpecialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
     int capacity = isSpecialSize ? 12 : 8;
@@ -271,6 +279,7 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     {
         (this->unitList)->insert(unitArray[i]);
     }
+    updateParameters();
 }
 
 void Army::fight(Army *enemy, bool defense = false)
@@ -503,6 +512,11 @@ string UnitList::str() const
     }
     result << "]";
     return result.str();
+}
+
+Node* UnitList::getHead()
+{
+    return listHead;
 }
 
 // class TerrainElement

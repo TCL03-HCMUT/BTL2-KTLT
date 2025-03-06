@@ -83,6 +83,7 @@ protected:
     BattleField *battleField;
     int clampLF(int LF);
     int clampEXP(int EXP);
+    void updateParameters();
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
     virtual void fight(Army *enemy, bool defense = false) = 0;
@@ -195,6 +196,7 @@ public:
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
+    Node* getHead();
     string str() const;
     // TODO:
 };
