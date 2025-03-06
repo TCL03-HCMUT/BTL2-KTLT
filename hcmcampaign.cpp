@@ -283,6 +283,10 @@ string Army::str() const
 
 }
 
+string Army::instance()
+{
+    return "Army";
+}
 
 // class LiberationArmy
 LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField) 
@@ -304,6 +308,12 @@ string LiberationArmy::str() const
     return result.str();
 }
 
+string LiberationArmy::instance()
+{
+    return "LiberationArmy";
+}
+
+
 // class ARVN
 ARVN::ARVN(Unit **unitArray, int size, string name, BattleField *battleField)
 : Army(unitArray, size, name, battleField)
@@ -323,6 +333,12 @@ string ARVN::str() const
         << ",unitList=" << unitList->str() << ",battleField=" << battleField->str();
     return result.str();
 }
+
+string ARVN::instance()
+{
+    return "ARVN";
+}
+
 
 // class Position
 Position::Position(int r = 0, int c = 0)
