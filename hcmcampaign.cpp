@@ -469,6 +469,22 @@ string UnitList::str() const
     result << "]";
     return result.str();
 }
+
+// class TerrainElement
+TerrainElement::TerrainElement()
+{
+
+}
+
+TerrainElement::~TerrainElement()
+{
+
+}
+
+void TerrainElement::getEffect(Army *army)
+{
+
+}
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
