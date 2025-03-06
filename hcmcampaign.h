@@ -209,6 +209,8 @@ public:
     virtual void getEffect(Army *army) = 0;
 };
 
+// TODO: delcare and implement the Elements of the terrain
+
 class BattleField
 {
 private:

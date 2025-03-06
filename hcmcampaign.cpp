@@ -271,6 +271,21 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     Utility util;
     this->name = name;
     this->battleField = battleField;
+    this->LF = 0;
+    this->EXP = 0;
+    for (int i = 0; i < size; i++)
+    {
+        if (unitArray[i]->instance() == "Vehicle")
+        {
+            this->LF += unitArray[i]->getAttackScore();
+        }
+        else if (unitArray[i]->instance() == "Infantry")
+        {
+            this->EXP += unitArray[i]->getAttackScore();
+        }
+    }
+    this->LF = clampLF(this->LF);
+    this->EXP = clampEXP(this->EXP);
     int S = this->LF + this->EXP;
     bool isSpecialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
     int capacity = isSpecialSize ? 12 : 8;
