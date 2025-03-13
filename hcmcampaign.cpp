@@ -297,6 +297,26 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     }
 }
 
+int Army::getLF()
+{
+    return LF;
+}
+
+int Army::getEXP()
+{
+    return EXP;
+}
+
+void Army::setLF(int LF)
+{
+    this->LF = LF;
+}
+
+void Army::setEXP(int EXP)
+{
+    this->EXP = EXP;
+}
+
 void Army::fight(Army *enemy, bool defense)
 {
 
@@ -435,6 +455,11 @@ string Position::str() const
     stringstream result;
     result << "(" << r << "," << c << ")";
     return result.str();
+}
+
+double Position::getDistance(Position other)
+{
+    return sqrt(pow(this->getRow() - other.getRow(), 2) + pow(this->getCol() - other.getCol(),2));
 }
 
 Node::Node()

@@ -86,6 +86,10 @@ protected:
     void updateParameters();
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
+    int getLF();
+    int getEXP();
+    void setLF(int LF);
+    void setEXP(int EXP);
     virtual void fight(Army *enemy, bool defense = false) = 0;
     virtual string str() const = 0;
     virtual string instance();
@@ -126,6 +130,7 @@ public:
     void setRow(int r);
     void setCol(int c);
     string str() const; // Example: returns "(1,15)"
+    double getDistance(Position other);
 };
 
 class Unit
