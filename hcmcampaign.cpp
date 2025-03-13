@@ -312,6 +312,35 @@ string Army::instance()
     return "Army";
 }
 
+void Army::multiplyLF(double multiplier)
+{
+    double temp = LF;
+    temp *= multiplier;
+    LF = ceil(temp);
+}
+
+void Army::multiplyEXP(double multiplier)
+{
+    double temp = EXP;
+    temp *= multiplier;
+    EXP = ceil(temp);
+}
+
+void Army::addLF(double num)
+{
+    double temp = LF;
+    temp += num;
+    LF = ceil(temp);
+}
+
+void Army::addLF(double num)
+{
+    double temp = EXP;
+    temp += num;
+    EXP = ceil(temp);
+}
+
+
 // class LiberationArmy
 LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField) 
 : Army(unitArray, size, name, battleField)
@@ -550,7 +579,27 @@ void TerrainElement::getEffect(Army *army)
 
 }
 
+Road::Road() : TerrainElement()
+{
 
+}
+
+void Road::getEffect(Army *army)
+{
+
+}
+
+Mountain::Mountain(Position pos) : TerrainElement()
+{
+    this->pos = pos;
+}
+
+void Mountain::getEffect(Army *army)
+{
+
+}
+
+// class Battlefield
 BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
                         vector<Position *> arrayRiver, vector<Position *> arrayFortification,
                         vector<Position *> arrayUrban, vector<Position *> arraySpecialZone)

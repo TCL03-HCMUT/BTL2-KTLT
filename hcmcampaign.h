@@ -89,6 +89,10 @@ public:
     virtual void fight(Army *enemy, bool defense = false) = 0;
     virtual string str() const = 0;
     virtual string instance();
+    void multiplyLF(double multiplier);
+    void multiplyEXP(double multiplier);
+    void addLF(double num);
+    void addEXP(double num);
 };
 
 class LiberationArmy : public Army
@@ -215,7 +219,6 @@ class Road : public TerrainElement
 {
 public:
     Road();
-    ~Road();
     void getEffect(Army *army) override;
 };
 
@@ -225,7 +228,6 @@ private:
     Position pos;
 public:
     Mountain(Position pos);
-    ~Mountain();
     void getEffect(Army *army) override;
 };
 
@@ -235,7 +237,6 @@ private:
     Position pos;
 public:
     River(Position pos);
-    ~River();
     void getEffect(Army *army) override;
 };
 
@@ -245,7 +246,6 @@ private:
     Position pos;
 public:
     Urban(Position pos);
-    ~Urban();
     void getEffect(Army *army) override;
 };
 
@@ -255,7 +255,6 @@ private:
     Position pos;
 public:
     Fortification(Position pos);
-    ~Fortification();
     void getEffect(Army *army) override;
 };
 
@@ -265,7 +264,6 @@ private:
     Position pos;
 public:
     SpecialZone(Position pos);
-    ~SpecialZone();
     void getEffect(Army *army) override;
 };
 
