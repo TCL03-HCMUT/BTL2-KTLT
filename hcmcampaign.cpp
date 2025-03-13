@@ -53,6 +53,7 @@ Unit::Unit(int quantity, int weight, Position pos)
     this->quantity = quantity;
     this->weight = weight;
     this->pos = pos;
+    this->attackScore = getAttackScore();
 }
 
 Unit::~Unit()
@@ -88,6 +89,11 @@ VehicleType Unit::getVehicleType()
 InfantryType Unit::getInfantryType()
 {
 
+}
+
+int Unit::getCurrentScore()
+{
+    return attackScore;
 }
 
 // class Vehicle
@@ -204,13 +210,13 @@ int Infantry::getAttackScore()
     {
         double quantity_tmp = quantity * 1.2;
         quantity = ceil(quantity_tmp);
-        score = getScore();
+        score = infantryType*56 + quantity*weight;
     }
     else if (personalNum < 3)
     {
         double quantity_tmp = quantity * 0.9;
         quantity = ceil(quantity_tmp);
-        score = getScore();
+        score = infantryType*56 + quantity*weight;
     }
     return score;
 }
@@ -241,7 +247,7 @@ int Army::clampLF(int LF)
 
 int Army::clampEXP(int EXP)
 {
-    return LF < 0 ? 0 : (LF > 500 ? 500 : LF);    
+    return EXP < 0 ? 0 : (EXP > 500 ? 500 : EXP);    
 }
 
 void Army::updateParameters()
@@ -309,12 +315,12 @@ int Army::getEXP()
 
 void Army::setLF(int LF)
 {
-    this->LF = LF;
+    this->LF = clampLF(LF);
 }
 
 void Army::setEXP(int EXP)
 {
-    this->EXP = EXP;
+    this->EXP = clampEXP(EXP);
 }
 
 void Army::fight(Army *enemy, bool defense)
@@ -336,30 +342,34 @@ void Army::multiplyLF(double multiplier)
 {
     double temp = LF;
     temp *= multiplier;
-    LF = ceil(temp);
+    LF = clampLF(ceil(temp));
 }
 
 void Army::multiplyEXP(double multiplier)
 {
     double temp = EXP;
     temp *= multiplier;
-    EXP = ceil(temp);
+    EXP = clampEXP(ceil(temp));
 }
 
 void Army::addLF(double num)
 {
     double temp = LF;
     temp += num;
-    LF = ceil(temp);
+    LF = clampLF(ceil(temp));
 }
 
-void Army::addLF(double num)
+void Army::addEXP(double num)
 {
     double temp = EXP;
     temp += num;
-    EXP = ceil(temp);
+    EXP = clampEXP(ceil(temp));
 }
 
+Node *Army::getListHead()
+{
+    return this->unitList->getHead();
+}
 
 // class LiberationArmy
 LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField) 
@@ -621,7 +631,30 @@ Mountain::Mountain(Position pos) : TerrainElement()
 
 void Mountain::getEffect(Army *army)
 {
+    double tempLF = army->getLF();
+    double tempEXP = army->getEXP();
+    Node *tmp = army->getListHead();
+    double distanceThreshold = (army->instance() == "LiberationArmy") ? 2.0 : 4.0;
+    double infantryEXPMultiplier = (army->instance() == "LiberationArmy") ? 0.3 : 0.2;
+    double vehicleLFMultiplier = (army->instance() == "LiberationArmy") ? -0.1 : -0.05;
 
+    while (tmp != NULL)
+    {
+        if (tmp->unit->getCurrentPosition().getDistance(this->pos) <= distanceThreshold)
+        {
+            if (tmp->unit->instance() == "Infantry")
+            {
+                tempEXP += infantryEXPMultiplier * tmp->unit->getAttackScore();
+            }
+            else if (tmp->unit->instance() == "Vehicle")
+            {
+                tempLF += vehicleLFMultiplier * tmp->unit->getAttackScore();
+            }
+        }
+        tmp = tmp->next;
+    }
+    army->setLF((int)ceil(tempLF));
+    army->setEXP((int)ceil(tempEXP));
 }
 
 // class Battlefield

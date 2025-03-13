@@ -97,6 +97,7 @@ public:
     void multiplyEXP(double multiplier);
     void addLF(double num);
     void addEXP(double num);
+    Node *getListHead();
 };
 
 class LiberationArmy : public Army
@@ -136,9 +137,8 @@ public:
 class Unit
 {
 protected:
-    int quantity, weight;
+    int quantity, weight, attackScore;
     Position pos;
-
 public:
     Unit(int quantity, int weight, Position pos);
     virtual ~Unit();
@@ -148,6 +148,7 @@ public:
     virtual string instance();
     virtual VehicleType getVehicleType();
     virtual InfantryType getInfantryType();
+    int getCurrentScore();
 };
 
 class Vehicle : public Unit
