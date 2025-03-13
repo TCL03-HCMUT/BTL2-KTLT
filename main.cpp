@@ -14,9 +14,9 @@ using namespace std;
 
 void g_satc_01() {
     cout << "----- Sample Testcase 01 -----" << endl;
-    Configuration* config = new Configuration("config.txt");
-    cout << config->str() << endl;
-    delete config;
+    //Configuration* config = new Configuration("config.txt");
+    //cout << config->str() << endl;
+    //delete config;
 }
 void g_satc_02() {
     cout << "----- Sample Testcase 02 -----" << endl;
@@ -58,8 +58,26 @@ void g_satc_02() {
     delete[] unitArrayOfAr;
 }
 
+void g_satc_03()
+{
+    Position test_ps("(4,5)");
+    Vehicle *test_vhc = new Vehicle(2,3,test_ps,TRUCK);
+    Vehicle *test_vhc2 = new Vehicle(2,3,test_ps,ANTIAIRCRAFT);
+
+    Infantry *test_if = new Infantry(2,3,test_ps,SPECIALFORCES);
+
+    UnitList test_unl(5);
+
+    test_unl.insert(test_vhc);
+    test_unl.insert(test_vhc2);
+    test_unl.insert(test_if);
+    cout << test_unl.str();
+
+}
+
 int main(int argc, const char * argv[]) {
-    g_satc_01();
-    g_satc_02();
+    // g_satc_01();
+    // g_satc_02();
+    g_satc_03();
     return 0;
 }

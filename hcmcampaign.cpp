@@ -273,6 +273,7 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     this->battleField = battleField;
     this->LF = 0;
     this->EXP = 0;
+    this->unitList = new UnitList(size);
     for (int i = 0; i < size; i++)
     {
         if (unitArray[i]->instance() == "Vehicle")
@@ -294,10 +295,9 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     {
         (this->unitList)->insert(unitArray[i]);
     }
-    updateParameters();
 }
 
-void Army::fight(Army *enemy, bool defense = false)
+void Army::fight(Army *enemy, bool defense)
 {
 
 }
@@ -319,7 +319,7 @@ LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleFi
     
 }
 
-void LiberationArmy::fight(Army *enemy, bool defense = false)
+void LiberationArmy::fight(Army *enemy, bool defense)
 {
     //TODO: implement this method
 }
@@ -345,7 +345,7 @@ ARVN::ARVN(Unit **unitArray, int size, string name, BattleField *battleField)
 
 }
 
-void ARVN::fight(Army *enemy, bool defense = false)
+void ARVN::fight(Army *enemy, bool defense)
 {
     //TODO: implement this method
 }
@@ -365,7 +365,7 @@ string ARVN::instance()
 
 
 // class Position
-Position::Position(int r = 0, int c = 0)
+Position::Position(int r, int c)
 {
     this->r = r;
     this->c = c;
@@ -374,11 +374,11 @@ Position::Position(int r = 0, int c = 0)
 Position::Position(const string &str_pos)
 {
     string pos_cpy = str_pos;
-    pos_cpy.erase(pos_cpy.begin());
-    pos_cpy.erase(pos_cpy.end());
-    pos_cpy.replace(pos_cpy.find(','), 1, ",", 1);
-    stringstream nums(pos_cpy);
-    nums >> this->r >> this->c;
+    pos_cpy.erase(pos_cpy.begin()); // Remove the first '('
+    pos_cpy.erase(pos_cpy.end() - 1); // Remove the last ')'
+    size_t commaPos = pos_cpy.find(',');
+    this->r = stoi(pos_cpy.substr(0, commaPos));
+    this->c = stoi(pos_cpy.substr(commaPos + 1));
 }
 
 int Position::getRow() const
@@ -548,6 +548,42 @@ TerrainElement::~TerrainElement()
 void TerrainElement::getEffect(Army *army)
 {
 
+}
+
+
+BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
+                        vector<Position *> arrayRiver, vector<Position *> arrayFortification,
+                        vector<Position *> arrayUrban, vector<Position *> arraySpecialZone)
+{
+
+}
+
+BattleField::~BattleField()
+{
+
+}
+
+string BattleField::str()
+{
+    stringstream result;
+    result << "BattleField[n_rows=" << n_rows << ",n_cols=" << n_cols << "]";
+    return result.str();
+}
+
+
+HCMCampaign::HCMCampaign(const string &config_file_path)
+{
+
+}
+
+void HCMCampaign::run()
+{
+
+}
+
+string HCMCampaign::printResult()
+{
+    return "";
 }
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
