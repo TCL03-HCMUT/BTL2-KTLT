@@ -162,7 +162,7 @@ private:
     int getScore();
     string infantryName;
 public:
-    Infantry (int quantity, int weight, const Position pos, InfantryType infantryType);
+    Infantry(int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
     string instance();
@@ -211,11 +211,69 @@ public:
 
 // TODO: delcare and implement the Elements of the terrain
 
+class Road : public TerrainElement
+{
+public:
+    Road();
+    ~Road();
+    void getEffect(Army *army) override;
+};
+
+class Mountain : public TerrainElement
+{
+private:
+    Position pos;
+public:
+    Mountain(Position pos);
+    ~Mountain();
+    void getEffect(Army *army) override;
+};
+
+class River : public TerrainElement
+{
+private:
+    Position pos;
+public:
+    River(Position pos);
+    ~River();
+    void getEffect(Army *army) override;
+};
+
+class Urban : public TerrainElement
+{
+private:
+    Position pos;
+public:
+    Urban(Position pos);
+    ~Urban();
+    void getEffect(Army *army) override;
+};
+
+class Fortification : public TerrainElement
+{
+private:
+    Position pos;
+public:
+    Fortification(Position pos);
+    ~Fortification();
+    void getEffect(Army *army) override;
+};
+
+class SpecialZone : public TerrainElement
+{
+private:
+    Position pos;
+public:
+    SpecialZone(Position pos);
+    ~SpecialZone();
+    void getEffect(Army *army) override;
+};
+
 class BattleField
 {
 private:
     int n_rows, n_cols;
-    // TODO:
+    
 public:
     BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
                 vector<Position *> arrayRiver, vector<Position *> arrayFortification,

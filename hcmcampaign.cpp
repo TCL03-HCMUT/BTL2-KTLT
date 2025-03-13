@@ -130,8 +130,8 @@ int Vehicle::getAttackScore()
 string Vehicle::str() const
 {
     stringstream result;
-    result << "Vehicle[vehicleType=" << vehicleName << ";quantity=" << quantity 
-        << ";weight=" << weight << ";pos=" << pos.str() << "]";
+    result << "Vehicle[vehicleType=" << vehicleName << ",quantity=" << quantity 
+        << ",weight=" << weight << ",pos=" << pos.str() << "]";
     return result.str();
 }
 
@@ -514,7 +514,7 @@ bool UnitList::isContain(InfantryType infantryType)
 string UnitList::str() const
 {
     stringstream result;
-    result << "UnitList[" << "countvehicle=" << vehicleCount << ";count_infantry=" << infantryCount << ";";
+    result << "UnitList[" << "count_vehicle=" << vehicleCount << ";count_infantry=" << infantryCount << ";";
     Node *tmp = listHead;
     while (tmp != NULL)
     {
