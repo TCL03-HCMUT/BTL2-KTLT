@@ -665,7 +665,7 @@ void Mountain::getEffect(Army *army)
 
     while (tmp != NULL)
     {
-        if (tmp->unit->getCurrentPosition().getDistance(this->pos) <= distanceThreshold)
+        if (this->pos.getDistance(tmp->unit->getCurrentPosition()) <= distanceThreshold)
         {
             if (tmp->unit->instance() == "Infantry")
             {
@@ -680,6 +680,25 @@ void Mountain::getEffect(Army *army)
     }
     army->setLF((int)ceil(tempLF));
     army->setEXP((int)ceil(tempEXP));
+}
+
+River::River(Position pos)
+{
+    this->pos = pos;
+}
+
+void River::getEffect(Army *army)
+{
+    Node *tmp = army->getListHead();
+    while (tmp != NULL)
+    {
+        if (this->pos.getDistance(tmp->unit->getCurrentPosition()) <= 2)
+        {
+            if (tmp->unit->instance() == "Infantry")
+                tmp->unit->multiplyScore(0.9);
+        }
+        tmp = tmp->next;
+    }
 }
 
 // class Battlefield
