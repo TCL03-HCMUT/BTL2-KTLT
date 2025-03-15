@@ -68,13 +68,11 @@ void g_satc_03()
     Infantry *test_if2 = new Infantry(2,3,test_ps,ANTIAIRCRAFTSQUAD);
 
     UnitList test_unl(5);
-
     test_unl.insert(test_vhc);
     test_unl.insert(test_vhc2);
     test_unl.insert(test_if);
     test_unl.insert(test_if2);
     cout << test_unl.str();
-
 }
 
 int main(int argc, const char * argv[]) {

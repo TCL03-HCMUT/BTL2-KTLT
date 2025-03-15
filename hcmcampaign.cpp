@@ -46,6 +46,11 @@ bool Utility::isSpecialNumber(int num, int base)
     return true;
 }
 
+bool Utility::isSquare(int n)
+{
+    int a_sq = sqrt(n);
+    return (a_sq * a_sq) == n;
+}
 
 // abstract class Unit
 Unit::Unit(int quantity, int weight, Position pos)
@@ -53,7 +58,7 @@ Unit::Unit(int quantity, int weight, Position pos)
     this->quantity = quantity;
     this->weight = weight;
     this->pos = pos;
-    this->attackScore = getAttackScore();
+    //this->attackScore = getAttackScore();
 }
 
 Unit::~Unit()
@@ -93,7 +98,19 @@ InfantryType Unit::getInfantryType()
 
 int Unit::getCurrentScore()
 {
-    return attackScore;
+    return this->attackScore;
+}
+
+void Unit::setAttackScore(int score)
+{
+    this->attackScore = score;
+}
+
+void Unit::multiplyScore(double multiplier)
+{
+    double tmpScore = this->attackScore;
+    tmpScore *= multiplier;
+    this->attackScore = ceil(tmpScore);
 }
 
 // class Vehicle
@@ -125,6 +142,7 @@ Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType
         vehicleName = "TANK";
         break;
     }
+    this->attackScore = getAttackScore();
 }
 
 int Vehicle::getAttackScore()
@@ -177,17 +195,15 @@ Infantry::Infantry(int quantity, int weight, const Position pos, InfantryType in
             infantryName = "REGULARINFANTRY";
             break;
     }
+    this->attackScore = getAttackScore();
 }
 
-bool isSquare(int a)
-{
-    int a_sq = sqrt(a);
-    return (a_sq * a_sq) == a;
-}
+
 
 bool Infantry::isCommando()
 {
-    return (infantryType == SPECIALFORCES) && isSquare(weight);
+    Utility util;
+    return (infantryType == SPECIALFORCES) && util.isSquare(weight);
 }
 
 int Infantry::getScore()
@@ -279,7 +295,7 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     this->battleField = battleField;
     this->LF = 0;
     this->EXP = 0;
-    this->unitList = new UnitList(size);
+    
     for (int i = 0; i < size; i++)
     {
         if (unitArray[i]->instance() == "Vehicle")
@@ -296,7 +312,7 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     int S = this->LF + this->EXP;
     bool isSpecialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
     int capacity = isSpecialSize ? 12 : 8;
-    *(this->unitList) = UnitList(capacity);
+    this->unitList = new UnitList(capacity);
     for (int i = 0; i < size; i++)
     {
         (this->unitList)->insert(unitArray[i]);
@@ -366,7 +382,7 @@ void Army::addEXP(double num)
     EXP = clampEXP(ceil(temp));
 }
 
-Node *Army::getListHead()
+Node* Army::getListHead()
 {
     return this->unitList->getHead();
 }
@@ -412,7 +428,7 @@ void ARVN::fight(Army *enemy, bool defense)
 string ARVN::str() const
 {
     stringstream result;
-    result << "LiberationArmy[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
+    result << "ARVN[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
         << ",unitList=" << unitList->str() << ",battleField=" << battleField->str();
     return result.str();
 }
@@ -483,6 +499,8 @@ Node::Node(Unit *unit)
     this->unit = unit;
     this->next = NULL;
 }
+
+
 //class UnitList
 UnitList::UnitList(int capacity)
 {
@@ -492,6 +510,11 @@ UnitList::UnitList(int capacity)
     this->listEnd = NULL;
     this->vehicleCount = 0;
     this->infantryCount = 0;
+}
+
+void UnitList::setCapacity(int capacity)
+{
+    this->capacity = capacity;
 }
 
 void UnitList::insertAtHead(Unit *unit)
@@ -532,11 +555,13 @@ bool UnitList::insert(Unit *unit)
     {
         insertAtEnd(unit);
         vehicleCount++;
+        currentSize++;
     }
     else if (unit->instance() == "Infantry")
     {
         insertAtHead(unit);
         infantryCount++;
+        currentSize++;
     }
     return true;
 }

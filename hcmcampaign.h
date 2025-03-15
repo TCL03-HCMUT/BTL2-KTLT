@@ -45,6 +45,7 @@ class HCMCampaign;
 class Configuration;
 
 class Utility;
+class Node;
 
 enum VehicleType
 {
@@ -72,6 +73,7 @@ public:
     int sumDigits(int n);
     int personalNumber(int num, int year);
     bool isSpecialNumber(int num, int k);
+    bool isSquare(int n);
 };
 
 class Army
@@ -97,7 +99,7 @@ public:
     void multiplyEXP(double multiplier);
     void addLF(double num);
     void addEXP(double num);
-    Node *getListHead();
+    Node* getListHead();
 };
 
 class LiberationArmy : public Army
@@ -149,6 +151,8 @@ public:
     virtual VehicleType getVehicleType();
     virtual InfantryType getInfantryType();
     int getCurrentScore();
+    void setAttackScore(int score);
+    void multiplyScore(double multiplier);
 };
 
 class Vehicle : public Unit
@@ -203,6 +207,7 @@ private:
     void insertAtEnd(Unit *unit);
 public:
     UnitList(int capacity);
+    void setCapacity(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
