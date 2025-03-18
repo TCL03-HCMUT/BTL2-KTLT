@@ -68,7 +68,7 @@ Unit::~Unit()
 
 int Unit::getAttackScore()
 {
-
+    return 0;
 }
 
 Position Unit::getCurrentPosition() const
@@ -78,7 +78,7 @@ Position Unit::getCurrentPosition() const
 
 string Unit::str() const
 {
-
+    return "Unit";
 }
 
 string Unit::instance()
@@ -88,12 +88,12 @@ string Unit::instance()
 
 VehicleType Unit::getVehicleType()
 {
-
+    return TRUCK;
 }
 
 InfantryType Unit::getInfantryType()
 {
-
+    return SNIPER;
 }
 
 int Unit::getCurrentScore()
@@ -110,7 +110,14 @@ void Unit::multiplyScore(double multiplier)
 {
     double tmpScore = this->attackScore;
     tmpScore *= multiplier;
-    this->attackScore = ceil(tmpScore);
+    this->attackScore = (int)ceil(tmpScore);
+}
+
+void Unit::addScore(double num)
+{
+    double tmpScore = this->attackScore;
+    tmpScore += num;
+    this->attackScore = (int)ceil(tmpScore);
 }
 
 // class Vehicle
@@ -346,7 +353,7 @@ void Army::fight(Army *enemy, bool defense)
 
 string Army::str() const
 {
-
+    return "Army";
 }
 
 string Army::instance()
@@ -358,28 +365,28 @@ void Army::multiplyLF(double multiplier)
 {
     double temp = LF;
     temp *= multiplier;
-    LF = clampLF(ceil(temp));
+    LF = clampLF((int)ceil(temp));
 }
 
 void Army::multiplyEXP(double multiplier)
 {
     double temp = EXP;
     temp *= multiplier;
-    EXP = clampEXP(ceil(temp));
+    EXP = clampEXP((int)ceil(temp));
 }
 
 void Army::addLF(double num)
 {
     double temp = LF;
     temp += num;
-    LF = clampLF(ceil(temp));
+    LF = clampLF((int)ceil(temp));
 }
 
 void Army::addEXP(double num)
 {
     double temp = EXP;
     temp += num;
-    EXP = clampEXP(ceil(temp));
+    EXP = clampEXP((int)ceil(temp));
 }
 
 Node* Army::getListHead()
@@ -696,6 +703,51 @@ void River::getEffect(Army *army)
         {
             if (tmp->unit->instance() == "Infantry")
                 tmp->unit->multiplyScore(0.9);
+        }
+        tmp = tmp->next;
+    }
+}
+
+Urban::Urban(Position pos)
+{
+    this->pos = pos;
+}
+
+void Urban::getEffect(Army *army)
+{
+    Node *tmp = army->getListHead();
+    while (tmp != NULL)
+    {
+        double distance = this->pos.getDistance(tmp->unit->getCurrentPosition());
+        if (army->instance() == "LiberationArmy")
+        {
+            if (
+                (tmp->unit->instance() == "Infantry") &&
+                (tmp->unit->getInfantryType() == SPECIALFORCES || tmp->unit->getInfantryType() == REGULARINFANTRY) &&
+                (distance <= 5.0)
+            )
+            {
+                tmp->unit->addScore( ((2.0*tmp->unit->getCurrentScore()) / distance) );
+            }
+            if (
+                (tmp->unit->instance() == "Vehicle")  &&
+                (tmp->unit->getVehicleType() == ARTILLERY) &&
+                (distance <= 2.0)
+            )
+            {
+                tmp->unit->multiplyScore(0.5);
+            }
+        }
+        else if (army->instance() == "ARVN")
+        {
+            if (
+                (tmp->unit->instance() == "Infantry") &&
+                (tmp->unit->getInfantryType() == REGULARINFANTRY) &&
+                (distance <= 3.0)
+            )
+            {
+                tmp->unit->addScore( ((3.0*tmp->unit->getCurrentScore()) / (2.0*distance)) );
+            }
         }
         tmp = tmp->next;
     }

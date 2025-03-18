@@ -153,6 +153,7 @@ public:
     int getCurrentScore();
     void setAttackScore(int score);
     void multiplyScore(double multiplier);
+    void addScore(double num);
 };
 
 class Vehicle : public Unit
