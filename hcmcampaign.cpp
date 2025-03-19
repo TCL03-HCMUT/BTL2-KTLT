@@ -277,7 +277,7 @@ void Army::updateParameters()
 {
     int LF_tmp = 0, EXP_tmp = 0;
     Node* tmp = unitList->getHead();
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         if (tmp->unit->instance() == VEHICLE)
         {
@@ -497,14 +497,14 @@ double Position::getDistance(Position other)
 
 Node::Node()
 {
-    unit = NULL;
-    next = NULL;
+    unit = nullptr;
+    next = nullptr;
 }
 
 Node::Node(Unit *unit)
 {
     this->unit = unit;
-    this->next = NULL;
+    this->next = nullptr;
 }
 
 
@@ -513,8 +513,8 @@ UnitList::UnitList(int capacity)
 {
     this->capacity = capacity;
     this->currentSize = 0;
-    this->listHead = NULL;
-    this->listEnd = NULL;
+    this->listHead = nullptr;
+    this->listEnd = nullptr;
     this->vehicleCount = 0;
     this->infantryCount = 0;
 }
@@ -526,7 +526,7 @@ void UnitList::setCapacity(int capacity)
 
 void UnitList::insertAtHead(Unit *unit)
 {
-    if (listHead == NULL)
+    if (listHead == nullptr)
     {
         listHead = new Node(unit);
         listEnd = listHead;
@@ -539,7 +539,7 @@ void UnitList::insertAtHead(Unit *unit)
 
 void UnitList::insertAtEnd(Unit *unit)
 {
-    if (listHead == NULL)
+    if (listHead == nullptr)
     {
         listHead = new Node(unit);
         listEnd = listHead;
@@ -576,7 +576,7 @@ bool UnitList::insert(Unit *unit)
 bool UnitList::isContain(VehicleType vehicleType)
 {
     Node *tmp = listHead;
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         if (tmp->unit->instance() == VEHICLE)
         {
@@ -593,7 +593,7 @@ bool UnitList::isContain(VehicleType vehicleType)
 bool UnitList::isContain(InfantryType infantryType)
 {
     Node *tmp = listHead;
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         if (tmp->unit->instance() == INFANTRY)
         {
@@ -612,10 +612,10 @@ string UnitList::str() const
     stringstream result;
     result << "UnitList[" << "count_vehicle=" << vehicleCount << ";count_infantry=" << infantryCount << ";";
     Node *tmp = listHead;
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         result << tmp->unit->str();
-        if (tmp->next != NULL)
+        if (tmp->next != nullptr)
         {
             result << ",";
         }
@@ -670,7 +670,7 @@ void Mountain::getEffect(Army *army)
     double infantryEXPMultiplier = (army->instance() == LIBERATIONARMY) ? 0.3 : 0.2;
     double vehicleLFMultiplier = (army->instance() == LIBERATIONARMY) ? -0.1 : -0.05;
 
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         if (this->pos.getDistance(tmp->unit->getCurrentPosition()) <= distanceThreshold)
         {
@@ -697,7 +697,7 @@ River::River(Position pos) : TerrainElement()
 void River::getEffect(Army *army)
 {
     Node *tmp = army->getListHead();
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         if (this->pos.getDistance(tmp->unit->getCurrentPosition()) <= 2)
         {
@@ -717,7 +717,7 @@ Urban::Urban(Position pos) : TerrainElement()
 void Urban::getEffect(Army *army)
 {
     Node *tmp = army->getListHead();
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         double distance = this->pos.getDistance(tmp->unit->getCurrentPosition());
         if (army->instance() == LIBERATIONARMY)
@@ -763,7 +763,7 @@ Fortification::Fortification(Position pos) : TerrainElement()
 void Fortification::getEffect(Army *army)
 {
     Node *tmp = army->getListHead();
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         double distance = this->pos.getDistance(tmp->unit->getCurrentPosition());
         if (army->instance() == LIBERATIONARMY && distance <= 2.0)
@@ -786,7 +786,7 @@ SpecialZone::SpecialZone(Position pos)
 void SpecialZone::getEffect(Army *army)
 {
     Node *tmp = army->getListHead();
-    while (tmp != NULL)
+    while (tmp != nullptr)
     {
         double distance = this->pos.getDistance(tmp->unit->getCurrentPosition());
         if (distance <= 1.0)
@@ -807,9 +807,10 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
     terrain.resize(n_rows);
     for (int i = 0; i < n_cols; i++)
     {
-        terrain[i].resize(n_cols, NULL);
+        terrain[i].resize(n_cols, nullptr);
     }
 
+    // Initialize corresponding terrain elements based on the position
     for (auto pos : arrayForest)
     {
         terrain[pos->getRow()][pos->getCol()] = new Mountain(*pos);
@@ -831,12 +832,12 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
         terrain[pos->getRow()][pos->getCol()] = new SpecialZone(*pos);
     }
 
-    // If the remaining pointers are all NULL, initialize to Road
+    // If the remaining pointers are all nullptr, initialize to Road
     for (int i = 0; i < n_rows; i++)
     {
         for (int j = 0; j < n_cols; j++)
         {
-            if (terrain[i][j] == NULL)
+            if (terrain[i][j] == nullptr)
             {
                 terrain[i][j] = new Road();
             }
@@ -846,7 +847,14 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
 
 BattleField::~BattleField()
 {
-
+    for (int i = 0; i < n_rows; i++)
+    {
+        for (int j = 0; j < n_cols; j++)
+        {
+            delete terrain[i][j];
+            terrain[i][j] = nullptr;
+        }
+    }
 }
 
 string BattleField::str()
