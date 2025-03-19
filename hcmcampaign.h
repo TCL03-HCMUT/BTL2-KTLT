@@ -297,6 +297,7 @@ class BattleField
 {
 private:
     int n_rows, n_cols;
+    vector<vector<TerrainElement*>> terrain;
     
 public:
     BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,

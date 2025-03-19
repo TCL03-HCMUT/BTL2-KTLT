@@ -804,7 +804,12 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
 {
     this->n_rows = n_rows;
     this->n_cols = n_cols;
-    vector<vector<TerrainElement*>> terrain(n_rows, vector<TerrainElement*>(n_cols, NULL)); // vector<type> name(number,val)
+    terrain.resize(n_rows);
+    for (int i = 0; i < n_cols; i++)
+    {
+        terrain[i].resize(n_cols, NULL);
+    }
+
     for (auto pos : arrayForest)
     {
         terrain[pos->getRow()][pos->getCol()] = new Mountain(*pos);
@@ -824,6 +829,18 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
     for (auto pos : arraySpecialZone)
     {
         terrain[pos->getRow()][pos->getCol()] = new SpecialZone(*pos);
+    }
+
+    // If the remaining pointers are all NULL, initialize to Road
+    for (int i = 0; i < n_rows; i++)
+    {
+        for (int j = 0; j < n_cols; j++)
+        {
+            if (terrain[i][j] == NULL)
+            {
+                terrain[i][j] = new Road();
+            }
+        }
     }
 }
 
