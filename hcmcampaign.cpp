@@ -802,7 +802,29 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
                         vector<Position *> arrayRiver, vector<Position *> arrayFortification,
                         vector<Position *> arrayUrban, vector<Position *> arraySpecialZone)
 {
-
+    this->n_rows = n_rows;
+    this->n_cols = n_cols;
+    vector<vector<TerrainElement*>> terrain(n_rows, vector<TerrainElement*>(n_cols, NULL)); // vector<type> name(number,val)
+    for (auto pos : arrayForest)
+    {
+        terrain[pos->getRow()][pos->getCol()] = new Mountain(*pos);
+    }
+    for (auto pos : arrayRiver)
+    {
+        terrain[pos->getRow()][pos->getCol()] = new River(*pos);
+    }
+    for (auto pos : arrayFortification)
+    {
+        terrain[pos->getRow()][pos->getCol()] = new Fortification(*pos);
+    }
+    for (auto pos : arrayUrban)
+    {
+        terrain[pos->getRow()][pos->getCol()] = new Urban(*pos);
+    }
+    for (auto pos : arraySpecialZone)
+    {
+        terrain[pos->getRow()][pos->getCol()] = new SpecialZone(*pos);
+    }
 }
 
 BattleField::~BattleField()
