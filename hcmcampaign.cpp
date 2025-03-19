@@ -804,6 +804,8 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
 {
     this->n_rows = n_rows;
     this->n_cols = n_cols;
+
+    // Resizes the 2d vector to match the size of the battlefield and initializes it with nullptr
     terrain.resize(n_rows);
     for (int i = 0; i < n_cols; i++)
     {

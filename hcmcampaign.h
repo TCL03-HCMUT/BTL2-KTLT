@@ -307,6 +307,19 @@ public:
     string str();
 };
 
+class Configuration
+{
+private:
+    int num_rows, num_cols;
+    vector<Position *> arrayForest, arrayRiver, arrayFortification, arrayUrban, arraySpecialZone;
+    Unit *liberationUnits;
+    Unit *ARVNUnits;
+    int eventCode;
+public:
+    Configuration(const string &filepath);
+    string str() const;
+};
+
 class HCMCampaign
 {
 private:
