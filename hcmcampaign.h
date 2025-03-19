@@ -67,6 +67,20 @@ enum InfantryType
     REGULARINFANTRY
 };
 
+enum UnitType
+{
+    UNIT,
+    VEHICLE,
+    INFANTRY
+};
+
+enum ArmyType
+{
+    ARMY,
+    LIBERATIONARMY,
+    ARVIETNAM
+};
+
 class Utility
 {
 public:
@@ -94,7 +108,7 @@ public:
     void setEXP(int EXP);
     virtual void fight(Army *enemy, bool defense = false) = 0;
     virtual string str() const = 0;
-    virtual string instance();
+    virtual ArmyType instance();
     void multiplyLF(double multiplier);
     void multiplyEXP(double multiplier);
     void addLF(double num);
@@ -108,7 +122,7 @@ public:
     LiberationArmy(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
-    string instance();
+    ArmyType instance();
 };
 
 class ARVN : public Army
@@ -117,7 +131,7 @@ public:
     ARVN(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
-    string instance();
+    ArmyType instance();
 };
 
 class Position
@@ -147,7 +161,7 @@ public:
     virtual int getAttackScore() = 0;
     Position getCurrentPosition() const;
     virtual string str() const = 0;
-    virtual string instance();
+    virtual UnitType instance();
     virtual VehicleType getVehicleType();
     virtual InfantryType getInfantryType();
     int getCurrentScore();
@@ -165,7 +179,7 @@ public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore() override;
     string str() const override;
-    string instance();
+    UnitType instance();
     VehicleType getVehicleType();
 };
 
@@ -180,7 +194,7 @@ public:
     Infantry(int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
-    string instance();
+    UnitType instance();
     InfantryType getInfantryType();
 };
 
