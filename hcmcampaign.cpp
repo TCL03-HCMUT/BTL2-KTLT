@@ -778,6 +778,25 @@ void Fortification::getEffect(Army *army)
     }
 }
 
+SpecialZone::SpecialZone(Position pos)
+{
+    this->pos = pos;
+}
+
+void SpecialZone::getEffect(Army *army)
+{
+    Node *tmp = army->getListHead();
+    while (tmp != NULL)
+    {
+        double distance = this->pos.getDistance(tmp->unit->getCurrentPosition());
+        if (distance <= 1.0)
+        {
+            tmp->unit->setAttackScore(0);
+        }
+        tmp = tmp->next;
+    }
+}
+
 // class Battlefield
 BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
                         vector<Position *> arrayRiver, vector<Position *> arrayFortification,
