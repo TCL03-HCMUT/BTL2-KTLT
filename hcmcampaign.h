@@ -165,6 +165,8 @@ public:
     virtual VehicleType getVehicleType();
     virtual InfantryType getInfantryType();
     int getCurrentScore();
+    int getQuantity();
+    int addQuantity(int quantity);
     void setAttackScore(int score);
     void multiplyScore(double multiplier);
     void addScore(double num);
@@ -314,6 +316,7 @@ private:
     vector<Position *> arrayForest, arrayRiver, arrayFortification, arrayUrban, arraySpecialZone;
     Unit *liberationUnits;
     Unit *ARVNUnits;
+    int liberationCount, ARVNCount;
     int eventCode;
 public:
     Configuration(const string &filepath);

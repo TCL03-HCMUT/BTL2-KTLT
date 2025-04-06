@@ -101,6 +101,15 @@ int Unit::getCurrentScore()
     return this->attackScore;
 }
 
+int Unit::getQuantity()
+{
+    return this->quantity;
+}
+
+int Unit::addQuantity(int quantity)
+{
+    this->quantity += quantity;
+}
 void Unit::setAttackScore(int score)
 {
     this->attackScore = score;
@@ -560,15 +569,43 @@ bool UnitList::insert(Unit *unit)
 
     if (unit->instance() == VEHICLE)
     {
-        insertAtEnd(unit);
-        vehicleCount++;
-        currentSize++;
+        VehicleType type = unit->getVehicleType();
+        int addedQuantity = unit->getQuantity();
+        if (this->isContain(type))
+        {
+            Node *tmp = listHead;
+            while (tmp->unit->getVehicleType() != type)
+            {
+                tmp = tmp->next;
+            }
+            tmp->unit->addQuantity(addedQuantity);
+        }
+        else
+        {
+            insertAtEnd(unit);
+            vehicleCount++;
+            currentSize++;
+        }
     }
     else if (unit->instance() == INFANTRY)
     {
-        insertAtHead(unit);
-        infantryCount++;
-        currentSize++;
+        InfantryType type = unit->getInfantryType();
+        int addedQuantity = unit->getQuantity();
+        if (this->isContain(type))
+        {
+            Node *tmp = listHead;
+            while (tmp->unit->getInfantryType() != type)
+            {
+                tmp = tmp->next;
+            }
+            tmp->unit->addQuantity(addedQuantity);
+        }
+        else
+        {
+            insertAtHead(unit);
+            infantryCount++;
+            currentSize++;
+        }
     }
     return true;
 }
@@ -866,6 +903,63 @@ string BattleField::str()
     return result.str();
 }
 
+Configuration::Configuration(const string &filepath)
+{
+
+}
+
+string Configuration::str() const
+{
+    stringstream result;
+    result << "Configuration[\n";
+    result << "num_rows=" << num_rows << '\n';
+    result << "num_cols=" << num_cols << '\n';
+
+    result << "arrayForest=[";
+    for (int i = 0; i < arrayForest.size(); i++)
+    {
+        result << arrayForest[i];
+        if (i < arrayForest.size()-1)
+            result << ',';
+    }
+    result << ']\n';
+
+    result << "arrayRiver=[";
+    for (int i = 0; i < arrayRiver.size(); i++)
+    {
+        result << arrayRiver[i];
+        if (i < arrayRiver.size()-1)
+            result << ',';
+    }
+    result << ']\n';
+
+    result << "arrayUrban=[";
+    for (int i = 0; i < arrayUrban.size(); i++)
+    {
+        result << arrayUrban[i];
+        if (i < arrayUrban.size()-1)
+            result << ',';
+    }
+    result << ']\n';
+
+    result << "arrayFortification=[";
+    for (int i = 0; i < arrayFortification.size(); i++)
+    {
+        result << arrayFortification[i];
+        if (i < arrayFortification.size()-1)
+            result << ',';
+    }
+    result << ']\n';
+
+    result << "arraySpecialZone=[";
+    for (int i = 0; i < arraySpecialZone.size(); i++)
+    {
+        result << arraySpecialZone[i];
+        if (i < arraySpecialZone.size()-1)
+            result << ',';
+    }
+    result << '\n';
+}
 
 HCMCampaign::HCMCampaign(const string &config_file_path)
 {
