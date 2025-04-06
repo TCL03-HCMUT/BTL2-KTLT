@@ -222,11 +222,10 @@ private:
     Node *listHead;
     Node *listEnd;
     int vehicleCount;
-    int infantryCount;
+    int infantryCount; // can also be used as the index of the first vehicle
     void insertAtHead(Unit *unit);
     void insertAtEnd(Unit *unit);
 public:
-    int firstVehicleIndex;
     UnitList(int capacity);
     void setCapacity(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
@@ -235,6 +234,7 @@ public:
     bool deleteNode(Node* node); // returns true if deletion sucessfull
     Node* getHead();
     Node* getNodeAtIndex(int index);
+    Node *getFirstVehicle();
     string str() const;
     // TODO:
 };

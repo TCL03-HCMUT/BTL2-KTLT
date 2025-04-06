@@ -576,7 +576,6 @@ UnitList::UnitList(int capacity)
     this->listEnd = nullptr;
     this->vehicleCount = 0;
     this->infantryCount = 0;
-    this->firstVehicleIndex = 0;
 }
 
 void UnitList::setCapacity(int capacity)
@@ -658,7 +657,6 @@ bool UnitList::insert(Unit *unit)
             insertAtHead(unit);
             infantryCount++;
             currentSize++;
-            firstVehicleIndex++;
         }
     }
     return true;
@@ -717,6 +715,7 @@ bool UnitList::deleteNode(Node *node)
             listEnd = nullptr;
         }
         delete node;
+        currentSize--;
         return true;
     }
 
@@ -734,14 +733,15 @@ bool UnitList::deleteNode(Node *node)
         return false;
     }
 
-    // if deletion at end
+    // if deletion at tail
     if (node == listEnd)
     {
-        listEnd = tmp;
+        listEnd = tmp; // move the tail to the previous node
     }
 
     tmp->next = node->next;
     delete node;
+    currentSize--;
     return true;
 }
 
@@ -775,6 +775,11 @@ Node* UnitList::getNodeAtIndex(int index)
     {
         tmp = tmp->next;
     }
+}
+
+Node *UnitList::getFirstVehicle()
+{
+    return getNodeAtIndex(infantryCount);
 }
 
 // class TerrainElement
