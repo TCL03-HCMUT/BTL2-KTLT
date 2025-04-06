@@ -225,13 +225,14 @@ private:
     int infantryCount;
     void insertAtHead(Unit *unit);
     void insertAtEnd(Unit *unit);
-    int firstVehicleIndex;
 public:
+    int firstVehicleIndex;
     UnitList(int capacity);
     void setCapacity(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
+    bool deleteNode(Node* node); // returns true if deletion sucessfull
     Node* getHead();
     Node* getNodeAtIndex(int index);
     string str() const;

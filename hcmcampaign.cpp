@@ -698,6 +698,53 @@ bool UnitList::isContain(InfantryType infantryType)
     return false;
 }
 
+bool UnitList::deleteNode(Node *node)
+{
+    // Case 1: null or empty list
+    if (listHead == nullptr || node == nullptr)
+    {
+        return false;
+    }
+
+    // Case 2: deletion at head
+    if (node == listHead)
+    {
+        listHead = listHead->next;
+        
+        // if the head was also the tail (one node)
+        if (node == listEnd)
+        {
+            listEnd = nullptr;
+        }
+        delete node;
+        return true;
+    }
+
+    // Case 3: deletion at middle or tail
+    Node *tmp = listHead;
+    // Find the node before the node to delete
+    while (tmp != nullptr && tmp->next != node)
+    {
+        tmp = tmp->next;
+    }
+
+    // Cannot find the correct node 
+    if (tmp == nullptr)
+    {
+        return false;
+    }
+
+    // if deletion at end
+    if (node == listEnd)
+    {
+        listEnd = tmp;
+    }
+
+    tmp->next = node->next;
+    delete node;
+    return true;
+}
+
 string UnitList::str() const
 {
     stringstream result;
@@ -724,7 +771,7 @@ Node* UnitList::getHead()
 Node* UnitList::getNodeAtIndex(int index)
 {
     Node* tmp = listHead;
-    for (int i = 0; i < index; i++)
+    for (int i = 0; i < index && tmp != nullptr ; i++)
     {
         tmp = tmp->next;
     }
