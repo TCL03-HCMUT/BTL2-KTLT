@@ -106,10 +106,18 @@ int Unit::getQuantity()
     return this->quantity;
 }
 
-int Unit::addQuantity(int quantity)
+void Unit::addQuantity(int quantity)
 {
     this->quantity += quantity;
 }
+
+void Unit::multiplyQuantity(double multiplier)
+{
+    double tmpQuantity = this->quantity;
+    tmpQuantity *= multiplier;
+    this->quantity = (int)ceil(tmpQuantity);
+}
+
 void Unit::setAttackScore(int score)
 {
     this->attackScore = score;
@@ -413,6 +421,31 @@ LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleFi
 void LiberationArmy::fight(Army *enemy, bool defense)
 {
     //TODO: implement this method
+    if (defense)
+    {
+        LF = (int)ceil(LF * 1.3);
+        EXP = (int)ceil(EXP * 1.3);
+        bool betterLF = this->LF >= enemy->getLF();
+        bool betterEXP = this->EXP >= enemy->getEXP();
+        if (betterLF && betterEXP)
+        {
+            // TODO: do the confiscation
+        }
+        else if (!betterLF && !betterEXP)
+        {
+            this->LF = closestFibonacci(this->LF);
+            this->EXP = closestFibonacci(this->EXP);
+        }
+        else
+        {
+            Node* tmp = this->unitList->getHead();
+            while (tmp != nullptr)
+            {
+                tmp->unit->multiplyQuantity(0.9);
+                tmp = tmp->next;
+            }
+        }
+    }
 }
 
 string LiberationArmy::str() const
@@ -428,6 +461,17 @@ ArmyType LiberationArmy::instance()
     return LIBERATIONARMY;
 }
 
+int LiberationArmy::closestFibonacci(int num)
+{
+    int a = 0, b = 1, c;
+    while (b <= num)
+    {
+        c = a + b;
+        a = b;
+        b = c;
+    }
+    return b;
+}
 
 // class ARVN
 ARVN::ARVN(Unit **unitArray, int size, string name, BattleField *battleField)
@@ -579,6 +623,7 @@ bool UnitList::insert(Unit *unit)
                 tmp = tmp->next;
             }
             tmp->unit->addQuantity(addedQuantity);
+            return false;
         }
         else
         {
@@ -599,6 +644,7 @@ bool UnitList::insert(Unit *unit)
                 tmp = tmp->next;
             }
             tmp->unit->addQuantity(addedQuantity);
+            return false;
         }
         else
         {

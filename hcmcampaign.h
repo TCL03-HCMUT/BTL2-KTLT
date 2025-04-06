@@ -118,6 +118,8 @@ public:
 
 class LiberationArmy : public Army
 {
+private:
+    int closestFibonacci(int num);
 public:
     LiberationArmy(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
@@ -166,7 +168,8 @@ public:
     virtual InfantryType getInfantryType();
     int getCurrentScore();
     int getQuantity();
-    int addQuantity(int quantity);
+    void addQuantity(int quantity);
+    void multiplyQuantity(double multiplier);
     void setAttackScore(int score);
     void multiplyScore(double multiplier);
     void addScore(double num);
