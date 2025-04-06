@@ -421,7 +421,7 @@ LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleFi
 void LiberationArmy::fight(Army *enemy, bool defense)
 {
     //TODO: implement this method
-    if (defense)
+    if (defense) // defense is true
     {
         LF = (int)ceil(LF * 1.3);
         EXP = (int)ceil(EXP * 1.3);
@@ -445,6 +445,12 @@ void LiberationArmy::fight(Army *enemy, bool defense)
                 tmp = tmp->next;
             }
         }
+    }
+    else
+    {
+        LF = (int)ceil(LF * 1.5);
+        EXP = (int)ceil(EXP * 1.5);
+        
     }
 }
 
@@ -570,6 +576,7 @@ UnitList::UnitList(int capacity)
     this->listEnd = nullptr;
     this->vehicleCount = 0;
     this->infantryCount = 0;
+    this->firstVehicleIndex = 0;
 }
 
 void UnitList::setCapacity(int capacity)
@@ -651,6 +658,7 @@ bool UnitList::insert(Unit *unit)
             insertAtHead(unit);
             infantryCount++;
             currentSize++;
+            firstVehicleIndex++;
         }
     }
     return true;
@@ -711,6 +719,15 @@ string UnitList::str() const
 Node* UnitList::getHead()
 {
     return listHead;
+}
+
+Node* UnitList::getNodeAtIndex(int index)
+{
+    Node* tmp = listHead;
+    for (int i = 0; i < index; i++)
+    {
+        tmp = tmp->next;
+    }
 }
 
 // class TerrainElement

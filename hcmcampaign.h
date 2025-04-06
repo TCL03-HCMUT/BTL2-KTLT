@@ -225,6 +225,7 @@ private:
     int infantryCount;
     void insertAtHead(Unit *unit);
     void insertAtEnd(Unit *unit);
+    int firstVehicleIndex;
 public:
     UnitList(int capacity);
     void setCapacity(int capacity);
@@ -232,6 +233,7 @@ public:
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
     Node* getHead();
+    Node* getNodeAtIndex(int index);
     string str() const;
     // TODO:
 };
