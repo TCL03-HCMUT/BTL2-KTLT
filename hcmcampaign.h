@@ -232,6 +232,7 @@ public:
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
     bool deleteNode(Node* node); // returns true if deletion sucessfull
+    bool deleteMatchingQuantity(int quantity);
     Node* getHead();
     Node* getNodeAtIndex(int index);
     Node *getFirstVehicle();

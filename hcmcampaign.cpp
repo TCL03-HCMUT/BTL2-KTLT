@@ -450,7 +450,8 @@ void LiberationArmy::fight(Army *enemy, bool defense)
     {
         LF = (int)ceil(LF * 1.5);
         EXP = (int)ceil(EXP * 1.5);
-        
+        // TODO: implement the attack case
+
     }
 }
 
@@ -489,6 +490,18 @@ ARVN::ARVN(Unit **unitArray, int size, string name, BattleField *battleField)
 void ARVN::fight(Army *enemy, bool defense)
 {
     //TODO: implement this method
+    if (defense)
+    {
+        Node *tmp = unitList->getHead();
+        while (tmp != nullptr)
+        {
+            tmp->unit->multiplyQuantity(0.8);
+        }
+    }
+    else
+    {
+
+    }
 }
 
 string ARVN::str() const
@@ -743,6 +756,24 @@ bool UnitList::deleteNode(Node *node)
     delete node;
     currentSize--;
     return true;
+}
+
+bool UnitList::deleteMatchingQuantity(int quantity)
+{
+    Node *curr = listHead;
+    while (curr != nullptr)
+    {
+        Node *next = curr->next;
+        if (curr->unit->getQuantity() == quantity)
+        {
+            if (!deleteNode(curr))
+            {
+                return false;
+            }
+        }
+        curr = next; // Move to the next node after handling the current one
+    }
+    return true; // Return true to indicate successful deletion
 }
 
 string UnitList::str() const
