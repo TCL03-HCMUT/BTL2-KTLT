@@ -492,15 +492,18 @@ void ARVN::fight(Army *enemy, bool defense)
     //TODO: implement this method
     if (defense)
     {
+        // TODO: implement this case
+    }
+    else
+    {
+        
         Node *tmp = unitList->getHead();
         while (tmp != nullptr)
         {
             tmp->unit->multiplyQuantity(0.8);
         }
-    }
-    else
-    {
-
+        unitList->deleteMatchingQuantity(1);
+        this->updateParameters();
     }
 }
 
@@ -794,6 +797,42 @@ string UnitList::str() const
     return result.str();
 }
 
+vector<Unit*> UnitList::convertToVector()
+{
+    vector<Unit*> result;
+    Node* tmp = this->listHead;
+    while (tmp != nullptr)
+    {
+        result.push_back(tmp->unit);
+        tmp = tmp->next;
+    }
+    return result;
+}
+
+vector<Node*> UnitList::findMinInfantrySubset(int threshold)
+{
+    vector<Unit*> units = convertToVector();
+    int minSum = INT_MAX;
+    int n = infantryCount;
+    vector<int> best_index;
+    vector<Node*> result;
+
+    // uses bitmasking (go trhough all combinations coded with binary numbers)
+    for (int mask = 0; mask < (1 << n); mask++)
+    {
+        int sum = 0;
+        vector<int> subsetIndices;
+        for (int i = 0; i < n; i++)
+        {
+            if (mask & (1 << i))
+            {
+                sum += getNodeAtIndex(i)->unit->getCurrentScore();
+                subsetIndices.push_back(i);
+            }
+        }
+    }
+}
+
 Node* UnitList::getHead()
 {
     return listHead;
@@ -1051,7 +1090,27 @@ string BattleField::str()
 
 Configuration::Configuration(const string &filepath)
 {
+    ifstream configFile(filepath);
 
+    string line;
+
+    while (getline(configFile,line))
+    {
+        int spaceIndex = line.find('=');
+        string lineCode = line.substr(0,spaceIndex);
+        if (lineCode == "NUM_ROWS")
+        {
+            num_rows = stoi(line.substr(spaceIndex + 1));
+        }
+        else if (lineCode == "NUM_COLS")
+        {
+            num_cols = stoi(line.substr(spaceIndex + 1));
+        }
+        else if (lineCode == "EVENT_CODE")
+        {
+            eventCode = stoi(line.substr(spaceIndex + 1));
+        }
+    }
 }
 
 string Configuration::str() const
