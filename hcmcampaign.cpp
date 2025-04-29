@@ -118,6 +118,11 @@ void Unit::multiplyQuantity(double multiplier)
     this->quantity = (int)ceil(tmpQuantity);
 }
 
+void Unit::setQuantity(int quantity)
+{
+    this->quantity = quantity;
+}
+
 void Unit::setAttackScore(int score)
 {
     this->attackScore = score;
@@ -433,8 +438,14 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         }
         else if (!betterLF && !betterEXP)
         {
-            this->LF = closestFibonacci(this->LF);
-            this->EXP = closestFibonacci(this->EXP);
+            Node* tmp = this->unitList->getHead();
+            while (tmp != nullptr)
+            {
+                int currentQuantity = tmp->unit->getQuantity();
+                tmp->unit->setQuantity(closestFibonacci(currentQuantity));
+                tmp = tmp->next;
+            }
+            updateParameters();
         }
         else
         {
@@ -444,6 +455,7 @@ void LiberationArmy::fight(Army *enemy, bool defense)
                 tmp->unit->multiplyQuantity(0.9);
                 tmp = tmp->next;
             }
+            updateParameters();
         }
     }
     else
@@ -451,7 +463,37 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         LF = (int)ceil(LF * 1.5);
         EXP = (int)ceil(EXP * 1.5);
         // TODO: implement the attack case
+        vector<Node*> combinationA = unitList->findMinSubset(enemy->getEXP(), true);
+        vector<Node*> combinationB = unitList->findMinSubset(enemy->getLF(), false);
 
+        bool battleOccurs;
+
+        if (combinationA.empty() && combinationB.empty())
+        {
+            battleOccurs = false;
+        }
+        else if (!combinationA.empty() && !combinationB.empty())
+        {
+            for (auto node : combinationA)
+            {
+                unitList->deleteNode(node);
+            }
+
+            for (auto node : combinationB)
+            {
+                unitList->deleteNode(node);
+            }
+            battleOccurs = true;
+        }
+        // TODO: need to fix a lot of this problem
+        else if (combinationA.empty())
+        {
+            battleOccurs = this->EXP > enemy->getEXP();
+        }
+        else if (combinationB.empty())
+        {
+            battleOccurs = this->LF > enemy->getLF();
+        }
     }
 }
 
@@ -809,12 +851,13 @@ vector<Unit*> UnitList::convertToVector()
     return result;
 }
 
-vector<Node*> UnitList::findMinInfantrySubset(int threshold)
+vector<Node*> UnitList::findMinSubset(int threshold, bool isInfantry)
 {
-    vector<Unit*> units = convertToVector();
-    int minSum = INT_MAX;
-    int n = infantryCount;
-    vector<int> best_index;
+    // vector<Unit*> units = convertToVector();
+    int minSize = INT_MAX;
+    int n = isInfantry ? infantryCount : vehicleCount;
+    int lowBound = isInfantry ? 0 : infantryCount;
+    vector<int> bestSubset;
     vector<Node*> result;
 
     // uses bitmasking (go trhough all combinations coded with binary numbers)
@@ -826,11 +869,29 @@ vector<Node*> UnitList::findMinInfantrySubset(int threshold)
         {
             if (mask & (1 << i))
             {
-                sum += getNodeAtIndex(i)->unit->getCurrentScore();
-                subsetIndices.push_back(i);
+                sum += getNodeAtIndex(i + lowBound)->unit->getCurrentScore();
+                subsetIndices.push_back(i + lowBound);
             }
         }
+
+        if (sum > threshold && subsetIndices.size() < minSize)
+        {
+            minSize = subsetIndices.size();
+            bestSubset = subsetIndices;
+        }
     }
+    
+    if (bestSubset.empty())
+    {
+        return {};
+    }
+
+    for (auto index : bestSubset)
+    {
+        result.push_back(getNodeAtIndex(index));
+    }
+
+    return result;
 }
 
 Node* UnitList::getHead()

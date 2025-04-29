@@ -170,6 +170,7 @@ public:
     int getQuantity();
     void addQuantity(int quantity);
     void multiplyQuantity(double multiplier);
+    void setQuantity(int quantity);
     void setAttackScore(int score);
     void multiplyScore(double multiplier);
     void addScore(double num);
@@ -234,11 +235,12 @@ public:
     bool deleteNode(Node* node); // returns true if deletion sucessfull
     bool deleteMatchingQuantity(int quantity);
     Node *getHead();
-    Node *getNodeAtIndex(int index);
+    Node *getNodeAtIndex(int index); // return a pointer to that specific node
     Node *getFirstVehicle();
     vector<Unit*> convertToVector();
-    vector<Node*> findMinInfantrySubset(int threshold);
-    vector<Node*> findMinInfantrySubset(int threshold);
+    vector<Node*> UnitList::findMinSubset(int threshold, bool isInfantry);
+    // vector<Node*> findMinInfantrySubset(int threshold); // returns a vector of pointers to the valid combination, returns empty if none is found
+    // vector<Node*> findMinInfantrySubset(int threshold);
     string str() const;
     // TODO:
 };
