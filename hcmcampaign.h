@@ -326,10 +326,12 @@ class Configuration
 private:
     int num_rows, num_cols;
     vector<Position *> arrayForest, arrayRiver, arrayFortification, arrayUrban, arraySpecialZone;
-    Unit *liberationUnits;
-    Unit *ARVNUnits;
+    Unit **liberationUnits;
+    Unit **ARVNUnits;
     int liberationCount, ARVNCount;
     int eventCode;
+
+    vector<Position *> toPositionVector(string &positionList);
 public:
     Configuration(const string &filepath);
     string str() const;

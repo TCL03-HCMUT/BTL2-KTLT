@@ -1080,7 +1080,7 @@ void SpecialZone::getEffect(Army *army)
     }
 }
 
-// class Battlefield
+    // class Battlefield
 BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
                         vector<Position *> arrayRiver, vector<Position *> arrayFortification,
                         vector<Position *> arrayUrban, vector<Position *> arraySpecialZone)
@@ -1149,6 +1149,27 @@ string BattleField::str()
     return result.str();
 }
 
+vector<Position *> Configuration::toPositionVector(string &positionList)
+{
+    vector<Position*> positions;
+    stringstream ss(positionList);
+    char ch;
+    int row, col;
+
+    // Skip the opening '['
+    ss >> ch;
+
+    while (ss >> ch) {
+        if (ch == '(') {
+            // Read the row and column values
+            ss >> row >> ch >> col >> ch; // Read row, ',', col, and ')'
+            positions.push_back(new Position(row, col));
+        }
+    }
+
+    return positions;
+}
+
 Configuration::Configuration(const string &filepath)
 {
     ifstream configFile(filepath);
@@ -1157,19 +1178,57 @@ Configuration::Configuration(const string &filepath)
 
     while (getline(configFile,line))
     {
-        int spaceIndex = line.find('=');
-        string lineCode = line.substr(0,spaceIndex);
+        int equalIndex = line.find('=');
+        string lineCode = line.substr(0,equalIndex);
+        string lineValue = line.substr(equalIndex);
         if (lineCode == "NUM_ROWS")
         {
-            num_rows = stoi(line.substr(spaceIndex + 1));
+            num_rows = stoi(lineValue);
         }
         else if (lineCode == "NUM_COLS")
         {
-            num_cols = stoi(line.substr(spaceIndex + 1));
+            num_cols = stoi(lineValue);
         }
+        
         else if (lineCode == "EVENT_CODE")
         {
-            eventCode = stoi(line.substr(spaceIndex + 1));
+            eventCode = stoi(lineValue);
+
+            if (eventCode > 99)
+            {
+                eventCode = eventCode % 100;
+            }
+
+            if (eventCode < 0)
+            {
+                eventCode = 0;
+            }
+        }
+
+        else if (lineCode == "ARRAY_FOREST")
+        {
+            arrayForest = toPositionVector(lineValue);
+        }
+        else if (lineCode == "ARRAY_RIVER")
+        {
+            arrayRiver = toPositionVector(lineValue);
+        }
+        else if (lineCode == "ARRAY_FORTIFICATION")
+        {
+            arrayFortification = toPositionVector(lineValue);
+        }
+        else if (lineCode == "ARRAY_URBAN")
+        {
+            arrayUrban = toPositionVector(lineValue);
+        }
+        else if (lineCode == "ARRAY_SPECIAL_ZONE")
+        {
+            arraySpecialZone = toPositionVector(lineValue);
+        }
+
+        else if (lineCode == "UNIT_LIST")
+        {
+
         }
     }
 }
