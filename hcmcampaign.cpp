@@ -184,7 +184,7 @@ string Vehicle::str() const
 {
     stringstream result;
     result << "Vehicle[vehicleType=" << vehicleName << ",quantity=" << quantity 
-        << ",weight=" << weight << ",pos=" << pos.str() << "]";
+        << ",weight=" << weight << ",position=" << pos.str() << "]";
     return result.str();
 }
 
@@ -270,7 +270,7 @@ string Infantry::str() const
 {
     stringstream result;  
     result << "Infantry[infantryType=" << infantryName << ",quantity=" << quantity 
-        << ",weight=" << weight << ",pos=" << pos.str() << "]";
+        << ",weight=" << weight << ",position=" << pos.str() << "]";
     return result.str();
 }
 
@@ -1137,7 +1137,7 @@ BattleField::~BattleField()
         for (int j = 0; j < n_cols; j++)
         {
             delete terrain[i][j];
-            terrain[i][j] = nullptr;
+            // terrain[i][j] = nullptr;
         }
     }
 }
@@ -1151,7 +1151,7 @@ string BattleField::str()
 
 vector<Position *> Configuration::toPositionVector(string &positionList)
 {
-    vector<Position*> positions;
+    vector<Position *> positions;
     stringstream ss(positionList);
     char ch;
     int row, col;
@@ -1257,67 +1257,130 @@ Configuration::Configuration(const string &filepath)
             liberationCount = 0;
             ARVNCount = 0;
             int inputSize = 0;
-            
+
         }
     }
+}
+
+Configuration::~Configuration()
+{
+    for (auto pos: arrayForest)
+    {
+        delete pos;
+    }
+    for (auto pos: arrayRiver)
+    {
+        delete pos;
+    }
+    for (auto pos: arrayFortification)
+    {
+        delete pos;
+    }
+    for (auto pos: arrayUrban)
+    {
+        delete pos;
+    }
+    for (auto pos: arraySpecialZone)
+    {
+        delete pos;
+    }
+    
+    for (int i = 0; i < liberationCount;i++)
+    {
+        delete liberationUnits[i];
+    }
+    delete[] liberationUnits;
+
+    for (int i = 0; i < ARVNCount;i++)
+    {
+        delete ARVNUnits[i];
+    }
+    delete[] ARVNUnits;
 }
 
 string Configuration::str() const
 {
     stringstream result;
-    result << "Configuration[\n";
-    result << "num_rows=" << num_rows << '\n';
-    result << "num_cols=" << num_cols << '\n';
+    // result << "Configuration[\n";
+    result << "[";
+    result << "num_rows=" << num_rows << ',';
+    result << "num_cols=" << num_cols << ',';
 
     result << "arrayForest=[";
     for (int i = 0; i < arrayForest.size(); i++)
     {
-        result << arrayForest[i];
-        if (i < arrayForest.size()-1)
+        result << arrayForest[i]->str();
+        if (i < arrayForest.size() - 1)
             result << ',';
     }
-    result << ']\n';
+    result << "],";
 
     result << "arrayRiver=[";
     for (int i = 0; i < arrayRiver.size(); i++)
     {
-        result << arrayRiver[i];
-        if (i < arrayRiver.size()-1)
+        result << arrayRiver[i]->str();
+        if (i < arrayRiver.size() - 1)
             result << ',';
     }
-    result << ']\n';
+    result << "],";
 
     result << "arrayUrban=[";
     for (int i = 0; i < arrayUrban.size(); i++)
     {
-        result << arrayUrban[i];
-        if (i < arrayUrban.size()-1)
+        result << arrayUrban[i]->str();
+        if (i < arrayUrban.size() - 1)
             result << ',';
     }
-    result << ']\n';
+    result << "],";
 
     result << "arrayFortification=[";
     for (int i = 0; i < arrayFortification.size(); i++)
     {
-        result << arrayFortification[i];
-        if (i < arrayFortification.size()-1)
+        result << arrayFortification[i]->str();
+        if (i < arrayFortification.size() - 1)
             result << ',';
     }
-    result << ']\n';
+    result << "],";
 
     result << "arraySpecialZone=[";
     for (int i = 0; i < arraySpecialZone.size(); i++)
     {
-        result << arraySpecialZone[i];
-        if (i < arraySpecialZone.size()-1)
+        result << arraySpecialZone[i]->str();
+        if (i < arraySpecialZone.size() - 1)
             result << ',';
     }
-    result << '\n';
+    result << "],";
+
+    result << "liberationUnits=[";
+    for (int i = 0; i < liberationCount; i++)
+    {
+        result << liberationUnits[i]->str();
+        if (i < liberationCount - 1)
+        {
+            result << ',';
+        }
+    }
+    result << "],";
+
+    result << "ARVNUnits=[";
+    for (int i = 0; i < ARVNCount; i++)
+    {
+        result << ARVNUnits[i]->str();
+        if (i < ARVNCount - 1)
+        {
+            result << ',';
+        }
+    }
+    result << "],";
+
+    result << "eventCode=" << eventCode << ']';
+
+    return result.str();
 }
 
 HCMCampaign::HCMCampaign(const string &config_file_path)
 {
-
+    config = new Configuration(config_file_path);
 }
 
 void HCMCampaign::run()

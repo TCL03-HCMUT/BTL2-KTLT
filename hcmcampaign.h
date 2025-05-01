@@ -335,6 +335,7 @@ private:
     int countUnits(string &unitList);
 public:
     Configuration(const string &filepath);
+    ~Configuration();
     string str() const;
 };
 
