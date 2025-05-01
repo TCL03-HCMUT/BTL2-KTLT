@@ -855,17 +855,17 @@ vector<Node*> UnitList::findMinSubset(int threshold, bool isInfantry)
 {
     // vector<Unit*> units = convertToVector();
     int minSize = INT_MAX;
-    int n = isInfantry ? infantryCount : vehicleCount;
+    int size = isInfantry ? infantryCount : vehicleCount;
     int lowBound = isInfantry ? 0 : infantryCount;
     vector<int> bestSubset;
     vector<Node*> result;
 
     // uses bitmasking (go trhough all combinations coded with binary numbers)
-    for (int mask = 0; mask < (1 << n); mask++)
+    for (int mask = 0; mask < (1 << size); mask++)
     {
         int sum = 0;
         vector<int> subsetIndices;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < size; i++)
         {
             if (mask & (1 << i))
             {
@@ -1156,18 +1156,43 @@ vector<Position *> Configuration::toPositionVector(string &positionList)
     char ch;
     int row, col;
 
-    // Skip the opening '['
+    // skip the opening '['
     ss >> ch;
 
     while (ss >> ch) {
         if (ch == '(') {
-            // Read the row and column values
-            ss >> row >> ch >> col >> ch; // Read row, ',', col, and ')'
+            // read row and column values
+            ss >> row >> ch >> col >> ch; // read row, ',', col, ')'
             positions.push_back(new Position(row, col));
         }
     }
 
     return positions;
+}
+
+int Configuration::countUnits(string &unitList)
+{
+    // TODO:
+    if (unitList == "[]")
+    {
+        return 0;
+    }
+
+    int count = 0;
+    int parenLevel = 0;
+
+    for (char c : unitList) {
+        if (c == '(') {
+            parenLevel++;
+        } else if (c == ')') {
+            parenLevel--;
+        } else if (c == ',' && parenLevel == 0) {
+            count++;
+        }
+    }
+
+    // Add 1 to count the last unit (there are n commas for n+1 units)
+    return count == 0 && unitList.find('(') != string::npos ? 1 : count + 1;
 }
 
 Configuration::Configuration(const string &filepath)
@@ -1176,11 +1201,11 @@ Configuration::Configuration(const string &filepath)
 
     string line;
 
-    while (getline(configFile,line))
+    while (getline(configFile, line))
     {
         int equalIndex = line.find('=');
         string lineCode = line.substr(0,equalIndex);
-        string lineValue = line.substr(equalIndex);
+        string lineValue = line.substr(equalIndex + 1);
         if (lineCode == "NUM_ROWS")
         {
             num_rows = stoi(lineValue);
@@ -1228,7 +1253,11 @@ Configuration::Configuration(const string &filepath)
 
         else if (lineCode == "UNIT_LIST")
         {
-
+            // TODO: do this case
+            liberationCount = 0;
+            ARVNCount = 0;
+            int inputSize = 0;
+            
         }
     }
 }

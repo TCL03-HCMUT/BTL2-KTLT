@@ -332,6 +332,7 @@ private:
     int eventCode;
 
     vector<Position *> toPositionVector(string &positionList);
+    int countUnits(string &unitList);
 public:
     Configuration(const string &filepath);
     string str() const;
