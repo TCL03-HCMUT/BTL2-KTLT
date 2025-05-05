@@ -818,7 +818,7 @@ bool UnitList::deleteMatchingQuantity(int quantity)
         }
         curr = next; // Move to the next node after handling the current one
     }
-    return true; // Return true to indicate successful deletion
+    return true;
 }
 
 string UnitList::str() const
@@ -839,7 +839,7 @@ string UnitList::str() const
     return result.str();
 }
 
-vector<Unit*> UnitList::convertToVector()
+vector<Unit *> UnitList::convertToVector()
 {
     vector<Unit*> result;
     Node* tmp = this->listHead;
@@ -851,7 +851,7 @@ vector<Unit*> UnitList::convertToVector()
     return result;
 }
 
-vector<Node*> UnitList::findMinSubset(int threshold, bool isInfantry)
+vector<Node *> UnitList::findMinSubset(int threshold, bool isInfantry)
 {
     // vector<Unit*> units = convertToVector();
     int minSize = INT_MAX;
@@ -894,12 +894,12 @@ vector<Node*> UnitList::findMinSubset(int threshold, bool isInfantry)
     return result;
 }
 
-Node* UnitList::getHead()
+Node *UnitList::getHead()
 {
     return listHead;
 }
 
-Node* UnitList::getNodeAtIndex(int index)
+Node *UnitList::getNodeAtIndex(int index)
 {
     Node* tmp = listHead;
     for (int i = 0; i < index && tmp != nullptr ; i++)
@@ -1149,7 +1149,7 @@ string BattleField::str()
     return result.str();
 }
 
-vector<Position *> Configuration::toPositionVector(string &positionList)
+vector<Position *> Configuration::toPositionVector(const string &positionList)
 {
     vector<Position *> positions;
     stringstream ss(positionList);
@@ -1193,6 +1193,29 @@ int Configuration::countUnits(string &unitList)
 
     // Add 1 to count the last unit (there are n commas for n+1 units)
     return count == 0 && unitList.find('(') != string::npos ? 1 : count + 1;
+}
+
+vector<string> Configuration::splitUnits(const string& unitListString)
+{
+    std::vector<std::string> units;
+    int parenLevel = 0;
+    std::string current;
+    
+    for (char c : unitListString) {
+        if (c == ',' && parenLevel == 0) {
+            units.push_back(current);
+            current.clear();
+        } else {
+            if (c == '(') parenLevel++;
+            if (c == ')') parenLevel--;
+            current += c;
+        }
+    }
+    
+    if (!current.empty())
+        units.push_back(current);
+
+    return units;
 }
 
 Configuration::Configuration(const string &filepath)
@@ -1254,10 +1277,11 @@ Configuration::Configuration(const string &filepath)
         else if (lineCode == "UNIT_LIST")
         {
             // TODO: do this case
-            liberationCount = 0;
-            ARVNCount = 0;
-            int inputSize = 0;
+            // Remove the square brackets
+            lineValue = lineValue.substr(1, lineValue.size() - 2);
 
+            // Split the string into individual string
+            vector<string> units = splitUnits(lineValue);
         }
     }
 }
@@ -1378,6 +1402,7 @@ string Configuration::str() const
     return result.str();
 }
 
+// HCMCampaign
 HCMCampaign::HCMCampaign(const string &config_file_path)
 {
     config = new Configuration(config_file_path);

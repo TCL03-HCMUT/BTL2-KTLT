@@ -331,11 +331,14 @@ private:
     int liberationCount, ARVNCount;
     int eventCode;
 
-    vector<Position *> toPositionVector(string &positionList);
+    vector<Position *> toPositionVector(const string &positionList);
+    vector<string> splitUnits(const string& unitListString);
     int countUnits(string &unitList);
 public:
     Configuration(const string &filepath);
     ~Configuration();
+    vector<int> getBattleFieldDimensions();
+    
     string str() const;
 };
 
