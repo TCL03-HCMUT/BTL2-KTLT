@@ -108,7 +108,7 @@ public:
     void setEXP(int EXP);
     virtual void fight(Army *enemy, bool defense = false) = 0;
     virtual string str() const = 0;
-    virtual ArmyType instance();
+    virtual string instance();
     void multiplyLF(double multiplier);
     void multiplyEXP(double multiplier);
     void addLF(double num);
@@ -124,7 +124,7 @@ public:
     LiberationArmy(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
-    ArmyType instance();
+    string instance();
 };
 
 class ARVN : public Army
@@ -133,7 +133,7 @@ public:
     ARVN(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
-    ArmyType instance();
+    string instance();
 };
 
 class Position
@@ -163,7 +163,7 @@ public:
     virtual int getAttackScore() = 0;
     Position getCurrentPosition() const;
     virtual string str() const = 0;
-    virtual UnitType instance();
+    virtual string instance();
     virtual VehicleType getVehicleType();
     virtual InfantryType getInfantryType();
     int getCurrentScore();
@@ -185,7 +185,7 @@ public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore() override;
     string str() const override;
-    UnitType instance();
+    string instance();
     VehicleType getVehicleType();
 };
 
@@ -200,7 +200,7 @@ public:
     Infantry(int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
-    UnitType instance();
+    string instance();
     InfantryType getInfantryType();
 };
 
@@ -238,7 +238,7 @@ public:
     Node *getNodeAtIndex(int index); // return a pointer to that specific node
     Node *getFirstVehicle();
     vector<Unit*> convertToVector();
-    vector<Node*> UnitList::findMinSubset(int threshold, bool isInfantry);
+    vector<Node*> findMinSubset(int threshold, bool isInfantry);
     // vector<Node*> findMinInfantrySubset(int threshold); // returns a vector of pointers to the valid combination, returns empty if none is found
     // vector<Node*> findMinInfantrySubset(int threshold);
     string str() const;
@@ -247,8 +247,10 @@ public:
 
 class TerrainElement
 {
+protected:
+    Position *pos;
 public:
-    TerrainElement();
+    TerrainElement(Position *pos);
     ~TerrainElement();
     virtual void getEffect(Army *army) = 0;
 };
@@ -264,46 +266,36 @@ public:
 
 class Mountain : public TerrainElement
 {
-private:
-    Position pos;
 public:
-    Mountain(Position pos);
+    Mountain(Position *pos);
     void getEffect(Army *army) override;
 };
 
 class River : public TerrainElement
 {
-private:
-    Position pos;
 public:
-    River(Position pos);
+    River(Position *pos);
     void getEffect(Army *army) override;
 };
 
 class Urban : public TerrainElement
 {
-private:
-    Position pos;
 public:
-    Urban(Position pos);
+    Urban(Position *pos);
     void getEffect(Army *army) override;
 };
 
 class Fortification : public TerrainElement
 {
-private:
-    Position pos;
 public:
-    Fortification(Position pos);
+    Fortification(Position *pos);
     void getEffect(Army *army) override;
 };
 
 class SpecialZone : public TerrainElement
 {
-private:
-    Position pos;
 public:
-    SpecialZone(Position pos);
+    SpecialZone(Position *pos);
     void getEffect(Army *army) override;
 };
 
@@ -333,7 +325,10 @@ private:
 
     vector<Position *> toPositionVector(const string &positionList);
     vector<string> splitUnits(const string& unitListString);
-    int countUnits(string &unitList);
+    void parseUnits(vector<string> unitListVector);
+    bool isInfantry(const string& unitName);
+    InfantryType getInfantryType(const string& unitName);
+    VehicleType getVehicleType(const string& unitName);
 public:
     Configuration(const string &filepath);
     ~Configuration();
