@@ -1229,30 +1229,6 @@ InfantryType Configuration::getInfantryType(const string& unitName)
             return infantryName.second;
         }
     }
-    // if (unitName == "SNIPER")
-    // {
-    //     return SNIPER;
-    // }
-    // else if (unitName == "ANTIAIRCRAFTSQUAD")
-    // {
-    //     return ANTIAIRCRAFTSQUAD;
-    // }
-    // else if (unitName == "MORTARSQUAD")
-    // {
-    //     return MORTARSQUAD;
-    // }
-    // else if (unitName == "ENGINEER")
-    // {
-    //     return ENGINEER;
-    // }
-    // else if (unitName == "SPECIALFORCES")
-    // {
-    //     return SPECIALFORCES;
-    // }
-    // else
-    // {
-    //     return REGULARINFANTRY;
-    // }
 }
 
 VehicleType Configuration::getVehicleType(const string& unitName)
@@ -1274,34 +1250,6 @@ VehicleType Configuration::getVehicleType(const string& unitName)
             return vehicleName.second;
         }
     }
-    // if (unitName == "TRUCK")
-    // {
-    //     return TRUCK;
-    // }
-    // else if (unitName == "MORTAR")
-    // {
-    //     return MORTAR;
-    // }
-    // else if (unitName == "ANTIAIRCRAFT")
-    // {
-    //     return ANTIAIRCRAFT;
-    // }
-    // else if (unitName == "ARMOREDCAR")
-    // {
-    //     return ARMOREDCAR;
-    // }
-    // else if (unitName == "APC")
-    // {
-    //     return APC;
-    // }
-    // else if (unitName == "ARTILLERY")
-    // {
-    //     return ARTILLERY;
-    // }
-    // else
-    // {
-    //     return TANK;
-    // }
 }
 
 void Configuration::parseUnits(vector<string> units)
