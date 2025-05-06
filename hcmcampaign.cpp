@@ -1213,62 +1213,95 @@ bool Configuration::isInfantry(const string& unitName)
 
 InfantryType Configuration::getInfantryType(const string& unitName)
 {
-    if (unitName == "SNIPER")
+    static vector<pair<string,InfantryType>> infantryNames = {
+        {"SNIPER", SNIPER},
+        {"ANTIAIRCRAFTSQUAD", ANTIAIRCRAFTSQUAD},
+        {"MORTARSQUAD", MORTARSQUAD},
+        {"ENGINEER", ENGINEER},
+        {"SPECIALFORCES", SPECIALFORCES},
+        {"REGULARINFANTRY", REGULARINFANTRY}
+    };
+
+    for (auto infantryName : infantryNames)
     {
-        return SNIPER;
+        if (infantryName.first == unitName)
+        {
+            return infantryName.second;
+        }
     }
-    else if (unitName == "ANTIAIRCRAFTSQUAD")
-    {
-        return ANTIAIRCRAFTSQUAD;
-    }
-    else if (unitName == "MORTARSQUAD")
-    {
-        return MORTARSQUAD;
-    }
-    else if (unitName == "ENGINEER")
-    {
-        return ENGINEER;
-    }
-    else if (unitName == "SPECIALFORCES")
-    {
-        return SPECIALFORCES;
-    }
-    else
-    {
-        return REGULARINFANTRY;
-    }
+    // if (unitName == "SNIPER")
+    // {
+    //     return SNIPER;
+    // }
+    // else if (unitName == "ANTIAIRCRAFTSQUAD")
+    // {
+    //     return ANTIAIRCRAFTSQUAD;
+    // }
+    // else if (unitName == "MORTARSQUAD")
+    // {
+    //     return MORTARSQUAD;
+    // }
+    // else if (unitName == "ENGINEER")
+    // {
+    //     return ENGINEER;
+    // }
+    // else if (unitName == "SPECIALFORCES")
+    // {
+    //     return SPECIALFORCES;
+    // }
+    // else
+    // {
+    //     return REGULARINFANTRY;
+    // }
 }
 
 VehicleType Configuration::getVehicleType(const string& unitName)
 {
-    if (unitName == "TRUCK")
+    static vector<pair<string,VehicleType>> vehicleNames = {
+        {"TRUCK", TRUCK},
+        {"MORTAR", MORTAR},
+        {"ANTIAIRCRAFT", ANTIAIRCRAFT},
+        {"ARMOREDCAR", ARMOREDCAR},
+        {"APC", APC},
+        {"ARTILLERY", ARTILLERY},
+        {"TANK", TANK}
+    };
+
+    for (auto vehicleName : vehicleNames)
     {
-        return TRUCK;
+        if (vehicleName.first == unitName)
+        {
+            return vehicleName.second;
+        }
     }
-    else if (unitName == "MORTAR")
-    {
-        return MORTAR;
-    }
-    else if (unitName == "ANTIAIRCRAFT")
-    {
-        return ANTIAIRCRAFT;
-    }
-    else if (unitName == "ARMOREDCAR")
-    {
-        return ARMOREDCAR;
-    }
-    else if (unitName == "APC")
-    {
-        return APC;
-    }
-    else if (unitName == "ARTILLERY")
-    {
-        return ARTILLERY;
-    }
-    else
-    {
-        return TANK;
-    }
+    // if (unitName == "TRUCK")
+    // {
+    //     return TRUCK;
+    // }
+    // else if (unitName == "MORTAR")
+    // {
+    //     return MORTAR;
+    // }
+    // else if (unitName == "ANTIAIRCRAFT")
+    // {
+    //     return ANTIAIRCRAFT;
+    // }
+    // else if (unitName == "ARMOREDCAR")
+    // {
+    //     return ARMOREDCAR;
+    // }
+    // else if (unitName == "APC")
+    // {
+    //     return APC;
+    // }
+    // else if (unitName == "ARTILLERY")
+    // {
+    //     return ARTILLERY;
+    // }
+    // else
+    // {
+    //     return TANK;
+    // }
 }
 
 void Configuration::parseUnits(vector<string> units)
@@ -1379,7 +1412,6 @@ Configuration::Configuration(const string &filepath)
 
         else if (lineCode == "UNIT_LIST")
         {
-            // TODO: do this case
             // Remove the square brackets
             lineValue = lineValue.substr(1, lineValue.size() - 2);
 
@@ -1427,7 +1459,7 @@ Configuration::~Configuration()
     delete[] ARVNUnits;
 }
 
-vector<int> Configuration::getBattleFieldDimensions()
+pair<int,int> Configuration::getBattleFieldDimensions()
 {
     return {num_rows,num_cols};
 }
@@ -1516,6 +1548,9 @@ string Configuration::str() const
 HCMCampaign::HCMCampaign(const string &config_file_path)
 {
     config = new Configuration(config_file_path);
+    pair<int,int> dimensions = config->getBattleFieldDimensions();
+    int row = dimensions.first;
+    int col = dimensions.second; 
 }
 
 void HCMCampaign::run()

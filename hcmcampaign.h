@@ -332,8 +332,7 @@ private:
 public:
     Configuration(const string &filepath);
     ~Configuration();
-    vector<int> getBattleFieldDimensions();
-    
+    pair<int,int> getBattleFieldDimensions();
     string str() const;
 };
 
