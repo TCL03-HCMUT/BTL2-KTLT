@@ -813,6 +813,14 @@ bool UnitList::deleteNode(Node *node)
         listHead = listHead->next;
         
         // if the head was also the tail (one node)
+        if (node->unit->instance() == "INFANTRY")
+        {
+            infantryCount--;
+        }
+        else
+        {
+            vehicleCount--;
+        }
         if (node == listEnd)
         {
             listEnd = nullptr;
@@ -843,9 +851,31 @@ bool UnitList::deleteNode(Node *node)
     }
 
     tmp->next = node->next;
+    if (node->unit->instance() == "INFANTRY")
+    {
+        infantryCount--;
+    }
+    else
+    {
+        vehicleCount--;
+    }
     delete node;
     currentSize--;
     return true;
+}
+
+bool UnitList::deleteAllInfantry()
+{
+    Node* current = listHead;
+
+    while (current != nullptr) {
+        Node* next = current->next;
+        if (current->unit->instance() == "INFANTRY") {
+            deleteNode(current);
+            infantryCount--;
+        }
+        current = next;
+    }
 }
 
 bool UnitList::deleteMatchingQuantity(int quantity)
