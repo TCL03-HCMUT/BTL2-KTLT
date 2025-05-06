@@ -433,7 +433,7 @@ LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleFi
 void LiberationArmy::fight(Army *enemy, bool defense)
 {
     //TODO: implement this method
-    if (defense) // defense is true
+    if (defense) // defense case
     {
         LF = (int)ceil(LF * 1.3);
         EXP = (int)ceil(EXP * 1.3);
@@ -465,16 +465,17 @@ void LiberationArmy::fight(Army *enemy, bool defense)
             updateParameters();
         }
     }
-    else
+    else // attack case
     {
         LF = (int)ceil(LF * 1.5);
         EXP = (int)ceil(EXP * 1.5);
         // TODO: implement the attack case
-        vector<Node*> combinationA = unitList->findMinSubset(enemy->getEXP(), true);
-        vector<Node*> combinationB = unitList->findMinSubset(enemy->getLF(), false);
+        vector<Node *> combinationA = unitList->findMinSubset(enemy->getEXP(), true);
+        vector<Node *> combinationB = unitList->findMinSubset(enemy->getLF(), false);
 
         bool battleOccurs;
 
+        // Evaluate if battle occurs, and delete units if applicable
         if (combinationA.empty() && combinationB.empty())
         {
             battleOccurs = false;
@@ -497,9 +498,17 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         {
             battleOccurs = this->EXP > enemy->getEXP();
         }
+
         else if (combinationB.empty())
         {
             battleOccurs = this->LF > enemy->getLF();
+        }
+
+
+        // Evaluate the battle entirely
+        if (battleOccurs)
+        {
+
         }
     }
 }
@@ -669,6 +678,7 @@ void UnitList::insertAtHead(Unit *unit)
         return;
     }
     Node *newNode = new Node(unit);
+
     newNode->next = listHead;
     listHead = newNode;
 }
@@ -706,13 +716,21 @@ bool UnitList::insert(Unit *unit)
                 tmp = tmp->next;
             }
             tmp->unit->addQuantity(addedQuantity);
-            return false;
+            return true;
         }
         else
         {
-            insertAtEnd(unit);
-            vehicleCount++;
-            currentSize++;
+            if (currentSize < capacity)
+            {
+                insertAtEnd(unit);
+                vehicleCount++;
+                currentSize++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     else if (unit->instance() == "INFANTRY")
@@ -727,13 +745,21 @@ bool UnitList::insert(Unit *unit)
                 tmp = tmp->next;
             }
             tmp->unit->addQuantity(addedQuantity);
-            return false;
+            return true;
         }
         else
         {
-            insertAtHead(unit);
-            infantryCount++;
-            currentSize++;
+            if (currentSize < capacity)
+            {
+                insertAtHead(unit);
+                infantryCount++;
+                currentSize++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     return true;
