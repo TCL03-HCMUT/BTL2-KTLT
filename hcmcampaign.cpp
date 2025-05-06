@@ -58,7 +58,7 @@ Unit::Unit(int quantity, int weight, Position pos)
     this->quantity = quantity;
     this->weight = weight;
     this->pos = pos;
-    //this->attackScore = getAttackScore();
+    // this->attackScore = getAttackScore();
 }
 
 Unit::~Unit()
@@ -177,7 +177,8 @@ Vehicle::Vehicle(int quantity, int weight, Position pos, VehicleType vehicleType
 int Vehicle::getAttackScore()
 {
     double score = (vehicleType * 304 + quantity * weight) / 30.0;
-    return ceil(score);
+    this->attackScore = (int)ceil(score);
+    return (int)ceil(score);
 }
 
 string Vehicle::str() const
@@ -254,15 +255,16 @@ int Infantry::getAttackScore()
     if (personalNum > 7)
     {
         double quantity_tmp = quantity * 1.2;
-        quantity = ceil(quantity_tmp);
-        score = infantryType*56 + quantity*weight;
+        quantity = (int)ceil(quantity_tmp);
+        score = infantryType * 56 + quantity*weight;
     }
     else if (personalNum < 3)
     {
         double quantity_tmp = quantity * 0.9;
-        quantity = ceil(quantity_tmp);
-        score = infantryType*56 + quantity*weight;
+        quantity = (int)ceil(quantity_tmp);
+        score = infantryType * 56 + quantity*weight;
     }
+    this->attackScore = score;
     return score;
 }
 
@@ -346,6 +348,11 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     {
         (this->unitList)->insert(unitArray[i]);
     }
+}
+
+Army::~Army()
+{
+    delete unitList;
 }
 
 int Army::getLF()
@@ -501,7 +508,7 @@ string LiberationArmy::str() const
 {
     stringstream result;
     result << "LiberationArmy[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
-        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str();
+        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str() << "]";
     return result.str();
 }
 
@@ -553,7 +560,7 @@ string ARVN::str() const
 {
     stringstream result;
     result << "ARVN[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
-        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str();
+        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str() << "]";
     return result.str();
 }
 
@@ -634,6 +641,18 @@ UnitList::UnitList(int capacity)
     this->listEnd = nullptr;
     this->vehicleCount = 0;
     this->infantryCount = 0;
+}
+
+UnitList::~UnitList()
+{
+    while (listHead != nullptr)
+    {
+        Node *temp = listHead;
+        listHead = listHead->next;
+        delete temp;
+    }
+    listEnd = nullptr;
+    currentSize = 0;
 }
 
 void UnitList::setCapacity(int capacity)

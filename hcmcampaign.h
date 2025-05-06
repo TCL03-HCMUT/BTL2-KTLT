@@ -102,6 +102,7 @@ protected:
     void updateParameters();
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
+    virtual ~Army();
     int getLF();
     int getEXP();
     void setLF(int LF);
@@ -228,6 +229,7 @@ private:
     void insertAtEnd(Unit *unit);
 public:
     UnitList(int capacity);
+    ~UnitList();
     void setCapacity(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
@@ -239,10 +241,8 @@ public:
     Node *getFirstVehicle();
     vector<Unit*> convertToVector();
     vector<Node*> findMinSubset(int threshold, bool isInfantry);
-    // vector<Node*> findMinInfantrySubset(int threshold); // returns a vector of pointers to the valid combination, returns empty if none is found
-    // vector<Node*> findMinInfantrySubset(int threshold);
     string str() const;
-    // TODO:
+    
 };
 
 class TerrainElement
