@@ -831,15 +831,15 @@ bool UnitList::deleteNode(Node *node)
     }
 
     // Case 3: deletion at middle or tail
-    Node *tmp = listHead;
+    Node *prev = listHead;
     // Find the node before the node to delete
-    while (tmp != nullptr && tmp->next != node)
+    while (prev != nullptr && prev->next != node)
     {
-        tmp = tmp->next;
+        prev = prev->next;
     }
 
     // Cannot find the correct node 
-    if (tmp == nullptr)
+    if (prev == nullptr)
     {
         return false;
     }
@@ -847,10 +847,10 @@ bool UnitList::deleteNode(Node *node)
     // if deletion at tail
     if (node == listEnd)
     {
-        listEnd = tmp; // move the tail to the previous node
+        listEnd = prev; // move the tail to the previous node
     }
 
-    tmp->next = node->next;
+    prev->next = node->next;
     if (node->unit->instance() == "INFANTRY")
     {
         infantryCount--;
@@ -872,10 +872,26 @@ bool UnitList::deleteAllInfantry()
         Node* next = current->next;
         if (current->unit->instance() == "INFANTRY") {
             deleteNode(current);
-            infantryCount--;
         }
         current = next;
     }
+    infantryCount = 0;
+    return true;
+}
+
+bool UnitList::deleteAllVehicle()
+{
+    Node* current = listHead;
+
+    while (current != nullptr) {
+        Node* next = current->next;
+        if (current->unit->instance() == "VEHICLE") {
+            deleteNode(current);
+        }
+        current = next;
+    }
+    vehicleCount = 0;
+    return true;
 }
 
 bool UnitList::deleteMatchingQuantity(int quantity)
