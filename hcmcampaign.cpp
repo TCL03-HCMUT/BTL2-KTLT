@@ -123,6 +123,13 @@ void Unit::setQuantity(int quantity)
     this->quantity = quantity;
 }
 
+void Unit::multiplyWeight(double multiplier)
+{
+    double tmpWeight = this->weight;
+    tmpWeight *= multiplier;
+    this->weight = (int)ceil(tmpWeight);
+}
+
 void Unit::setAttackScore(int score)
 {
     this->attackScore = score;
@@ -452,7 +459,6 @@ void LiberationArmy::fight(Army *enemy, bool defense)
                 tmp->unit->setQuantity(closestFibonacci(currentQuantity));
                 tmp = tmp->next;
             }
-            updateParameters();
         }
         else
         {
@@ -462,8 +468,8 @@ void LiberationArmy::fight(Army *enemy, bool defense)
                 tmp->unit->multiplyQuantity(0.9);
                 tmp = tmp->next;
             }
-            updateParameters();
         }
+        updateParameters();
     }
     else // attack case
     {
@@ -497,19 +503,47 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         else if (combinationA.empty())
         {
             battleOccurs = this->EXP > enemy->getEXP();
+
+            if (battleOccurs)
+            {
+                this->unitList->deleteAllInfantry();
+                for (auto node : combinationB)
+                {
+                    unitList->deleteNode(node);
+                }
+            }
         }
 
         else if (combinationB.empty())
         {
             battleOccurs = this->LF > enemy->getLF();
+
+            if (battleOccurs)
+            {
+                this->unitList->deleteAllVehicle();
+                for (auto node : combinationA)
+                {
+                    unitList->deleteNode(node);
+                }
+            }
         }
 
 
         // Evaluate the battle entirely
         if (battleOccurs)
         {
-
+            // TODO: confiscation
         }
+        else
+        {
+            Node* tmp = this->unitList->getHead();
+            while (tmp != nullptr)
+            {
+                tmp->unit->multiplyWeight(0.9);
+                tmp = tmp->next;
+            }
+        }
+        updateParameters();
     }
 }
 
@@ -992,6 +1026,11 @@ Node *UnitList::getHead()
 
 Node *UnitList::getNodeAtIndex(int index)
 {
+    if (index < 0 || index >= currentSize)
+    {
+        return nullptr;
+    }
+    
     Node* tmp = listHead;
     for (int i = 0; i < index && tmp != nullptr ; i++)
     {

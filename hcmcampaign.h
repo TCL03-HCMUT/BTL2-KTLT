@@ -67,19 +67,6 @@ enum InfantryType
     REGULARINFANTRY
 };
 
-enum UnitType
-{
-    UNIT,
-    VEHICLE,
-    INFANTRY
-};
-
-enum ArmyType
-{
-    ARMY,
-    LIBERATIONARMY,
-    ARVIETNAM
-};
 
 class Utility
 {
@@ -173,6 +160,7 @@ public:
     void addQuantity(int quantity);
     void multiplyQuantity(double multiplier);
     void setQuantity(int quantity);
+    void multiplyWeight(double multiplier);
     void setAttackScore(int score);
     void multiplyScore(double multiplier);
     void addScore(double num);
