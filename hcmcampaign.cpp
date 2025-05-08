@@ -954,7 +954,7 @@ void UnitList::reverse()
     Node *prev = nullptr, *current = listHead, *next;
     listEnd = listHead;
 
-    while (current)
+    while (current != nullptr)
     {
         next = current->next;
         current->next = prev;
