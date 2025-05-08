@@ -67,16 +67,6 @@ enum InfantryType
     REGULARINFANTRY
 };
 
-
-class Utility
-{
-public:
-    int sumDigits(int n);
-    int personalNumber(int num, int year);
-    bool isSpecialNumber(int num, int k);
-    bool isSquare(int n);
-};
-
 class Army
 {
 protected:
@@ -86,6 +76,7 @@ protected:
     BattleField *battleField;
     int clampLF(int LF);
     int clampEXP(int EXP);
+    bool isSpecialNumber(int num, int base);
     void updateParameters();
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
@@ -108,6 +99,7 @@ class LiberationArmy : public Army
 {
 private:
     int closestFibonacci(int num);
+    void confiscate(Army *enemy);
 public:
     LiberationArmy(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
@@ -182,16 +174,20 @@ class Infantry : public Unit
 {
 private:
     InfantryType infantryType;
+    int sumDigits(int num);
+    int personalNumber(int num, int year);
+    bool isSquare(int num);
     bool isCommando();
     int getScore();
     string infantryName;
+    
 public:
     Infantry(int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
     string instance();
     InfantryType getInfantryType();
-};
+}; 
 
 class Node
 {

@@ -3,55 +3,6 @@
 ////////////////////////////////////////////////////////////////////////
 /// STUDENT'S ANSWER BEGINS HERE
 ////////////////////////////////////////////////////////////////////////
-
-
-int Utility::sumDigits(int num)
-{
-    int sumDigit = 0;
-    while (num != 0)
-    {
-        sumDigit += num % 10;
-        num /= 10;
-    }
-    return sumDigit;
-}
-
-int Utility::personalNumber(int num, int year)
-{
-    int result = sumDigits(num) + sumDigits(year);
-    while (result > 9)
-    {
-        result = sumDigits(result);
-    }
-    return result;
-}
-
-bool Utility::isSpecialNumber(int num, int base)
-{
-    // Edge case: 0 and negative numbers cannot be expressed as a sum of powers
-    if (num < 0)
-        return false;
-
-    int remainder;
-    while (num > 0)
-    {
-        remainder = num % base;
-
-        // If any digit is greater than 1, it's not a special number
-        if (remainder > 1)
-            return false;
-        
-        num /= base;
-    }
-    return true;
-}
-
-bool Utility::isSquare(int n)
-{
-    int a_sq = sqrt(n);
-    return (a_sq * a_sq) == n;
-}
-
 // abstract class Unit
 Unit::Unit(int quantity, int weight, Position pos)
 {
@@ -235,12 +186,15 @@ Infantry::Infantry(int quantity, int weight, const Position pos, InfantryType in
     this->attackScore = getAttackScore();
 }
 
-
+bool Infantry::isSquare(int num)
+{
+    int a_sq = sqrt(num);
+    return (a_sq * a_sq) == num;
+}
 
 bool Infantry::isCommando()
 {
-    Utility util;
-    return (infantryType == SPECIALFORCES) && util.isSquare(weight);
+    return (infantryType == SPECIALFORCES) && isSquare(weight);
 }
 
 int Infantry::getScore()
@@ -253,12 +207,31 @@ int Infantry::getScore()
     return score;
 }
 
+int Infantry::sumDigits(int num)
+{
+    int sumDigit = 0;
+    while (num != 0)
+    {
+        sumDigit += num % 10;
+        num /= 10;
+    }
+    return sumDigit;
+}
+
+int Infantry::personalNumber(int num, int year)
+{
+    int result = sumDigits(num) + sumDigits(year);
+    while (result > 9)
+    {
+        result = sumDigits(result);
+    }
+    return result;
+}
 
 int Infantry::getAttackScore()
 {
-    Utility util;
     int score = getScore();
-    int personalNum = util.personalNumber(score, 1975);
+    int personalNum = personalNumber(score, 1975);
     if (personalNum > 7)
     {
         double quantity_tmp = quantity * 1.2;
@@ -271,6 +244,7 @@ int Infantry::getAttackScore()
         quantity = (int)ceil(quantity_tmp);
         score = infantryType * 56 + quantity*weight;
     }
+    if (isCommando) score +=75;
     this->attackScore = score;
     return score;
 }
@@ -326,9 +300,28 @@ void Army::updateParameters()
     this->EXP = EXP_tmp;
 }
 
+bool Army::isSpecialNumber(int num, int base)
+{
+    // Edge case: 0 and negative numbers cannot be expressed as a sum of powers
+    if (num < 0)
+        return false;
+
+    int remainder;
+    while (num > 0)
+    {
+        remainder = num % base;
+
+        // If any digit is greater than 1, it's not a special number
+        if (remainder > 1)
+            return false;
+        
+        num /= base;
+    }
+    return true;
+}
+
 Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
 {
-    Utility util;
     this->name = name;
     this->battleField = battleField;
     this->LF = 0;
@@ -348,7 +341,7 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     this->LF = clampLF(this->LF);
     this->EXP = clampEXP(this->EXP);
     int S = this->LF + this->EXP;
-    bool isSpecialSize = util.isSpecialNumber(S, 3) || util.isSpecialNumber(S, 5) || util.isSpecialNumber(S, 7);
+    bool isSpecialSize = isSpecialNumber(S, 3) || isSpecialNumber(S, 5) || isSpecialNumber(S, 7);
     int capacity = isSpecialSize ? 12 : 8;
     this->unitList = new UnitList(capacity);
     for (int i = 0; i < size; i++)
@@ -997,7 +990,7 @@ vector<Unit *> UnitList::convertToVector()
 
 vector<Node *> UnitList::findMinSubset(int threshold, bool isInfantry)
 {
-    // vector<Unit*> units = convertToVector();
+    vector<Unit*> units = convertToVector();
     int minSize = INT_MAX;
     int size = isInfantry ? infantryCount : vehicleCount;
     int lowBound = isInfantry ? 0 : infantryCount;
@@ -1013,7 +1006,7 @@ vector<Node *> UnitList::findMinSubset(int threshold, bool isInfantry)
         {
             if (mask & (1 << i))
             {
-                sum += getNodeAtIndex(i + lowBound)->unit->getCurrentScore();
+                sum += units[i + lowBound]->getCurrentScore();
                 subsetIndices.push_back(i + lowBound);
             }
         }
