@@ -244,7 +244,7 @@ int Infantry::getAttackScore()
         quantity = (int)ceil(quantity_tmp);
         score = infantryType * 56 + quantity*weight;
     }
-    if (isCommando) score +=75;
+    if (isCommando()) score +=75;
     this->attackScore = score;
     return score;
 }
