@@ -622,12 +622,9 @@ Position::Position(int r, int c)
 
 Position::Position(const string &str_pos)
 {
-    string pos_cpy = str_pos;
-    pos_cpy.erase(pos_cpy.begin()); // Remove the first '('
-    pos_cpy.erase(pos_cpy.end() - 1); // Remove the last ')'
-    size_t commaPos = pos_cpy.find(',');
-    this->r = stoi(pos_cpy.substr(0, commaPos));
-    this->c = stoi(pos_cpy.substr(commaPos + 1));
+    stringstream ss(str_pos);
+    char ch;
+    ss >> ch >> r >> ch >> c >> ch;
 }
 
 int Position::getRow() const
@@ -696,6 +693,8 @@ UnitList::~UnitList()
     }
     listEnd = nullptr;
     currentSize = 0;
+    infantryCount = 0;
+    vehicleCount = 0;
 }
 
 void UnitList::setCapacity(int capacity)
@@ -711,8 +710,8 @@ void UnitList::insertAtHead(Unit *unit)
         listEnd = listHead;
         return;
     }
-    Node *newNode = new Node(unit);
 
+    Node *newNode = new Node(unit);
     newNode->next = listHead;
     listHead = newNode;
 }
@@ -725,6 +724,7 @@ void UnitList::insertAtEnd(Unit *unit)
         listEnd = listHead;
         return;
     }
+
     Node *newNode = new Node(unit);
     listEnd->next = newNode;
     listEnd = listEnd->next;
@@ -833,7 +833,7 @@ bool UnitList::isContain(InfantryType infantryType)
     return false;
 }
 
-bool UnitList::deleteNode(Node *node)
+bool UnitList::deleteNode(Node* &node)
 {
     // Case 1: null or empty list
     if (listHead == nullptr || node == nullptr)
@@ -847,6 +847,11 @@ bool UnitList::deleteNode(Node *node)
         listHead = listHead->next;
         
         // if the head was also the tail (one node)
+        if (node == listEnd)
+        {
+            listEnd = nullptr;
+        }
+
         if (node->unit->instance() == "INFANTRY")
         {
             infantryCount--;
@@ -855,11 +860,8 @@ bool UnitList::deleteNode(Node *node)
         {
             vehicleCount--;
         }
-        if (node == listEnd)
-        {
-            listEnd = nullptr;
-        }
         delete node;
+        node = nullptr;
         currentSize--;
         return true;
     }
@@ -894,6 +896,7 @@ bool UnitList::deleteNode(Node *node)
         vehicleCount--;
     }
     delete node;
+    node = nullptr;
     currentSize--;
     return true;
 }
@@ -944,6 +947,22 @@ bool UnitList::deleteMatchingQuantity(int quantity)
         curr = next; // Move to the next node after handling the current one
     }
     return true;
+}
+
+void UnitList::reverse()
+{
+    Node *prev = nullptr, *current = listHead, *next;
+    listEnd = listHead;
+
+    while (current)
+    {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    listHead = prev;
 }
 
 string UnitList::str() const
@@ -1030,7 +1049,7 @@ Node *UnitList::getNodeAtIndex(int index)
     {
         return nullptr;
     }
-    
+
     Node* tmp = listHead;
     for (int i = 0; i < index && tmp != nullptr ; i++)
     {

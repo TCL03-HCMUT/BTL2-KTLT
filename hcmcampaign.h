@@ -108,7 +108,6 @@ class LiberationArmy : public Army
 {
 private:
     int closestFibonacci(int num);
-    // bool evaluateBattle(Army *enemy, vector<Node*> combinationA, vector<Node*> combinationB);
 public:
     LiberationArmy(Unit **unitArray, int size, string name ,BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
@@ -223,10 +222,11 @@ public:
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
-    bool deleteNode(Node* node); // returns true if deletion sucessfull
+    bool deleteNode(Node* &node); // returns true if deletion sucessfull
     bool deleteMatchingQuantity(int quantity);
     bool deleteAllInfantry();
     bool deleteAllVehicle();
+    void reverse();
     Node *getHead();
     Node *getNodeAtIndex(int index); // return a pointer to that specific node
     Node *getFirstVehicle();
