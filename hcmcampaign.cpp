@@ -437,7 +437,6 @@ LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleFi
 
 void LiberationArmy::fight(Army *enemy, bool defense)
 {
-    //TODO: implement this method
     if (defense) // defense case
     {
         LF = (int)ceil(LF * 1.3);
@@ -446,7 +445,7 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         bool betterEXP = this->EXP >= enemy->getEXP();
         if (betterLF && betterEXP)
         {
-            // TODO: do the confiscation
+            
         }
         else if (!betterLF && !betterEXP)
         {
@@ -780,6 +779,7 @@ bool UnitList::insert(Unit *unit)
                 tmp = tmp->next;
             }
             tmp->unit->addQuantity(addedQuantity);
+            tmp->unit->getAttackScore();
             return true;
         }
         else
@@ -809,6 +809,7 @@ bool UnitList::insert(Unit *unit)
                 tmp = tmp->next;
             }
             tmp->unit->addQuantity(addedQuantity);
+            tmp->unit->getAttackScore();
             return true;
         }
         else
@@ -1270,7 +1271,7 @@ BattleField::BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
 
     // Resizes the 2d vector to match the size of the battlefield and initializes it with nullptr
     terrain.resize(n_rows);
-    for (int i = 0; i < n_cols; i++)
+    for (int i = 0; i < n_rows; i++)
     {
         terrain[i].resize(n_cols, nullptr);
     }
@@ -1747,6 +1748,7 @@ HCMCampaign::HCMCampaign(const string &config_file_path)
     vector<Position*> arrayUrban = config->getTerrainPosition(4);
     vector<Position*> arraySpecialZone = config->getTerrainPosition(5);
     battleField = new BattleField(row, col, arrayForest, arrayRiver, arrayFortification, arrayUrban, arraySpecialZone);
+    // battleField = nullptr;
     Unit **liberationUnits = config->getUnitList(true), **ARVNUnits = config->getUnitList(false);
     int liberationCount = config->getListSize(true), ARVNCount = config->getListSize(false);
 
@@ -1766,8 +1768,22 @@ HCMCampaign::~HCMCampaign()
 
 void HCMCampaign::run()
 {
-    // TODO:
-    
+    if (battleField)
+    {
+        battleField->affectArmy(liberationArmy);
+        battleField->affectArmy(ARVNArmy);
+    }
+
+    if (eventCode < 75)
+    {
+        liberationArmy->fight(ARVNArmy, false);
+    }
+    else
+    {
+        ARVNArmy->fight(liberationArmy, false);
+        liberationArmy->fight(ARVNArmy, false);
+    } 
+
 }
 
 string HCMCampaign::printResult()
