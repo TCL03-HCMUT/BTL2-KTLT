@@ -93,6 +93,7 @@ public:
     void addLF(double num);
     void addEXP(double num);
     Node* getListHead();
+    UnitList* getList();
 };
 
 class LiberationArmy : public Army
@@ -296,7 +297,7 @@ public:
                 vector<Position *> arrayRiver, vector<Position *> arrayFortification,
                 vector<Position *> arrayUrban, vector<Position *> arraySpecialZone);
     ~BattleField();
-    void effectUnits(Node* head);
+    void affectArmy(Army *army);
     string str();
 };
 
@@ -323,6 +324,7 @@ public:
     vector<Position*> getTerrainPosition(int identity);
     Unit** getUnitList(bool isLiber);
     int getListSize(bool isLiber);
+    int getEventCode();
     string str() const;
 };
 
@@ -333,7 +335,7 @@ private:
     BattleField *battleField;
     LiberationArmy *liberationArmy;
     ARVN *ARVNArmy;
-
+    int eventCode;
 public:
     HCMCampaign(const string &config_file_path);
     ~HCMCampaign();

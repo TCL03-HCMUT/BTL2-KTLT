@@ -19,14 +19,16 @@ void g_satc_01() {
     delete config;
 }
 void g_satc_02() {
-    cout << "----- Sample Testcase 02 -----" << endl;
-    Vehicle tankOfLiber(5, 2, Position(1, 2), TANK);
-    Vehicle truckOfLiber(3, 1, Position(2, 2), TRUCK);
-    Infantry sniperOfLiber(5, 2, Position(1, 1), SNIPER);
+     	
 
-    Vehicle tankOfAr(5, 2, Position(3, 2), TANK);
-    Vehicle truckOfAr(3, 1, Position(3, 1), TRUCK);
-    Infantry sniperOfAr(5, 2, Position(3, 3), SNIPER);
+cout << "----- Sample Testcase 02 -----" << endl;
+    Vehicle tankOfLiber(20, 20, Position(1, 2), MORTAR);
+    Vehicle truckOfLiber(15, 10, Position(2, 2), TRUCK);
+    Infantry sniperOfLiber(10, 20, Position(1, 1), SNIPER);
+
+    Vehicle tankOfAr(5, 20, Position(3, 2), MORTAR);
+    Vehicle truckOfAr(1, 10, Position(3, 1), TRUCK);
+    Infantry sniperOfAr(7, 20, Position(3, 3), SNIPER);
 
     Unit** unitArrayOfLiber = new Unit*[3];
     unitArrayOfLiber[0] = &tankOfLiber;
@@ -76,8 +78,8 @@ void g_satc_03()
 }
 
 int main(int argc, const char * argv[]) {
-    g_satc_01();
-    // g_satc_02();
-    g_satc_03();
+    // g_satc_01();
+    g_satc_02();
+    // g_satc_03();
     return 0;
 }

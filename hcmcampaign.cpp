@@ -423,6 +423,11 @@ Node* Army::getListHead()
     return this->unitList->getHead();
 }
 
+UnitList* Army::getList()
+{
+    return unitList;
+}
+
 // class LiberationArmy
 LiberationArmy::LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField) 
 : Army(unitArray, size, name, battleField)
@@ -468,7 +473,6 @@ void LiberationArmy::fight(Army *enemy, bool defense)
     {
         LF = (int)ceil(LF * 1.5);
         EXP = (int)ceil(EXP * 1.5);
-        // TODO: implement the attack case
         vector<Node *> combinationA = unitList->findMinSubset(enemy->getEXP(), true);
         vector<Node *> combinationB = unitList->findMinSubset(enemy->getLF(), false);
 
@@ -492,7 +496,6 @@ void LiberationArmy::fight(Army *enemy, bool defense)
             }
             battleOccurs = true;
         }
-        // TODO: need to fix a lot of this problem
         else if (combinationA.empty())
         {
             battleOccurs = this->EXP > enemy->getEXP();
@@ -525,7 +528,6 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         // Evaluate the battle entirely
         if (battleOccurs)
         {
-            // TODO: confiscation
             confiscate(enemy);
         }
         else
@@ -538,21 +540,48 @@ void LiberationArmy::fight(Army *enemy, bool defense)
             }
         }
 
-
+        enemy->fight(this, true);
         updateParameters();
     }
 }
 
 void LiberationArmy::confiscate(Army *enemy)
 {
-    
+    UnitList *enemyList = enemy->getList();
+    vector<Node *> deleteCombination;
+
+    enemyList->reverse();
+    Node *temp = enemyList->getHead();
+    while (temp != nullptr)
+    {
+        if (this->unitList->insert(temp->unit))
+        {
+            deleteCombination.push_back(temp);
+        }
+
+        temp = temp->next;
+    }
+    enemyList->reverse();
+
+    for (auto unit : deleteCombination)
+    {
+        enemyList->deleteNode(unit);
+    }
+
+    temp = enemyList->getHead();
+    {
+        while (temp != nullptr)
+        {
+            temp->unit->multiplyWeight(0.8);
+        }
+    }
 }
 
 string LiberationArmy::str() const
 {
     stringstream result;
-    result << "LiberationArmy[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
-        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str() << "]";
+    result << "LiberationArmy[LF=" << LF << ",EXP=" << EXP 
+        << ",unitList=" << unitList->str() << ",battleField=" << ((battleField == NULL || battleField == nullptr) ? "" : battleField->str()) << "]";
     return result.str();
 }
 
@@ -582,29 +611,29 @@ ARVN::ARVN(Unit **unitArray, int size, string name, BattleField *battleField)
 
 void ARVN::fight(Army *enemy, bool defense)
 {
-    //TODO: implement this method
-    if (defense)
+    if (defense) // defense case
     {
-        // TODO: implement this case
+        // confiscation has already happened in Liberation Army
+        updateParameters();
     }
-    else
+    else // attack case
     {
-        
+        enemy->fight(this, true);
         Node *tmp = unitList->getHead();
         while (tmp != nullptr)
         {
             tmp->unit->multiplyQuantity(0.8);
         }
         unitList->deleteMatchingQuantity(1);
-        this->updateParameters();
+        updateParameters();
     }
 }
 
 string ARVN::str() const
 {
     stringstream result;
-    result << "ARVN[name=" << name << ",LF=" << LF << ",EXP=" << EXP 
-        << ",unitList=" << unitList->str() << ",battleField=" << battleField->str() << "]";
+    result << "ARVN[LF=" << LF << ",EXP=" << EXP 
+        << ",unitList=" << unitList->str() << ",battleField=" << ((battleField == NULL || battleField == nullptr) ? "" : battleField->str()) << "]";
     return result.str();
 }
 
@@ -969,7 +998,7 @@ void UnitList::reverse()
 string UnitList::str() const
 {
     stringstream result;
-    result << "UnitList[" << "count_vehicle=" << vehicleCount << ";count_infantry=" << infantryCount << ";";
+    result << "UnitList[" << "count_vehicle=" << vehicleCount << ";count_infantry=" << infantryCount << ((currentSize > 0) ? ";" : "");
     Node *tmp = listHead;
     while (tmp != nullptr)
     {
@@ -1110,11 +1139,11 @@ void Mountain::getEffect(Army *army)
         {
             if (tmp->unit->instance() == "INFANTRY")
             {
-                tempEXP += infantryEXPMultiplier * tmp->unit->getCurrentScore();
+                tempEXP = ceil(tempEXP + infantryEXPMultiplier * tmp->unit->getCurrentScore());
             }
             else if (tmp->unit->instance() == "VEHICLE")
             {
-                tempLF += vehicleLFMultiplier * tmp->unit->getCurrentScore();
+                tempLF = ceil(tempLF + vehicleLFMultiplier * tmp->unit->getCurrentScore());
             }
         }
         tmp = tmp->next;
@@ -1297,6 +1326,17 @@ BattleField::~BattleField()
     }
 }
 
+void BattleField::affectArmy(Army* army)
+{
+    for (int i = 0; i < n_rows; i++)
+    {
+        for (int j = 0; j < n_cols; j++)
+        {
+            terrain[i][j]->getEffect(army);
+        }
+    }
+}
+
 string BattleField::str()
 {
     stringstream result;
@@ -1379,6 +1419,8 @@ InfantryType Configuration::getInfantryType(const string& unitName)
             return infantryName.second;
         }
     }
+
+    return SNIPER;
 }
 
 VehicleType Configuration::getVehicleType(const string& unitName)
@@ -1400,6 +1442,8 @@ VehicleType Configuration::getVehicleType(const string& unitName)
             return vehicleName.second;
         }
     }
+
+    return TRUCK;
 }
 
 void Configuration::parseUnits(vector<string> units)
@@ -1576,6 +1620,8 @@ vector<Position*> Configuration::getTerrainPosition(int identity)
             return arrayUrban;
         case 5:
             return arraySpecialZone;
+        default:
+            return {};
     }
 }
 
@@ -1601,6 +1647,11 @@ int Configuration::getListSize(bool isLiber)
     {
         return ARVNCount;
     }
+}
+
+int Configuration::getEventCode()
+{
+    return eventCode;
 }
 
 string Configuration::str() const
@@ -1629,20 +1680,20 @@ string Configuration::str() const
     }
     result << "],";
 
-    result << "arrayUrban=[";
-    for (int i = 0; i < arrayUrban.size(); i++)
-    {
-        result << arrayUrban[i]->str();
-        if (i < arrayUrban.size() - 1)
-            result << ',';
-    }
-    result << "],";
-
     result << "arrayFortification=[";
     for (int i = 0; i < arrayFortification.size(); i++)
     {
         result << arrayFortification[i]->str();
         if (i < arrayFortification.size() - 1)
+            result << ',';
+    }
+    result << "],";
+
+    result << "arrayUrban=[";
+    for (int i = 0; i < arrayUrban.size(); i++)
+    {
+        result << arrayUrban[i]->str();
+        if (i < arrayUrban.size() - 1)
             result << ',';
     }
     result << "],";
@@ -1701,6 +1752,8 @@ HCMCampaign::HCMCampaign(const string &config_file_path)
 
     liberationArmy = new LiberationArmy(liberationUnits, liberationCount, "LiberationArmy", battleField);
     ARVNArmy = new ARVN(ARVNUnits, ARVNCount, "ARVN", battleField);
+    
+    eventCode = config->getEventCode();
 }
 
 HCMCampaign::~HCMCampaign()
@@ -1714,6 +1767,7 @@ HCMCampaign::~HCMCampaign()
 void HCMCampaign::run()
 {
     // TODO:
+    
 }
 
 string HCMCampaign::printResult()
