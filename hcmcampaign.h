@@ -229,7 +229,6 @@ public:
     vector<Unit*> convertToVector();
     vector<Node*> findMinSubset(int threshold, bool isInfantry);
     string str() const;
-    
 };
 
 class TerrainElement
@@ -297,6 +296,7 @@ public:
                 vector<Position *> arrayRiver, vector<Position *> arrayFortification,
                 vector<Position *> arrayUrban, vector<Position *> arraySpecialZone);
     ~BattleField();
+    void effectUnits(Node* head);
     string str();
 };
 
@@ -320,6 +320,9 @@ public:
     Configuration(const string &filepath);
     ~Configuration();
     pair<int,int> getBattleFieldDimensions();
+    vector<Position*> getTerrainPosition(int identity);
+    Unit** getUnitList(bool isLiber);
+    int getListSize(bool isLiber);
     string str() const;
 };
 
@@ -329,10 +332,11 @@ private:
     Configuration *config;
     BattleField *battleField;
     LiberationArmy *liberationArmy;
-    ARVN *ARVN;
+    ARVN *ARVNArmy;
 
 public:
     HCMCampaign(const string &config_file_path);
+    ~HCMCampaign();
     void run();
     string printResult();
 };

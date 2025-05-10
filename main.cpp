@@ -78,6 +78,6 @@ void g_satc_03()
 int main(int argc, const char * argv[]) {
     g_satc_01();
     // g_satc_02();
-    //g_satc_03();
+    g_satc_03();
     return 0;
 }

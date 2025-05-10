@@ -526,6 +526,7 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         if (battleOccurs)
         {
             // TODO: confiscation
+            confiscate(enemy);
         }
         else
         {
@@ -536,8 +537,15 @@ void LiberationArmy::fight(Army *enemy, bool defense)
                 tmp = tmp->next;
             }
         }
+
+
         updateParameters();
     }
+}
+
+void LiberationArmy::confiscate(Army *enemy)
+{
+    
 }
 
 string LiberationArmy::str() const
@@ -1554,6 +1562,47 @@ pair<int,int> Configuration::getBattleFieldDimensions()
     return {num_rows,num_cols};
 }
 
+vector<Position*> Configuration::getTerrainPosition(int identity)
+{
+    switch (identity)
+    {
+        case 1:
+            return arrayForest;
+        case 2:
+            return arrayRiver;
+        case 3:
+            return arrayFortification;
+        case 4:
+            return arrayUrban;
+        case 5:
+            return arraySpecialZone;
+    }
+}
+
+Unit** Configuration::getUnitList(bool isLiber)
+{
+    if (isLiber)
+    {
+        return liberationUnits;
+    }
+    else
+    {
+        return ARVNUnits;
+    }
+}
+
+int Configuration::getListSize(bool isLiber)
+{
+    if (isLiber)
+    {
+        return liberationCount;
+    }
+    else
+    {
+        return ARVNCount;
+    }
+}
+
 string Configuration::str() const
 {
     stringstream result;
@@ -1640,7 +1689,26 @@ HCMCampaign::HCMCampaign(const string &config_file_path)
     config = new Configuration(config_file_path);
     pair<int,int> dimensions = config->getBattleFieldDimensions();
     int row = dimensions.first;
-    int col = dimensions.second; 
+    int col = dimensions.second;
+    vector<Position*> arrayForest = config->getTerrainPosition(1);
+    vector<Position*> arrayRiver = config->getTerrainPosition(2);
+    vector<Position*> arrayFortification = config->getTerrainPosition(3);
+    vector<Position*> arrayUrban = config->getTerrainPosition(4);
+    vector<Position*> arraySpecialZone = config->getTerrainPosition(5);
+    battleField = new BattleField(row, col, arrayForest, arrayRiver, arrayFortification, arrayUrban, arraySpecialZone);
+    Unit **liberationUnits = config->getUnitList(true), **ARVNUnits = config->getUnitList(false);
+    int liberationCount = config->getListSize(true), ARVNCount = config->getListSize(false);
+
+    liberationArmy = new LiberationArmy(liberationUnits, liberationCount, "LiberationArmy", battleField);
+    ARVNArmy = new ARVN(ARVNUnits, ARVNCount, "ARVN", battleField);
+}
+
+HCMCampaign::~HCMCampaign()
+{
+    delete liberationArmy;
+    delete ARVNArmy;
+    delete battleField;
+    delete config;
 }
 
 void HCMCampaign::run()
@@ -1652,7 +1720,7 @@ string HCMCampaign::printResult()
 {
     stringstream result;
     result << "LIBERATIONARMY[LF=" << liberationArmy->getLF() << ",EXP=" << liberationArmy->getEXP() 
-           << "]-ARVN[LF=" << ARVN->getLF() << ",EXP=" << ARVN->getEXP() << "]";
+           << "]-ARVN[LF=" << ARVNArmy->getLF() << ",EXP=" << ARVNArmy->getEXP() << "]";
 
     return result.str();
 }
