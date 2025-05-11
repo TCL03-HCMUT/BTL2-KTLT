@@ -380,9 +380,9 @@ void Army::fight(Army *enemy, bool defense)
 
 }
 
-bool Army::removeUnitsAfterFight()
+void Army::removeUnitsAfterFight()
 {
-    return unitList->deleteLowerScore(5);
+    unitList->deleteLowerScore(5);
 }
 
 string Army::str() const
@@ -843,12 +843,12 @@ bool UnitList::isContain(InfantryType infantryType)
     return false;
 }
 
-bool UnitList::deleteNode(Node* &node)
+void UnitList::deleteNode(Node* &node)
 {
     // Case 1: null or empty list
     if (listHead == nullptr || node == nullptr)
     {
-        return false;
+        return;
     }
 
     // Case 2: deletion at head
@@ -873,7 +873,7 @@ bool UnitList::deleteNode(Node* &node)
         delete node;
         node = nullptr;
         currentSize--;
-        return true;
+        return;
     }
 
     // Case 3: deletion at middle or tail
@@ -887,7 +887,7 @@ bool UnitList::deleteNode(Node* &node)
     // Cannot find the correct node 
     if (prev == nullptr)
     {
-        return false;
+        return;
     }
 
     // if deletion at tail
@@ -908,10 +908,10 @@ bool UnitList::deleteNode(Node* &node)
     delete node;
     node = nullptr;
     currentSize--;
-    return true;
+    return;
 }
 
-bool UnitList::deleteAllInfantry()
+void UnitList::deleteAllInfantry()
 {
     Node* current = listHead;
 
@@ -923,10 +923,9 @@ bool UnitList::deleteAllInfantry()
         current = next;
     }
     infantryCount = 0;
-    return true;
 }
 
-bool UnitList::deleteAllVehicle()
+void UnitList::deleteAllVehicle()
 {
     Node* current = listHead;
 
@@ -938,10 +937,9 @@ bool UnitList::deleteAllVehicle()
         current = next;
     }
     vehicleCount = 0;
-    return true;
 }
 
-bool UnitList::deleteMatchingQuantity(int quantity)
+void UnitList::deleteMatchingQuantity(int quantity)
 {
     Node *temp = listHead;
     while (temp != nullptr)
@@ -949,17 +947,13 @@ bool UnitList::deleteMatchingQuantity(int quantity)
         Node *next = temp->next;
         if (temp->unit->getQuantity() == quantity)
         {
-            if (!deleteNode(temp))
-            {
-                return false;
-            }
+            deleteNode(temp);
         }
         temp = next; // Move to the next node after handling the current one
     }
-    return true;
 }
 
-bool UnitList::deleteLowerScore(int score)
+void UnitList::deleteLowerScore(int score)
 {
     Node *temp = listHead;
     while (temp != nullptr)
@@ -967,10 +961,7 @@ bool UnitList::deleteLowerScore(int score)
         Node *next = temp->next;
         if (temp->unit->getAttackScore() <= score)
         {
-            if (!deleteNode(temp))
-            {
-                return false;
-            }
+            deleteNode(temp);
         }
         temp = next;
     }
