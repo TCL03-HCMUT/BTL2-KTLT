@@ -86,12 +86,9 @@ public:
     void setLF(int LF);
     void setEXP(int EXP);
     virtual void fight(Army *enemy, bool defense = false) = 0;
+    bool removeUnitsAfterFight();
     virtual string str() const = 0;
     virtual string instance();
-    void multiplyLF(double multiplier);
-    void multiplyEXP(double multiplier);
-    void addLF(double num);
-    void addEXP(double num);
     Node* getListHead();
     UnitList* getList();
 };
@@ -221,6 +218,7 @@ public:
     bool isContain(InfantryType infantryType); // return true if it exists
     bool deleteNode(Node* &node); // returns true if deletion sucessfull
     bool deleteMatchingQuantity(int quantity);
+    bool deleteLowerScore(int score);
     bool deleteAllInfantry();
     bool deleteAllVehicle();
     void reverse();

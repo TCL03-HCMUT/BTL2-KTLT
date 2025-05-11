@@ -380,6 +380,11 @@ void Army::fight(Army *enemy, bool defense)
 
 }
 
+bool Army::removeUnitsAfterFight()
+{
+    return unitList->deleteLowerScore(5);
+}
+
 string Army::str() const
 {
     return "Army";
@@ -388,34 +393,6 @@ string Army::str() const
 string Army::instance()
 {
     return "ARMY";
-}
-
-void Army::multiplyLF(double multiplier)
-{
-    double temp = LF;
-    temp *= multiplier;
-    LF = clampLF((int)ceil(temp));
-}
-
-void Army::multiplyEXP(double multiplier)
-{
-    double temp = EXP;
-    temp *= multiplier;
-    EXP = clampEXP((int)ceil(temp));
-}
-
-void Army::addLF(double num)
-{
-    double temp = LF;
-    temp += num;
-    LF = clampLF((int)ceil(temp));
-}
-
-void Army::addEXP(double num)
-{
-    double temp = EXP;
-    temp += num;
-    EXP = clampEXP((int)ceil(temp));
 }
 
 Node* Army::getListHead()
@@ -580,7 +557,8 @@ string LiberationArmy::str() const
 {
     stringstream result;
     result << "LiberationArmy[LF=" << LF << ",EXP=" << EXP 
-        << ",unitList=" << unitList->str() << ",battleField=" << ((battleField == NULL || battleField == nullptr) ? "" : battleField->str()) << "]";
+        << ",unitList=" << unitList->str() 
+        << ",battleField=" << ((battleField == NULL || battleField == nullptr) ? "" : battleField->str()) << "]";
     return result.str();
 }
 
@@ -632,7 +610,8 @@ string ARVN::str() const
 {
     stringstream result;
     result << "ARVN[LF=" << LF << ",EXP=" << EXP 
-        << ",unitList=" << unitList->str() << ",battleField=" << ((battleField == NULL || battleField == nullptr) ? "" : battleField->str()) << "]";
+        << ",unitList=" << unitList->str() 
+        << ",battleField=" << ((battleField == NULL || battleField == nullptr) ? "" : battleField->str()) << "]";
     return result.str();
 }
 
@@ -964,20 +943,37 @@ bool UnitList::deleteAllVehicle()
 
 bool UnitList::deleteMatchingQuantity(int quantity)
 {
-    Node *curr = listHead;
-    while (curr != nullptr)
+    Node *temp = listHead;
+    while (temp != nullptr)
     {
-        Node *next = curr->next;
-        if (curr->unit->getQuantity() == quantity)
+        Node *next = temp->next;
+        if (temp->unit->getQuantity() == quantity)
         {
-            if (!deleteNode(curr))
+            if (!deleteNode(temp))
             {
                 return false;
             }
         }
-        curr = next; // Move to the next node after handling the current one
+        temp = next; // Move to the next node after handling the current one
     }
     return true;
+}
+
+bool UnitList::deleteLowerScore(int score)
+{
+    Node *temp = listHead;
+    while (temp != nullptr)
+    {
+        Node *next = temp->next;
+        if (temp->unit->getAttackScore() <= score)
+        {
+            if (!deleteNode(temp))
+            {
+                return false;
+            }
+        }
+        temp = next;
+    }
 }
 
 void UnitList::reverse()
@@ -999,7 +995,8 @@ void UnitList::reverse()
 string UnitList::str() const
 {
     stringstream result;
-    result << "UnitList[" << "count_vehicle=" << vehicleCount << ";count_infantry=" << infantryCount << ((currentSize > 0) ? ";" : "");
+    result << "UnitList[" << "count_vehicle=" << vehicleCount 
+           << ";count_infantry=" << infantryCount << ((currentSize > 0) ? ";" : "");
     Node *tmp = listHead;
     while (tmp != nullptr)
     {
@@ -1391,7 +1388,14 @@ vector<string> Configuration::splitUnits(const string& unitListString)
 
 bool Configuration::isInfantry(const string& unitName)
 {
-    static vector<string> infantryUnits = {"SNIPER", "ANTIAIRCRAFTSQUAD", "MORTARSQUAD", "ENGINEER", "SPECIALFORCES", "REGULARINFANTRY"};
+    static vector<string> infantryUnits = {
+        "SNIPER",
+        "ANTIAIRCRAFTSQUAD",
+        "MORTARSQUAD",
+        "ENGINEER",
+        "SPECIALFORCES",
+        "REGULARINFANTRY"
+    };
     for (string unit : infantryUnits)
     {
         if (unit == unitName)
@@ -1782,7 +1786,10 @@ void HCMCampaign::run()
     {
         ARVNArmy->fight(liberationArmy, false);
         liberationArmy->fight(ARVNArmy, false);
-    } 
+    }
+
+    liberationArmy->removeUnitsAfterFight();
+    ARVNArmy->removeUnitsAfterFight();
 
 }
 
