@@ -135,6 +135,7 @@ class Unit
 protected:
     int quantity, weight, attackScore;
     Position pos;
+    bool affectedForest, affectedRiver, affectedFortification, affectedUrban, affectedSpecialZone;
 public:
     Unit(int quantity, int weight, Position pos);
     virtual ~Unit();
@@ -146,13 +147,17 @@ public:
     virtual InfantryType getInfantryType();
     int getCurrentScore();
     int getQuantity();
+    int getWeight();
     void addQuantity(int quantity);
     void multiplyQuantity(double multiplier);
     void setQuantity(int quantity);
     void multiplyWeight(double multiplier);
+    void setWeight(int weight);
     void setAttackScore(int score);
     void multiplyScore(double multiplier);
     void addScore(double num);
+    bool isAffected(int type);
+    void setAffected(int type);
 };
 
 class Vehicle : public Unit
