@@ -1855,6 +1855,9 @@ void HCMCampaign::run()
     liberationArmy->removeUnitsAfterFight();
     ARVNArmy->removeUnitsAfterFight();
 
+    liberationArmy->updateParameters();
+    ARVNArmy->updateParameters();
+
 }
 
 string HCMCampaign::printResult()

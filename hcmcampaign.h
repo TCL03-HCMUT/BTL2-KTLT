@@ -77,7 +77,7 @@ protected:
     int clampLF(int LF);
     int clampEXP(int EXP);
     bool isSpecialNumber(int num, int base);
-    void updateParameters();
+    
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
     virtual ~Army();
@@ -87,6 +87,7 @@ public:
     void setEXP(int EXP);
     virtual void fight(Army *enemy, bool defense = false) = 0;
     void removeUnitsAfterFight();
+    void updateParameters();
     virtual string str() const = 0;
     virtual string instance();
     Node* getListHead();
