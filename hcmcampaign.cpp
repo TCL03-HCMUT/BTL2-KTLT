@@ -42,27 +42,27 @@ string Unit::instance()
     return "UNIT";
 }
 
-VehicleType Unit::getVehicleType()
+VehicleType Unit::getVehicleType() const
 {
     return TRUCK;
 }
 
-InfantryType Unit::getInfantryType()
+InfantryType Unit::getInfantryType() const
 {
     return SNIPER;
 }
 
-int Unit::getCurrentScore()
+int Unit::getCurrentScore() const
 {
     return this->attackScore;
 }
 
-int Unit::getQuantity()
+int Unit::getQuantity() const
 {
     return this->quantity;
 }
 
-int Unit::getWeight()
+int Unit::getWeight() const
 {
     return this->weight;
 }
@@ -206,7 +206,7 @@ string Vehicle::instance()
     return "VEHICLE";
 }
 
-VehicleType Vehicle::getVehicleType()
+VehicleType Vehicle::getVehicleType() const
 {
     return vehicleType;
 }
@@ -316,7 +316,7 @@ string Infantry::instance()
     return "INFANTRY";
 }
 
-InfantryType Infantry::getInfantryType()
+InfantryType Infantry::getInfantryType() const
 {
     return infantryType;
 }
@@ -409,12 +409,12 @@ Army::~Army()
     delete unitList;
 }
 
-int Army::getLF()
+int Army::getLF() const
 {
     return LF;
 }
 
-int Army::getEXP()
+int Army::getEXP() const
 {
     return EXP;
 }
@@ -449,12 +449,12 @@ string Army::instance()
     return "ARMY";
 }
 
-Node* Army::getListHead()
+Node* Army::getListHead() const
 {
     return this->unitList->getHead();
 }
 
-UnitList* Army::getList()
+UnitList* Army::getList() const
 {
     return unitList;
 }
@@ -711,7 +711,7 @@ string Position::str() const
     return result.str();
 }
 
-double Position::getDistance(Position other)
+double Position::getDistance(Position other) const
 {
     return sqrt(pow(this->getRow() - other.getRow(), 2) + pow(this->getCol() - other.getCol(),2));
 }
@@ -1108,12 +1108,12 @@ vector<Node *> UnitList::findMinSubset(int threshold, bool isInfantry)
     return result;
 }
 
-Node *UnitList::getHead()
+Node *UnitList::getHead() const
 {
     return listHead;
 }
 
-Node *UnitList::getNodeAtIndex(int index)
+Node *UnitList::getNodeAtIndex(int index) const
 {
     if (index < 0 || index >= currentSize)
     {
@@ -1128,7 +1128,7 @@ Node *UnitList::getNodeAtIndex(int index)
     return tmp;
 }
 
-Node *UnitList::getFirstVehicle()
+Node *UnitList::getFirstVehicle() const
 {
     return getNodeAtIndex(infantryCount);
 }
@@ -1670,12 +1670,12 @@ Configuration::~Configuration()
     delete[] ARVNUnits;
 }
 
-pair<int,int> Configuration::getBattleFieldDimensions()
+pair<int,int> Configuration::getBattleFieldDimensions() const
 {
     return {num_rows,num_cols};
 }
 
-vector<Position*> Configuration::getTerrainPosition(int identity)
+vector<Position*> Configuration::getTerrainPosition(int identity) const
 {
     switch (identity)
     {
@@ -1694,7 +1694,7 @@ vector<Position*> Configuration::getTerrainPosition(int identity)
     }
 }
 
-Unit** Configuration::getUnitList(bool isLiber)
+Unit** Configuration::getUnitList(bool isLiber) const
 {
     if (isLiber)
     {
@@ -1706,7 +1706,7 @@ Unit** Configuration::getUnitList(bool isLiber)
     }
 }
 
-int Configuration::getListSize(bool isLiber)
+int Configuration::getListSize(bool isLiber) const
 {
     if (isLiber)
     {
@@ -1718,7 +1718,7 @@ int Configuration::getListSize(bool isLiber)
     }
 }
 
-int Configuration::getEventCode()
+int Configuration::getEventCode() const
 {
     return eventCode;
 }

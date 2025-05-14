@@ -81,8 +81,8 @@ protected:
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
     virtual ~Army();
-    int getLF();
-    int getEXP();
+    int getLF() const;
+    int getEXP() const;
     void setLF(int LF);
     void setEXP(int EXP);
     virtual void fight(Army *enemy, bool defense = false) = 0;
@@ -90,8 +90,8 @@ public:
     void updateParameters();
     virtual string str() const = 0;
     virtual string instance();
-    Node* getListHead();
-    UnitList* getList();
+    Node* getListHead() const;
+    UnitList* getList() const;
 };
 
 class LiberationArmy : public Army
@@ -128,7 +128,7 @@ public:
     void setRow(int r);
     void setCol(int c);
     string str() const; // Example: returns "(1,15)"
-    double getDistance(Position other);
+    double getDistance(Position other) const;
 };
 
 class Unit
@@ -144,11 +144,11 @@ public:
     Position getCurrentPosition() const;
     virtual string str() const = 0;
     virtual string instance();
-    virtual VehicleType getVehicleType();
-    virtual InfantryType getInfantryType();
-    int getCurrentScore();
-    int getQuantity();
-    int getWeight();
+    virtual VehicleType getVehicleType() const;
+    virtual InfantryType getInfantryType() const;
+    int getCurrentScore() const;
+    int getQuantity() const;
+    int getWeight() const;
     void addQuantity(int quantity);
     void multiplyQuantity(double multiplier);
     void setQuantity(int quantity);
@@ -171,7 +171,7 @@ public:
     int getAttackScore() override;
     string str() const override;
     string instance();
-    VehicleType getVehicleType();
+    VehicleType getVehicleType() const override;
 };
 
 class Infantry : public Unit
@@ -190,7 +190,7 @@ public:
     int getAttackScore() override;
     string str() const override;
     string instance();
-    InfantryType getInfantryType();
+    InfantryType getInfantryType() const override;
 }; 
 
 class Node
@@ -228,9 +228,9 @@ public:
     void deleteAllInfantry();
     void deleteAllVehicle();
     void reverse();
-    Node *getHead();
-    Node *getNodeAtIndex(int index); // return a pointer to that specific node
-    Node *getFirstVehicle();
+    Node *getHead() const;
+    Node *getNodeAtIndex(int index) const; // return a pointer to that specific node
+    Node *getFirstVehicle() const;
     vector<Unit*> convertToVector();
     vector<Node*> findMinSubset(int threshold, bool isInfantry);
     string str() const;
@@ -324,11 +324,11 @@ private:
 public:
     Configuration(const string &filepath);
     ~Configuration();
-    pair<int,int> getBattleFieldDimensions();
-    vector<Position*> getTerrainPosition(int identity);
-    Unit** getUnitList(bool isLiber);
-    int getListSize(bool isLiber);
-    int getEventCode();
+    pair<int,int> getBattleFieldDimensions() const;
+    vector<Position*> getTerrainPosition(int identity) const;
+    Unit** getUnitList(bool isLiber) const;
+    int getListSize(bool isLiber) const;
+    int getEventCode() const;
     string str() const;
 };
 
