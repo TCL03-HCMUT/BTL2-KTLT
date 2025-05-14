@@ -1687,10 +1687,8 @@ vector<Position*> Configuration::getTerrainPosition(int identity) const
             return arrayFortification;
         case 4:
             return arrayUrban;
-        case 5:
-            return arraySpecialZone;
         default:
-            return {};
+            return arraySpecialZone;
     }
 }
 
@@ -1723,6 +1721,38 @@ int Configuration::getEventCode() const
     return eventCode;
 }
 
+string Configuration::toPositionString(const vector<Position *> &vec) const
+{
+    stringstream ss;
+    ss << "[";
+    for (int i = 0; i < vec.size() ; i ++)
+    {
+        ss << vec[i]->str();
+        if (i < vec.size() - 1)
+        {
+            ss << ",";
+        }
+    }
+    ss << "]";
+    return ss.str();
+}
+
+string Configuration::toUnitListString(Unit** units, int size) const
+{
+    stringstream ss;
+    ss << "[";
+    for (int i = 0; i < size; i++)
+    {
+        ss << units[i]->str();
+        if (i < size - 1)
+        {
+            ss << ",";
+        }
+    }
+    ss << "]";
+    return ss.str();
+}
+
 string Configuration::str() const
 {
     stringstream result;
@@ -1731,72 +1761,14 @@ string Configuration::str() const
     result << "num_rows=" << num_rows << ',';
     result << "num_cols=" << num_cols << ',';
 
-    result << "arrayForest=[";
-    for (int i = 0; i < arrayForest.size(); i++)
-    {
-        result << arrayForest[i]->str();
-        if (i < arrayForest.size() - 1)
-            result << ',';
-    }
-    result << "],";
+    result << "arrayForest=" << toPositionString(arrayForest) << ",";
+    result << "arrayRiver=" << toPositionString(arrayRiver) << ",";
+    result << "arrayFortification=" << toPositionString(arrayFortification) << ",";
+    result << "arrayUrban=" << toPositionString(arrayUrban) << ",";
+    result << "arraySpecialZone=" << toPositionString(arraySpecialZone) << ",";
 
-    result << "arrayRiver=[";
-    for (int i = 0; i < arrayRiver.size(); i++)
-    {
-        result << arrayRiver[i]->str();
-        if (i < arrayRiver.size() - 1)
-            result << ',';
-    }
-    result << "],";
-
-    result << "arrayFortification=[";
-    for (int i = 0; i < arrayFortification.size(); i++)
-    {
-        result << arrayFortification[i]->str();
-        if (i < arrayFortification.size() - 1)
-            result << ',';
-    }
-    result << "],";
-
-    result << "arrayUrban=[";
-    for (int i = 0; i < arrayUrban.size(); i++)
-    {
-        result << arrayUrban[i]->str();
-        if (i < arrayUrban.size() - 1)
-            result << ',';
-    }
-    result << "],";
-
-    result << "arraySpecialZone=[";
-    for (int i = 0; i < arraySpecialZone.size(); i++)
-    {
-        result << arraySpecialZone[i]->str();
-        if (i < arraySpecialZone.size() - 1)
-            result << ',';
-    }
-    result << "],";
-
-    result << "liberationUnits=[";
-    for (int i = 0; i < liberationCount; i++)
-    {
-        result << liberationUnits[i]->str();
-        if (i < liberationCount - 1)
-        {
-            result << ',';
-        }
-    }
-    result << "],";
-
-    result << "ARVNUnits=[";
-    for (int i = 0; i < ARVNCount; i++)
-    {
-        result << ARVNUnits[i]->str();
-        if (i < ARVNCount - 1)
-        {
-            result << ',';
-        }
-    }
-    result << "],";
+    result << "liberationUnits=" << toUnitListString(liberationUnits, liberationCount) << ",";
+    result << "ARVNUnits=" << toUnitListString(ARVNUnits, ARVNCount) << ",";
 
     result << "eventCode=" << eventCode << ']';
 

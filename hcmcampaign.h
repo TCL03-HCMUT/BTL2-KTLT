@@ -321,6 +321,8 @@ private:
     bool isInfantry(const string& unitName);
     InfantryType getInfantryType(const string& unitName);
     VehicleType getVehicleType(const string& unitName);
+    string toPositionString(const vector<Position *> &vec) const;
+    string toUnitListString(Unit** units, int size) const;
 public:
     Configuration(const string &filepath);
     ~Configuration();
