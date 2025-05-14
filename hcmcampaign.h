@@ -77,7 +77,7 @@ protected:
     int clampLF(int LF);
     int clampEXP(int EXP);
     bool isSpecialNumber(int num, int base);
-    
+
 public:
     Army(Unit **unitArray, int size, string name, BattleField *battleField);
     virtual ~Army();
@@ -90,8 +90,8 @@ public:
     void updateParameters();
     virtual string str() const = 0;
     virtual string instance();
-    Node* getListHead() const;
-    UnitList* getList() const;
+    Node *getListHead() const;
+    UnitList *getList() const;
 };
 
 class LiberationArmy : public Army
@@ -99,8 +99,9 @@ class LiberationArmy : public Army
 private:
     int closestFibonacci(int num);
     void confiscate(Army *enemy);
+
 public:
-    LiberationArmy(Unit **unitArray, int size, string name ,BattleField *battleField);
+    LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
     string instance();
@@ -109,7 +110,7 @@ public:
 class ARVN : public Army
 {
 public:
-    ARVN(Unit **unitArray, int size, string name ,BattleField *battleField);
+    ARVN(Unit **unitArray, int size, string name, BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
     string instance();
@@ -137,6 +138,7 @@ protected:
     int quantity, weight, attackScore;
     Position pos;
     bool affectedForest, affectedRiver, affectedFortification, affectedUrban, affectedSpecialZone;
+
 public:
     Unit(int quantity, int weight, Position pos);
     virtual ~Unit();
@@ -166,6 +168,7 @@ class Vehicle : public Unit
 private:
     VehicleType vehicleType;
     string vehicleName;
+
 public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore() override;
@@ -184,14 +187,14 @@ private:
     bool isCommando();
     int getScore();
     string infantryName;
-    
+
 public:
     Infantry(int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
     string instance();
     InfantryType getInfantryType() const override;
-}; 
+};
 
 class Node
 {
@@ -215,6 +218,7 @@ private:
     int infantryCount; // can also be used as the index of the first vehicle
     void insertAtHead(Unit *unit);
     void insertAtEnd(Unit *unit);
+
 public:
     UnitList(int capacity);
     ~UnitList();
@@ -222,7 +226,7 @@ public:
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
-    void deleteNode(Node* &node); // returns true if deletion sucessfull
+    void deleteNode(Node *&node);              // returns true if deletion sucessfull
     void deleteMatchingQuantity(int quantity);
     void deleteLowerScore(int score);
     void deleteAllInfantry();
@@ -231,8 +235,8 @@ public:
     Node *getHead() const;
     Node *getNodeAtIndex(int index) const; // return a pointer to that specific node
     Node *getFirstVehicle() const;
-    vector<Unit*> convertToVector();
-    vector<Node*> findMinSubset(int threshold, bool isInfantry);
+    vector<Unit *> convertToVector();
+    vector<Node *> findMinSubset(int threshold, bool isInfantry);
     string str() const;
 };
 
@@ -240,6 +244,7 @@ class TerrainElement
 {
 protected:
     Position *pos;
+
 public:
     TerrainElement(Position *pos);
     ~TerrainElement();
@@ -294,8 +299,8 @@ class BattleField
 {
 private:
     int n_rows, n_cols;
-    vector<vector<TerrainElement*>> terrain;
-    
+    vector<vector<TerrainElement *>> terrain;
+
 public:
     BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
                 vector<Position *> arrayRiver, vector<Position *> arrayFortification,
@@ -316,19 +321,20 @@ private:
     int eventCode;
 
     vector<Position *> toPositionVector(const string &positionList);
-    vector<string> splitUnits(const string& unitListString);
+    vector<string> splitUnits(const string &unitListString);
     void parseUnits(vector<string> unitListVector);
-    bool isInfantry(const string& unitName);
-    InfantryType getInfantryType(const string& unitName);
-    VehicleType getVehicleType(const string& unitName);
+    bool isInfantry(const string &unitName);
+    InfantryType getInfantryType(const string &unitName);
+    VehicleType getVehicleType(const string &unitName);
     string toPositionString(const vector<Position *> &vec) const;
-    string toUnitListString(Unit** units, int size) const;
+    string toUnitListString(Unit **units, int size) const;
+
 public:
     Configuration(const string &filepath);
     ~Configuration();
-    pair<int,int> getBattleFieldDimensions() const;
-    vector<Position*> getTerrainPosition(int identity) const;
-    Unit** getUnitList(bool isLiber) const;
+    pair<int, int> getBattleFieldDimensions() const;
+    vector<Position *> getTerrainPosition(int identity) const;
+    Unit **getUnitList(bool isLiber) const;
     int getListSize(bool isLiber) const;
     int getEventCode() const;
     string str() const;
@@ -342,6 +348,7 @@ private:
     LiberationArmy *liberationArmy;
     ARVN *ARVNArmy;
     int eventCode;
+
 public:
     HCMCampaign(const string &config_file_path);
     ~HCMCampaign();
