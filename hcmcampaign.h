@@ -44,7 +44,6 @@ class BattleField;
 class HCMCampaign;
 class Configuration;
 
-class Utility;
 class Node;
 
 enum VehicleType
@@ -137,7 +136,11 @@ class Unit
 protected:
     int quantity, weight, attackScore;
     Position pos;
-    bool affectedForest, affectedRiver, affectedFortification, affectedUrban, affectedSpecialZone;
+    bool affectedForest = false;
+    bool affectedRiver = false;
+    bool affectedFortification = false;
+    bool affectedUrban = false;
+    bool affectedSpecialZone = false;
 
 public:
     Unit(int quantity, int weight, Position pos);
@@ -200,10 +203,8 @@ class Node
 {
 public:
     Unit *unit;
-    Node *next;
-    // default constructor
+    Node *next = nullptr;
     Node();
-    // parametrized constructor
     Node(Unit *unit);
 };
 
@@ -211,11 +212,11 @@ class UnitList
 {
 private:
     int capacity;
-    int currentSize;
-    Node *listHead;
-    Node *listEnd;
-    int vehicleCount;
-    int infantryCount; // can also be used as the index of the first vehicle
+    int currentSize = 0;
+    Node *listHead = nullptr;
+    Node *listEnd = nullptr;
+    int vehicleCount = 0;
+    int infantryCount = 0; // can also be used as the index of the first vehicle
     void insertAtHead(Unit *unit);
     void insertAtEnd(Unit *unit);
 
@@ -251,7 +252,7 @@ public:
     virtual void getEffect(Army *army) = 0;
 };
 
-// TODO: delcare and implement the Elements of the terrain
+
 
 class Road : public TerrainElement
 {

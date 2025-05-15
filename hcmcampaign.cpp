@@ -9,12 +9,6 @@ Unit::Unit(int quantity, int weight, Position pos)
     this->quantity = quantity;
     this->weight = weight;
     this->pos = pos;
-    this->affectedForest = false;
-    this->affectedRiver = false;
-    this->affectedFortification = false;
-    this->affectedUrban = false;
-    this->affectedSpecialZone = false;
-    // this->attackScore = getAttackScore();
 }
 
 Unit::~Unit()
@@ -713,24 +707,17 @@ double Position::getDistance(Position other) const
 Node::Node()
 {
     unit = nullptr;
-    next = nullptr;
 }
 
 Node::Node(Unit *unit)
 {
     this->unit = unit;
-    this->next = nullptr;
 }
 
 // class UnitList
 UnitList::UnitList(int capacity)
 {
     this->capacity = capacity;
-    this->currentSize = 0;
-    this->listHead = nullptr;
-    this->listEnd = nullptr;
-    this->vehicleCount = 0;
-    this->infantryCount = 0;
 }
 
 UnitList::~UnitList()
@@ -1742,8 +1729,8 @@ string Configuration::str() const
 {
     stringstream result;
     result << "[";
-    result << "num_rows=" << num_rows << ',';
-    result << "num_cols=" << num_cols << ',';
+    result << "num_rows=" << num_rows << ",";
+    result << "num_cols=" << num_cols << ",";
 
     result << "arrayForest=" << toPositionString(arrayForest) << ",";
     result << "arrayRiver=" << toPositionString(arrayRiver) << ",";
@@ -1754,7 +1741,7 @@ string Configuration::str() const
     result << "liberationUnits=" << toUnitListString(liberationUnits, liberationCount) << ",";
     result << "ARVNUnits=" << toUnitListString(ARVNUnits, ARVNCount) << ",";
 
-    result << "eventCode=" << eventCode << ']';
+    result << "eventCode=" << eventCode << "]";
 
     return result.str();
 }
@@ -1772,7 +1759,6 @@ HCMCampaign::HCMCampaign(const string &config_file_path)
     vector<Position *> arrayUrban = config->getTerrainPosition(4);
     vector<Position *> arraySpecialZone = config->getTerrainPosition(5);
     battleField = new BattleField(row, col, arrayForest, arrayRiver, arrayFortification, arrayUrban, arraySpecialZone);
-    // battleField = nullptr;
     Unit **liberationUnits = config->getUnitList(true), **ARVNUnits = config->getUnitList(false);
     int liberationCount = config->getListSize(true), ARVNCount = config->getListSize(false);
 
