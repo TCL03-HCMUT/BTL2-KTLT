@@ -17,6 +17,7 @@ Unit::~Unit()
 
 int Unit::getAttackScore()
 {
+    return 0;
 }
 
 Position Unit::getCurrentPosition() const
@@ -26,6 +27,7 @@ Position Unit::getCurrentPosition() const
 
 string Unit::str() const
 {
+    return "";
 }
 
 string Unit::instance()
@@ -434,6 +436,7 @@ void Army::removeUnitsAfterFight()
 
 string Army::str() const
 {
+    return "";
 }
 
 string Army::instance()
@@ -581,14 +584,6 @@ void LiberationArmy::confiscate(Army *enemy)
         temp = next;
     }
     enemyList->reverse();
-
-    temp = enemyList->getHead();
-    {
-        while (temp != nullptr)
-        {
-            temp->unit->multiplyWeight(0.8);
-        }
-    }
 }
 
 string LiberationArmy::str() const
@@ -628,6 +623,13 @@ void ARVN::fight(Army *enemy, bool defense)
     if (defense) // defense case
     {
         // confiscation has already happened in Liberation Army
+        Node *temp = unitList->getHead();
+        {
+        while (temp != nullptr)
+        {
+            temp->unit->multiplyWeight(0.8);
+        }
+        }
         updateParameters();
     }
     else // attack case
@@ -716,6 +718,21 @@ UnitList::~UnitList()
     currentSize = 0;
     infantryCount = 0;
     vehicleCount = 0;
+}
+
+Node* UnitList::operator[](int index)
+{
+    if (index < 0 || index >= currentSize)
+    {
+        return nullptr;
+    }
+
+    Node *tmp = listHead;
+    for (int i = 0; i < index && tmp != nullptr; i++)
+    {
+        tmp = tmp->next;
+    }
+    return tmp;
 }
 
 void UnitList::setCapacity(int capacity)
@@ -1069,7 +1086,7 @@ vector<Node *> UnitList::findMinSubset(int threshold, bool isInfantry)
 
     for (auto index : bestSubset)
     {
-        result.push_back(getNodeAtIndex(index));
+        result.push_back(((*this)[index]));
     }
 
     return result;
@@ -1078,21 +1095,6 @@ vector<Node *> UnitList::findMinSubset(int threshold, bool isInfantry)
 Node *UnitList::getHead() const
 {
     return listHead;
-}
-
-Node *UnitList::getNodeAtIndex(int index) const
-{
-    if (index < 0 || index >= currentSize)
-    {
-        return nullptr;
-    }
-
-    Node *tmp = listHead;
-    for (int i = 0; i < index && tmp != nullptr; i++)
-    {
-        tmp = tmp->next;
-    }
-    return tmp;
 }
 
 // class TerrainElement

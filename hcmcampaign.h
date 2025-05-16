@@ -220,6 +220,7 @@ private:
 public:
     UnitList(int capacity);
     ~UnitList();
+    Node* operator[](int index);
     void setCapacity(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
@@ -231,7 +232,6 @@ public:
     void deleteAllVehicle();
     void reverse();
     Node *getHead() const;
-    Node *getNodeAtIndex(int index) const; // return a pointer to that specific node
     vector<Unit *> convertToVector();
     vector<Node *> findMinSubset(int threshold, bool isInfantry);
     string str() const;
