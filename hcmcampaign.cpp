@@ -247,10 +247,7 @@ bool Infantry::isCommando()
 int Infantry::getScore()
 {
     int score = infantryType * 56 + quantity * weight;
-    if (isCommando())
-    {
-        score += 75;
-    }
+    
     return score;
 }
 
@@ -278,21 +275,22 @@ int Infantry::personalNumber(int num, int year)
 int Infantry::getAttackScore()
 {
     int score = getScore();
+    if (isCommando())
+    {
+        score += 75;
+    }
     int personalNum = personalNumber(score, 1975);
     if (personalNum > 7)
     {
         double quantity_tmp = quantity * 1.2;
         quantity = (int)ceil(quantity_tmp);
-        score = infantryType * 56 + quantity * weight;
     }
     else if (personalNum < 3)
     {
         double quantity_tmp = quantity * 0.9;
         quantity = (int)ceil(quantity_tmp);
-        score = infantryType * 56 + quantity * weight;
     }
-    if (isCommando())
-        score += 75;
+    score = getScore();
     this->attackScore = score;
     return score;
 }
