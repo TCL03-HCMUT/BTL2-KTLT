@@ -91,6 +91,9 @@ public:
     virtual string instance();
     Node *getListHead() const;
     UnitList *getList() const;
+
+    bool battleOccurs = false;
+
 };
 
 class LiberationArmy : public Army
@@ -102,6 +105,7 @@ private:
 public:
     LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
+    
     string str() const override;
     string instance() override;
 };

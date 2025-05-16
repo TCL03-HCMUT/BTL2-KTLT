@@ -488,7 +488,6 @@ void LiberationArmy::fight(Army *enemy, bool defense)
                 tmp = tmp->next;
             }
         }
-        updateParameters();
     }
     else // attack case
     {
@@ -497,7 +496,7 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         vector<Node *> combinationA = unitList->findMinSubset(enemy->getEXP(), true);
         vector<Node *> combinationB = unitList->findMinSubset(enemy->getLF(), false);
 
-        bool battleOccurs;
+        
 
         // Evaluate if battle occurs, and delete units if applicable
         if (combinationA.empty() && combinationB.empty())
@@ -559,10 +558,8 @@ void LiberationArmy::fight(Army *enemy, bool defense)
                 tmp = tmp->next;
             }
         }
-
-        enemy->fight(this, true);
-        updateParameters();
     }
+    updateParameters();
 }
 
 void LiberationArmy::confiscate(Army *enemy)
@@ -583,11 +580,7 @@ void LiberationArmy::confiscate(Army *enemy)
     }
     enemyList->reverse();
 
-    temp = enemyList->getHead();
-    while (temp != nullptr)
-    {
-        temp->unit->multiplyWeight(0.8);
-    }
+    
 }
 
 string LiberationArmy::str() const
@@ -627,20 +620,26 @@ void ARVN::fight(Army *enemy, bool defense)
     if (defense) // defense case
     {
         // confiscation has already happened in Liberation Army
-        
-        updateParameters();
+        if (enemy->battleOccurs)
+        {
+            Node *temp = unitList->getHead();
+            while (temp != nullptr)
+            {
+                temp->unit->multiplyWeight(0.8);
+            }
+        }
     }
     else // attack case
     {
-        enemy->fight(this, true);
         Node *tmp = unitList->getHead();
         while (tmp != nullptr)
         {
             tmp->unit->multiplyQuantity(0.8);
         }
         unitList->deleteMatchingQuantity(1);
-        updateParameters();
     }
+
+    updateParameters();
 }
 
 string ARVN::str() const
@@ -1766,11 +1765,15 @@ void HCMCampaign::run()
     if (eventCode < 75)
     {
         liberationArmy->fight(ARVNArmy, false);
+        ARVNArmy->fight(liberationArmy, true);
     }
     else
     {
         ARVNArmy->fight(liberationArmy, false);
+        liberationArmy->fight(ARVNArmy, true);
+
         liberationArmy->fight(ARVNArmy, false);
+        ARVNArmy->fight(ARVNArmy, true);
     }
 
     liberationArmy->removeUnitsAfterFight();
