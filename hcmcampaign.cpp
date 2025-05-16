@@ -17,7 +17,6 @@ Unit::~Unit()
 
 int Unit::getAttackScore()
 {
-    
 }
 
 Position Unit::getCurrentPosition() const
@@ -27,7 +26,6 @@ Position Unit::getCurrentPosition() const
 
 string Unit::str() const
 {
-
 }
 
 string Unit::instance()
@@ -436,7 +434,6 @@ void Army::removeUnitsAfterFight()
 
 string Army::str() const
 {
-    
 }
 
 string Army::instance()
@@ -684,16 +681,6 @@ int Position::getCol() const
     return c;
 }
 
-void Position::setRow(int r)
-{
-    this->r = r;
-}
-
-void Position::setCol(int c)
-{
-    this->c = c;
-}
-
 string Position::str() const
 {
     stringstream result;
@@ -704,11 +691,6 @@ string Position::str() const
 double Position::getDistance(Position other) const
 {
     return sqrt(pow(this->getRow() - other.getRow(), 2) + pow(this->getCol() - other.getCol(), 2));
-}
-
-Node::Node()
-{
-    unit = nullptr;
 }
 
 Node::Node(Unit *unit)
@@ -1111,11 +1093,6 @@ Node *UnitList::getNodeAtIndex(int index) const
         tmp = tmp->next;
     }
     return tmp;
-}
-
-Node *UnitList::getFirstVehicle() const
-{
-    return getNodeAtIndex(infantryCount);
 }
 
 // class TerrainElement

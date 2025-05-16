@@ -103,7 +103,7 @@ public:
     LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
-    string instance();
+    string instance() override;
 };
 
 class ARVN : public Army
@@ -112,7 +112,7 @@ public:
     ARVN(Unit **unitArray, int size, string name, BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
     string str() const override;
-    string instance();
+    string instance() override;
 };
 
 class Position
@@ -125,8 +125,6 @@ public:
     Position(const string &str_pos); // Example: str_pos = "(1,15)"
     int getRow() const;
     int getCol() const;
-    void setRow(int r);
-    void setCol(int c);
     string str() const; // Example: returns "(1,15)"
     double getDistance(Position other) const;
 };
@@ -176,7 +174,7 @@ public:
     Vehicle(int quantity, int weight, const Position pos, VehicleType vehicleType);
     int getAttackScore() override;
     string str() const override;
-    string instance();
+    string instance() override;
     VehicleType getVehicleType() const override;
 };
 
@@ -195,7 +193,7 @@ public:
     Infantry(int quantity, int weight, const Position pos, InfantryType infantryType);
     int getAttackScore() override;
     string str() const override;
-    string instance();
+    string instance() override;
     InfantryType getInfantryType() const override;
 };
 
@@ -204,7 +202,6 @@ class Node
 public:
     Unit *unit;
     Node *next = nullptr;
-    Node();
     Node(Unit *unit);
 };
 
@@ -235,7 +232,6 @@ public:
     void reverse();
     Node *getHead() const;
     Node *getNodeAtIndex(int index) const; // return a pointer to that specific node
-    Node *getFirstVehicle() const;
     vector<Unit *> convertToVector();
     vector<Node *> findMinSubset(int threshold, bool isInfantry);
     string str() const;
