@@ -93,7 +93,6 @@ public:
     UnitList *getList() const;
 
     bool battleOccurs = false;
-
 };
 
 class LiberationArmy : public Army
@@ -105,7 +104,7 @@ private:
 public:
     LiberationArmy(Unit **unitArray, int size, string name, BattleField *battleField);
     void fight(Army *enemy, bool defense = false) override;
-    
+
     string str() const override;
     string instance() override;
 };
@@ -224,7 +223,7 @@ private:
 public:
     UnitList(int capacity);
     ~UnitList();
-    Node* operator[](int index);
+    Node *operator[](int index);
     void setCapacity(int capacity);
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
@@ -251,8 +250,6 @@ public:
     ~TerrainElement();
     virtual void getEffect(Army *army) = 0;
 };
-
-
 
 class Road : public TerrainElement
 {

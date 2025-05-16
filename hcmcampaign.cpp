@@ -247,7 +247,7 @@ bool Infantry::isCommando()
 int Infantry::getScore()
 {
     int score = infantryType * 56 + quantity * weight;
-    
+
     return score;
 }
 
@@ -496,8 +496,6 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         vector<Node *> combinationA = unitList->findMinSubset(enemy->getEXP(), true);
         vector<Node *> combinationB = unitList->findMinSubset(enemy->getLF(), false);
 
-        
-
         // Evaluate if battle occurs, and delete units if applicable
         if (combinationA.empty() && combinationB.empty())
         {
@@ -579,8 +577,6 @@ void LiberationArmy::confiscate(Army *enemy)
         temp = next;
     }
     enemyList->reverse();
-
-    
 }
 
 string LiberationArmy::str() const
@@ -717,7 +713,7 @@ UnitList::~UnitList()
     vehicleCount = 0;
 }
 
-Node* UnitList::operator[](int index)
+Node *UnitList::operator[](int index)
 {
     if (index < 0 || index >= currentSize)
     {
