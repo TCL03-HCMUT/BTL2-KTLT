@@ -582,6 +582,12 @@ void LiberationArmy::confiscate(Army *enemy)
         temp = next;
     }
     enemyList->reverse();
+
+    temp = enemyList->getHead();
+    while (temp != nullptr)
+    {
+        temp->unit->multiplyWeight(0.8);
+    }
 }
 
 string LiberationArmy::str() const
@@ -621,13 +627,7 @@ void ARVN::fight(Army *enemy, bool defense)
     if (defense) // defense case
     {
         // confiscation has already happened in Liberation Army
-        Node *temp = unitList->getHead();
-        {
-        while (temp != nullptr)
-        {
-            temp->unit->multiplyWeight(0.8);
-        }
-        }
+        
         updateParameters();
     }
     else // attack case
