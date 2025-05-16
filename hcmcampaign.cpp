@@ -17,7 +17,7 @@ Unit::~Unit()
 
 int Unit::getAttackScore()
 {
-    return 0;
+    
 }
 
 Position Unit::getCurrentPosition() const
@@ -27,7 +27,7 @@ Position Unit::getCurrentPosition() const
 
 string Unit::str() const
 {
-    return "Unit";
+
 }
 
 string Unit::instance()
@@ -350,10 +350,10 @@ void Army::updateParameters()
 
 bool Army::isSpecialNumber(int num, int base)
 {
-    // Edge case: 0 and negative numbers cannot be expressed as a sum of powers
     if (num < 0)
         return false;
 
+    // This is essentially converting a number to other bases but the only digits that are valid are 0 and 1
     int remainder;
     while (num > 0)
     {
@@ -389,9 +389,11 @@ Army::Army(Unit **unitArray, int size, string name, BattleField *battleField)
     this->LF = clampLF(this->LF);
     this->EXP = clampEXP(this->EXP);
     int S = this->LF + this->EXP;
+
     bool isSpecialSize = isSpecialNumber(S, 3) || isSpecialNumber(S, 5) || isSpecialNumber(S, 7);
     int capacity = isSpecialSize ? 12 : 8;
     this->unitList = new UnitList(capacity);
+
     for (int i = 0; i < size; i++)
     {
         (this->unitList)->insert(unitArray[i]);
@@ -434,7 +436,7 @@ void Army::removeUnitsAfterFight()
 
 string Army::str() const
 {
-    return "Army";
+    
 }
 
 string Army::instance()
