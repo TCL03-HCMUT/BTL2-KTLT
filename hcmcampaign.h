@@ -128,6 +128,8 @@ public:
     Position(const string &str_pos); // Example: str_pos = "(1,15)"
     int getRow() const;
     int getCol() const;
+    void setRow(int r);
+    void setCol(int c);
     string str() const; // Example: returns "(1,15)"
     double getDistance(Position other) const;
 };
@@ -255,6 +257,7 @@ class Road : public TerrainElement
 {
 public:
     Road();
+    Road(Position *pos);
     void getEffect(Army *army) override;
 };
 

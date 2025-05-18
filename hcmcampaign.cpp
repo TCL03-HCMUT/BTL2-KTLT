@@ -676,6 +676,16 @@ int Position::getCol() const
     return c;
 }
 
+void Position::setRow(int r)
+{
+    this->r = r;
+}
+
+void Position::setCol(int c)
+{
+    this->c = c;
+}
+
 string Position::str() const
 {
     stringstream result;
@@ -1105,6 +1115,10 @@ void TerrainElement::getEffect(Army *army)
 }
 
 Road::Road() : TerrainElement(nullptr)
+{
+}
+
+Road::Road(Position *pos) : TerrainElement(pos)
 {
 }
 
