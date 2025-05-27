@@ -87,6 +87,7 @@ public:
     virtual void fight(Army *enemy, bool defense = false) = 0;
     void removeUnitsAfterFight();
     void updateParameters();
+    void updateAttackScores();
     virtual string str() const = 0;
     virtual string instance();
     Node *getListHead() const;
@@ -230,6 +231,7 @@ public:
     bool insert(Unit *unit);                   // return true if insert successfully
     bool isContain(VehicleType vehicleType);   // return true if it exists
     bool isContain(InfantryType infantryType); // return true if it exists
+    bool merged = false;
     void deleteNode(Node *&node);              // returns true if deletion sucessfull
     void deleteMatchingQuantity(int quantity);
     void deleteLowerScore(int score);
@@ -301,6 +303,7 @@ class BattleField
 private:
     int n_rows, n_cols;
     vector<vector<TerrainElement *>> terrain;
+    vector<Position *> arrayForest, arrayRiver, arrayFortification, arrayUrban, arraySpecialZone;
 
 public:
     BattleField(int n_rows, int n_cols, vector<Position *> arrayForest,
