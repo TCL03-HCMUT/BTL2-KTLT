@@ -168,6 +168,7 @@ public:
     void addScore(double num);
     bool isAffected(int type);
     void setAffected(int type);
+    bool updated = false;
 };
 
 class Vehicle : public Unit

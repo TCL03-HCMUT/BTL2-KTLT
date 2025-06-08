@@ -331,7 +331,13 @@ void Army::updateParameters()
         }
         else if (tmp->unit->instance() == "INFANTRY")
         {
-            EXP_tmp += tmp->unit->getAttackScore();
+            if (tmp->unit->updated == false)
+                EXP_tmp += tmp->unit->getAttackScore();
+            else
+            {
+                EXP_tmp += tmp->unit->getCurrentScore();
+                tmp->unit->updated = false;
+            }
         }
         tmp = tmp->next;
     }
@@ -346,11 +352,19 @@ void Army::updateAttackScores()
     Node *tmp = unitList->getHead();
     while (tmp != nullptr)
     {
-        if (tmp->unit->instance() == "VEHICLE")
+        // if (tmp->unit->instance() == "VEHICLE")
+        // {
+        //     tmp->unit->getAttackScore();
+        // }
+        // else if (tmp->unit->instance() == "INFANTRY")
+        // {
+        //     tmp->unit->getAttackScore();
+        // }
+        if (tmp->unit->updated)
         {
-            tmp->unit->getAttackScore();
+            tmp->unit->updated = false;
         }
-        else if (tmp->unit->instance() == "INFANTRY")
+        else
         {
             tmp->unit->getAttackScore();
         }
@@ -479,21 +493,21 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         }
         else if (!betterLF && !betterEXP)
         {
-            Node *tmp = this->unitList->getHead();
-            while (tmp != nullptr)
+            Node *temp = this->unitList->getHead();
+            while (temp != nullptr)
             {
-                int currentQuantity = tmp->unit->getQuantity();
-                tmp->unit->setQuantity(closestFibonacci(currentQuantity));
-                tmp = tmp->next;
+                int currentQuantity = temp->unit->getQuantity();
+                temp->unit->setQuantity(closestFibonacci(currentQuantity));
+                temp = temp->next;
             }
         }
         else
         {
-            Node *tmp = this->unitList->getHead();
-            while (tmp != nullptr)
+            Node *temp = this->unitList->getHead();
+            while (temp != nullptr)
             {
-                tmp->unit->multiplyQuantity(0.9);
-                tmp = tmp->next;
+                temp->unit->multiplyQuantity(0.9);
+                temp = temp->next;
             }
         }
     }
@@ -524,7 +538,7 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         }
         else if (combinationA.empty())
         {
-            battleOccurs = this->EXP > enemy->getEXP();
+            battleOccurs = (this->EXP) > (enemy->getEXP());
 
             if (battleOccurs)
             {
@@ -538,7 +552,7 @@ void LiberationArmy::fight(Army *enemy, bool defense)
 
         else if (combinationB.empty())
         {
-            battleOccurs = this->LF > enemy->getLF();
+            battleOccurs = (this->LF) > (enemy->getLF());
 
             if (battleOccurs)
             {
@@ -557,11 +571,11 @@ void LiberationArmy::fight(Army *enemy, bool defense)
         }
         else
         {
-            Node *tmp = this->unitList->getHead();
-            while (tmp != nullptr)
+            Node *temp = this->unitList->getHead();
+            while (temp != nullptr)
             {
-                tmp->unit->multiplyWeight(0.9);
-                tmp = tmp->next;
+                temp->unit->multiplyWeight(0.9);
+                temp = temp->next;
             }
         }
     }
@@ -639,15 +653,17 @@ void ARVN::fight(Army *enemy, bool defense)
             while (temp != nullptr)
             {
                 temp->unit->multiplyWeight(0.8);
+                temp = temp->next;
             }
         }
     }
     else // attack case
     {
-        Node *tmp = unitList->getHead();
-        while (tmp != nullptr)
+        Node *temp = unitList->getHead();
+        while (temp != nullptr)
         {
-            tmp->unit->multiplyQuantity(0.8);
+            temp->unit->multiplyQuantity(0.8);
+            temp = temp->next;
         }
         unitList->deleteMatchingQuantity(1);
     }
@@ -743,12 +759,12 @@ Node *UnitList::operator[](int index)
         return nullptr;
     }
 
-    Node *tmp = listHead;
-    for (int i = 0; i < index && tmp != nullptr; i++)
+    Node *temp = listHead;
+    for (int i = 0; i < index && temp != nullptr; i++)
     {
-        tmp = tmp->next;
+        temp = temp->next;
     }
-    return tmp;
+    return temp;
 }
 
 void UnitList::setCapacity(int capacity)
@@ -797,14 +813,15 @@ bool UnitList::insert(Unit *unit)
         int addedQuantity = unit->getQuantity();
         if (this->isContain(type))
         {
-            Node *tmp = listHead;
-            while (tmp->unit->getVehicleType() != type)
+            Node *temp = listHead;
+            while (temp->unit->getVehicleType() != type)
             {
-                tmp = tmp->next;
+                temp = temp->next;
             }
-            tmp->unit->addQuantity(addedQuantity);
-            tmp->unit->setWeight(max(tmp->unit->getWeight(), unit->getWeight()));
-            // tmp->unit->getAttackScore();
+            temp->unit->addQuantity(addedQuantity);
+            temp->unit->setWeight(max(temp->unit->getWeight(), unit->getWeight()));
+            temp->unit->getAttackScore();
+            temp->unit->updated = true;
             merged = true;
             return false;
         }
@@ -830,14 +847,15 @@ bool UnitList::insert(Unit *unit)
         int addedQuantity = unit->getQuantity();
         if (this->isContain(type))
         {
-            Node *tmp = listHead;
-            while (tmp->unit->getInfantryType() != type)
+            Node *temp = listHead;
+            while (temp->unit->getInfantryType() != type)
             {
-                tmp = tmp->next;
+                temp = temp->next;
             }
-            tmp->unit->addQuantity(addedQuantity);
-            tmp->unit->setWeight(max(tmp->unit->getWeight(), unit->getWeight()));
-            // tmp->unit->getAttackScore();
+            temp->unit->addQuantity(addedQuantity);
+            temp->unit->setWeight(max(temp->unit->getWeight(), unit->getWeight()));
+            temp->unit->getAttackScore();
+            temp->unit->updated = true;
             merged = true;
             return false;
         }
@@ -862,17 +880,17 @@ bool UnitList::insert(Unit *unit)
 
 bool UnitList::isContain(VehicleType vehicleType)
 {
-    Node *tmp = listHead;
-    while (tmp != nullptr)
+    Node *temp = listHead;
+    while (temp != nullptr)
     {
-        if (tmp->unit->instance() == "VEHICLE")
+        if (temp->unit->instance() == "VEHICLE")
         {
-            if (tmp->unit->getVehicleType() == vehicleType)
+            if (temp->unit->getVehicleType() == vehicleType)
             {
                 return true;
             }
         }
-        tmp = tmp->next;
+        temp = temp->next;
     }
     return false;
 }
@@ -999,12 +1017,12 @@ void UnitList::deleteMatchingQuantity(int quantity)
     Node *temp = listHead;
     while (temp != nullptr)
     {
-        Node *next = temp->next; // save the next node to move to after deletion
+        Node *next = temp->next;
         if (temp->unit->getQuantity() == quantity)
         {
             deleteNode(temp);
         }
-        temp = next; // Move to the next node after handling the current one
+        temp = next;
     }
 }
 
@@ -1043,15 +1061,15 @@ string UnitList::str() const
     stringstream result;
     result << "UnitList[" << "count_vehicle=" << vehicleCount
            << ";count_infantry=" << infantryCount << ((currentSize > 0) ? ";" : "");
-    Node *tmp = listHead;
-    while (tmp != nullptr)
+    Node *temp = listHead;
+    while (temp != nullptr)
     {
-        result << tmp->unit->str();
-        if (tmp->next != nullptr)
+        result << temp->unit->str();
+        if (temp->next != nullptr)
         {
             result << ",";
         }
-        tmp = tmp->next;
+        temp = temp->next;
     }
     result << "]";
     return result.str();
@@ -1060,11 +1078,11 @@ string UnitList::str() const
 vector<Unit *> UnitList::convertToVector()
 {
     vector<Unit *> result;
-    Node *tmp = this->listHead;
-    while (tmp != nullptr)
+    Node *temp = this->listHead;
+    while (temp != nullptr)
     {
-        result.push_back(tmp->unit);
-        tmp = tmp->next;
+        result.push_back(temp->unit);
+        temp = temp->next;
     }
     return result;
 }
@@ -1160,7 +1178,8 @@ void Mountain::getEffect(Army *army)
     {
         // if (!temp->unit->isAffected(1))
         // {
-            if (this->pos->getDistance(temp->unit->getCurrentPosition()) <= distanceThreshold)
+            double distance = this->pos->getDistance(temp->unit->getCurrentPosition());
+            if (distance <= distanceThreshold)
             {
                 if (temp->unit->instance() == "INFANTRY")
                 {
@@ -1190,7 +1209,8 @@ void River::getEffect(Army *army)
     {
         // if (!temp->unit->isAffected(2))
         // {
-            if (this->pos->getDistance(temp->unit->getCurrentPosition()) <= 2)
+            double distance = this->pos->getDistance(temp->unit->getCurrentPosition());
+            if (distance <= 2)
             {
                 if (temp->unit->instance() == "INFANTRY")
                     temp->unit->multiplyScore(0.9);
@@ -1252,23 +1272,23 @@ Fortification::Fortification(Position *pos) : TerrainElement(pos)
 
 void Fortification::getEffect(Army *army)
 {
-    Node *tmp = army->getListHead();
-    while (tmp != nullptr)
+    Node *temp = army->getListHead();
+    while (temp != nullptr)
     {
         // if (!tmp->unit->isAffected(3))
         // {
-            double distance = this->pos->getDistance(tmp->unit->getCurrentPosition());
+            double distance = this->pos->getDistance(temp->unit->getCurrentPosition());
             if (army->instance() == "LIBERATIONARMY" && distance <= 2.0)
             {
-                tmp->unit->multiplyScore(0.8);
+                temp->unit->multiplyScore(0.8);
             }
             else if (army->instance() == "ARVN" && distance <= 2.0)
             {
-                tmp->unit->multiplyScore(1.2);
+                temp->unit->multiplyScore(1.2);
             }
         //     tmp->unit->setAffected(3);
         // }
-        tmp = tmp->next;
+        temp = temp->next;
     }
 }
 
@@ -1278,19 +1298,19 @@ SpecialZone::SpecialZone(Position *pos) : TerrainElement(pos)
 
 void SpecialZone::getEffect(Army *army)
 {
-    Node *tmp = army->getListHead();
-    while (tmp != nullptr)
+    Node *temp = army->getListHead();
+    while (temp != nullptr)
     {
         // if (!tmp->unit->isAffected(5))
         // {
-            double distance = this->pos->getDistance(tmp->unit->getCurrentPosition());
+            double distance = this->pos->getDistance(temp->unit->getCurrentPosition());
             if (distance <= 1.0)
             {
-                tmp->unit->setAttackScore(0);
+                temp->unit->setAttackScore(0);
             }
             // tmp->unit->setAffected(5);
         // }
-        tmp = tmp->next;
+        temp = temp->next;
     }
 }
 
@@ -1367,23 +1387,23 @@ void BattleField::affectArmy(Army *army)
     //         terrain[i][j]->getEffect(army);
     //     }
     // }
-    for (auto pos : arrayForest)
+    for (auto &pos : arrayForest)
     {
         terrain[pos->getRow()][pos->getCol()]->getEffect(army);
     }
-    for (auto pos : arrayRiver)
+    for (auto &pos : arrayRiver)
     {
         terrain[pos->getRow()][pos->getCol()]->getEffect(army);
     }
-    for (auto pos : arrayUrban)
+    for (auto &pos : arrayUrban)
     {
         terrain[pos->getRow()][pos->getCol()]->getEffect(army);
     }
-    for (auto pos : arrayFortification)
+    for (auto &pos : arrayFortification)
     {
         terrain[pos->getRow()][pos->getCol()]->getEffect(army);
     }
-    for (auto pos : arraySpecialZone)
+    for (auto &pos : arraySpecialZone)
     {
         terrain[pos->getRow()][pos->getCol()]->getEffect(army);
     }
